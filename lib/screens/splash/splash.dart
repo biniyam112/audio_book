@@ -1,6 +1,6 @@
-import 'package:ebook_reader/sizeConfig.dart';
 import 'package:flutter/material.dart';
 
+import '../../sizeConfig.dart';
 import 'components/body.dart';
 
 class SplashScreen extends StatelessWidget {

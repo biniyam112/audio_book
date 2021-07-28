@@ -1,4 +1,4 @@
-import 'package:ebook_reader/theme.dart';
+import 'package:audio_books/theme.dart';
 import 'package:flutter/material.dart';
 
 import 'screens/splash/splash.dart';
@@ -11,8 +11,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Audio Book',
+      debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
+      themeMode: ThemeMode.system,
       darkTheme: AppTheme.darkTheme,
       home: SplashScreen(),
     );

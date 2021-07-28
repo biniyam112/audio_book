@@ -8,7 +8,7 @@ const primaryColor = Color(0xFFFFC107);
 const decoratedTextColor = Color(0xff52CECC);
 const buttonColor = Color(0xffffc10a);
 const buttonSplashColor = Color(0xfffab005);
-const bodyTextColor = Color(0xFF646462);
+const bodyTextColor = Color(0xFF191923);
 
 class LightTheme {
   // light theme
@@ -28,3 +28,16 @@ class Darktheme {
 // padding and animation
 const defaultPadding = 20.0;
 const defaultDuration = Duration(milliseconds: 400);
+
+// Form Error
+final RegExp emailValidatorRegExp =
+    RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+const String kEmailNullError = "Please Enter your email";
+const String kInvalidEmailError = "Please Enter Valid Email";
+const String kPassNullError = "Please Enter your password";
+const String kShortPassError = "Password is too short";
+const String kMatchPassError = "Passwords don't match";
+const String kFristNameNullError = "Please Enter your firstname";
+const String klastNameNullError = "Please Enter your lastname";
+const String kphoneNumberNullError = "Please Enter your phonenumber";
+const String kAddressNullError = "Please Enter your address";

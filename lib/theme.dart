@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'constants.dart';
-import 'sizeConfig.dart';
 
 class AppTheme {
   //?dark theme
@@ -10,20 +9,21 @@ class AppTheme {
     scaffoldBackgroundColor: Darktheme.darkBackgroundColor,
     primaryColor: primaryColor,
     inputDecorationTheme: InputDecorationTheme(
-      border: UnderlineInputBorder(
-        borderRadius: BorderRadius.circular(16),
-        borderSide: BorderSide(
-          color: Darktheme.textColor,
-          width: 2,
-        ),
+      isCollapsed: true,
+      contentPadding: EdgeInsets.symmetric(
+        vertical: 14,
+        horizontal: 30,
       ),
+      border: outlineInputBorder(),
+      enabledBorder: outlineInputBorder(),
+      focusedBorder: outlineInputBorder(),
     ),
     appBarTheme: AppBarTheme(
       backgroundColor: Darktheme.darkBackgroundColor,
       titleTextStyle: TextStyle(
         color: Colors.white,
         fontWeight: FontWeight.w600,
-        fontSize: getProportionateScreenHeight(16),
+        fontSize: 16,
       ),
       elevation: 4,
     ),
@@ -70,16 +70,18 @@ class AppTheme {
 
   // ? light theme
   static ThemeData lightTheme = ThemeData(
+    fontFamily: GoogleFonts.poppins().fontFamily,
     scaffoldBackgroundColor: Colors.white,
     primaryColor: primaryColor,
     inputDecorationTheme: InputDecorationTheme(
-      border: UnderlineInputBorder(
-        borderRadius: BorderRadius.circular(16),
-        borderSide: BorderSide(
-          color: LightTheme.textColor,
-          width: 2,
-        ),
+      isCollapsed: true,
+      contentPadding: EdgeInsets.symmetric(
+        vertical: 14,
+        horizontal: 30,
       ),
+      border: outlineInputBorder(),
+      enabledBorder: outlineInputBorder(),
+      focusedBorder: outlineInputBorder(),
     ),
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.white,
@@ -87,7 +89,7 @@ class AppTheme {
       titleTextStyle: TextStyle(
         color: Colors.black,
         fontWeight: FontWeight.w600,
-        fontSize: getProportionateScreenHeight(16),
+        fontSize: 16,
       ),
     ),
     textTheme: TextTheme(
@@ -112,5 +114,12 @@ class AppTheme {
       displayColor: bodyTextColor,
       fontFamily: GoogleFonts.poppins().fontFamily,
     ),
+  );
+}
+
+OutlineInputBorder outlineInputBorder() {
+  return OutlineInputBorder(
+    borderRadius: BorderRadius.circular(15),
+    borderSide: BorderSide(color: bodyTextColor),
   );
 }

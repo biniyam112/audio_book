@@ -5,8 +5,12 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: null,
+    return SafeArea(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [],
+        ),
+      ),
     );
   }
 }

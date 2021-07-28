@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'components.dart';
+import 'components/body.dart';
 
-class OTP extends StatelessWidget {
-  const OTP({Key? key}) : super(key: key);
+class OTPScreen extends StatelessWidget {
+  const OTPScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
