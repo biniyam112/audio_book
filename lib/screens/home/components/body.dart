@@ -1,4 +1,9 @@
+import 'package:audio_books/constants.dart';
+import 'package:audio_books/screens/bookdetails/book_details.dart';
+import 'package:audio_books/sizeConfig.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class Body extends StatelessWidget {
   const Body({Key? key}) : super(key: key);
@@ -8,7 +13,222 @@ class Body extends StatelessWidget {
     return SafeArea(
       child: SingleChildScrollView(
         child: Column(
-          children: [],
+          children: [
+            Column(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Romance',
+                        style: Theme.of(context).textTheme.headline4!.copyWith(
+                              color: Colors.black87,
+                              fontSize: 16,
+                            ),
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          'see all',
+                          style: TextStyle(fontSize: 13),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: [
+                      ...List.generate(
+                        3,
+                        (index) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: getProportionateScreenWidth(8),
+                                vertical: 6),
+                            child: BookTile(),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class BookTile extends StatelessWidget {
+  const BookTile({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return BookDetailsScreen();
+            },
+          ),
+        );
+      },
+      child: Container(
+        height: 140,
+        width: SizeConfig.screenWidth! - 20,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(
+            getProportionateScreenWidth(16),
+          ),
+          boxShadow: [
+            BoxShadow(
+              offset: Offset(4, 4),
+              color: LightTheme.textColor.withOpacity(.1),
+              blurRadius: 10,
+              spreadRadius: 2,
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            ClipRRect(
+              child: Image.asset(
+                'assets/images/book_1.jpg',
+                fit: BoxFit.cover,
+              ),
+              borderRadius: BorderRadius.circular(
+                getProportionateScreenWidth(16),
+              ),
+            ),
+            SizedBox(
+              width: getProportionateScreenWidth(20),
+            ),
+            Expanded(
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Container(
+                      constraints: BoxConstraints(
+                        maxHeight: getProportionateScreenHeight(30),
+                        maxWidth: getProportionateScreenWidth(80),
+                      ),
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Darktheme.textColor.withOpacity(.2),
+                            offset: Offset(-4, 4),
+                            blurRadius: 4,
+                            spreadRadius: .5,
+                          ),
+                        ],
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(
+                            getProportionateScreenWidth(16),
+                          ),
+                        ),
+                        color: Colors.orangeAccent,
+                      ),
+                      child: Center(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: getProportionateScreenWidth(6),
+                            vertical: getProportionateScreenWidth(5),
+                          ),
+                          child: Text(
+                            '20 mins',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: getProportionateScreenHeight(10),
+                      ),
+                      Container(
+                        width: getProportionateScreenWidth(130),
+                        child: Text(
+                          'Different winter',
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.headline4,
+                        ),
+                      ),
+                      RichText(
+                        overflow: TextOverflow.ellipsis,
+                        text: TextSpan(
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 16,
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                          ),
+                          children: [
+                            TextSpan(text: 'written by: '),
+                            TextSpan(
+                              text: 'Adrean Hunstler',
+                              style: Theme.of(context).textTheme.headline5,
+                            ),
+                          ],
+                        ),
+                      ),
+                      RichText(
+                        overflow: TextOverflow.ellipsis,
+                        text: TextSpan(
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 16,
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                          ),
+                          children: [
+                            TextSpan(text: 'translated by: '),
+                            TextSpan(
+                              text: 'Yohannis Dereje',
+                              style: Theme.of(context).textTheme.headline5,
+                            ),
+                          ],
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.people,
+                            color: Colors.black54,
+                          ),
+                          SizedBox(width: getProportionateScreenWidth(6)),
+                          Text('138 listening'),
+                          Spacer(),
+                          IconButton(
+                            onPressed: () {},
+                            icon: Icon(
+                              CupertinoIcons.heart_fill,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
