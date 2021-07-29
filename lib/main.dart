@@ -13,8 +13,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Audio Book',
       debugShowCheckedModeBanner: false,
-      theme: AppTheme.lightTheme,
       themeMode: ThemeMode.system,
+      theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       home: SplashScreen(),
     );

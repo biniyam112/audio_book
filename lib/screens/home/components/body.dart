@@ -5,6 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'book_category.dart';
+import 'popular_book_tile.dart';
+
 class Body extends StatelessWidget {
   const Body({Key? key}) : super(key: key);
 
@@ -18,24 +21,9 @@ class Body extends StatelessWidget {
               children: [
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Romance',
-                        style: Theme.of(context).textTheme.headline4!.copyWith(
-                              color: Colors.black87,
-                              fontSize: 16,
-                            ),
-                      ),
-                      TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          'see all',
-                          style: TextStyle(fontSize: 13),
-                        ),
-                      ),
-                    ],
+                  child: BookCategory(
+                    categoryName: 'Popular Books',
+                    onPressed: () {},
                   ),
                 ),
                 SingleChildScrollView(
@@ -47,9 +35,10 @@ class Body extends StatelessWidget {
                         (index) {
                           return Padding(
                             padding: EdgeInsets.symmetric(
-                                horizontal: getProportionateScreenWidth(8),
-                                vertical: 6),
-                            child: BookTile(),
+                              horizontal: getProportionateScreenWidth(12),
+                              vertical: 6,
+                            ),
+                            child: PopularBookTile(),
                           );
                         },
                       ),
@@ -57,10 +46,50 @@ class Body extends StatelessWidget {
                   ),
                 ),
               ],
-            )
+            ),
+            BookShelf(),
           ],
         ),
       ),
+    );
+  }
+}
+
+class BookShelf extends StatelessWidget {
+  const BookShelf({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+          child: BookCategory(
+            categoryName: 'Romance',
+            onPressed: () {},
+          ),
+        ),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: [
+              ...List.generate(
+                3,
+                (index) {
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                        horizontal: getProportionateScreenWidth(8),
+                        vertical: 6),
+                    child: BookTile(),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
