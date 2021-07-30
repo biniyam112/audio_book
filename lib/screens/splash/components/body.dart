@@ -51,10 +51,10 @@ class _BodyState extends State<Body> {
           'every time is a good time to read',
           'Start reading today!',
         ];
-        List<String> splashImagesPath = [
-          'assets/images/audio_book_splash_1.jpg',
-          'assets/images/audio_book_splash_2.jpg',
-          'assets/images/audio_book_splash_3.jpg',
+        List<Image> splashImagesPath = [
+          splashImage1,
+          splashImage2,
+          splashImage3,
         ];
         return Container(
           height: SizeConfig.screenHeight,
@@ -79,9 +79,7 @@ class _BodyState extends State<Body> {
                 Container(
                   height: SizeConfig.screenHeight! * .5,
                   width: SizeConfig.screenWidth,
-                  child: Image.asset(
-                    splashImagesPath[index],
-                  ),
+                  child: splashImagesPath[index],
                 ),
                 Spacer(),
                 Padding(

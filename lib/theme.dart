@@ -19,13 +19,21 @@ class AppTheme {
       focusedBorder: outlineInputBorder(),
     ),
     appBarTheme: AppBarTheme(
-      backgroundColor: Darktheme.darkBackgroundColor,
+      backgroundColor: Colors.white,
+      elevation: 0,
+      centerTitle: true,
       titleTextStyle: TextStyle(
         color: Colors.white,
         fontWeight: FontWeight.w600,
         fontSize: 16,
       ),
-      elevation: 4,
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(
+          Color(0xff3FB684),
+        ),
+      ),
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
@@ -86,11 +94,12 @@ class AppTheme {
     ),
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.white,
-      elevation: 4,
+      centerTitle: true,
+      elevation: 0,
       titleTextStyle: TextStyle(
-        color: Colors.black,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.bold,
         fontSize: 16,
+        color: Colors.black,
       ),
     ),
     textTheme: TextTheme(

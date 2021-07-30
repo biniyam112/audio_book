@@ -9,6 +9,7 @@ const decoratedTextColor = Color(0xff52CECC);
 const buttonColor = Color(0xffffc10a);
 const buttonSplashColor = Color(0xfffab005);
 const bodyTextColor = Color(0xFF191923);
+const decorationColor = Color(0xff3FB684);
 
 class LightTheme {
   // light theme
@@ -27,7 +28,8 @@ class Darktheme {
 
 // padding and animation
 const defaultPadding = 20.0;
-const defaultDuration = Duration(milliseconds: 400);
+const slowDuration = Duration(milliseconds: 800);
+const fastDuration = Duration(milliseconds: 400);
 
 // Form Error
 final RegExp emailValidatorRegExp =

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'components/body.dart';
 
-class BookDetailsScreen extends StatelessWidget {
-  const BookDetailsScreen({Key? key}) : super(key: key);
+class AudioPlayerScreen extends StatelessWidget {
+  const AudioPlayerScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Details'),
+        title: Text('Now playing'),
       ),
       body: Body(),
     );

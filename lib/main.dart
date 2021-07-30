@@ -1,3 +1,4 @@
+import 'package:audio_books/screens/home/home.dart';
 import 'package:audio_books/theme.dart';
 import 'package:flutter/material.dart';
 
@@ -13,10 +14,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Audio Book',
       debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      home: SplashScreen(),
+      // home: SplashScreen(),
+      home: HomeScreen(),
     );
   }
 }
