@@ -1,4 +1,6 @@
+import 'package:audio_books/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BookCategory extends StatelessWidget {
   const BookCategory({
@@ -12,13 +14,13 @@ class BookCategory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           categoryName,
           style: Theme.of(context).textTheme.headline4!.copyWith(
-                color: Colors.black87,
                 fontSize: 16,
               ),
         ),
@@ -26,7 +28,10 @@ class BookCategory extends StatelessWidget {
           onPressed: onPressed,
           child: Text(
             'see all',
-            style: TextStyle(fontSize: 13),
+            style: TextStyle(
+              fontSize: 13,
+              color: isDarkMode ? Colors.white : Colors.black,
+            ),
           ),
         ),
       ],

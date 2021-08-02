@@ -1,7 +1,10 @@
 import 'package:audio_books/screens/audioplayer/audio_player.dart';
+import 'package:audio_books/theme/theme_colors.dart';
+import 'package:audio_books/theme/theme_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
 import '../../../sizeConfig.dart';
@@ -113,13 +116,15 @@ class _DetailsBottomPartState extends State<DetailsBottomPart> {
   }
 
   Widget? childProvider(int index, BuildContext context) {
+    bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
     if (index == 0) {
       return Text(
         widget.preface,
         maxLines: 20,
         overflow: TextOverflow.ellipsis,
         style: Theme.of(context).textTheme.headline5!.copyWith(
-              color: Color(0xff868686),
+              color:
+                  isDarkMode ? Colors.white.withOpacity(.8) : Color(0xff868686),
               fontFamily: GoogleFonts.montserrat().fontFamily,
               height: 1.5,
             ),
@@ -161,92 +166,109 @@ class ChapterTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: getProportionateScreenWidth(10),
         vertical: getProportionateScreenHeight(10),
       ),
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(
-            getProportionateScreenWidth(10),
-          ),
-          boxShadow: [
-            BoxShadow(
-              offset: Offset(0, 4),
-              color: Darktheme.textColor.withOpacity(.08),
-              spreadRadius: .4,
-              blurRadius: 6,
-            ),
-            BoxShadow(
-              color: Darktheme.textColor.withOpacity(.06),
-              spreadRadius: .4,
-              blurRadius: 4,
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Expanded(
-              flex: 10,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Chapter $chapterNumber',
-                    style: Theme.of(context).textTheme.headline6!.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                  ),
-                  SizedBox(height: getProportionateScreenHeight(4)),
-                  Text(
-                    chapterTitle,
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
-                ],
-              ),
-            ),
-            Spacer(flex: 2),
-            Text(
-              chapterDuration,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            Spacer(),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return AudioPlayerScreen();
-                    },
-                  ),
-                );
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return AudioPlayerScreen();
               },
-              child: Padding(
-                padding: EdgeInsets.only(left: 3),
-                child: Icon(
-                  CupertinoIcons.play_fill,
-                  size: 20,
-                  color: Color(0xfff3D3E86),
-                ),
-              ),
-              style: ButtonStyle(
-                elevation: MaterialStateProperty.all(0),
-                shape: MaterialStateProperty.all(CircleBorder()),
-                padding: MaterialStateProperty.all(
-                  EdgeInsets.all(10),
-                ),
-                backgroundColor: MaterialStateProperty.all(Color(0xffF0F3FE)),
-              ),
             ),
-          ],
+          );
+        },
+        child: Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: isDarkMode ? Colors.black : Colors.white,
+            borderRadius: BorderRadius.circular(
+              getProportionateScreenWidth(10),
+            ),
+            boxShadow: [
+              BoxShadow(
+                offset: Offset(0, 4),
+                color: isDarkMode
+                    ? Darktheme.shadowColor.withOpacity(.06)
+                    : LightTheme.shadowColor.withOpacity(.06),
+                spreadRadius: .4,
+                blurRadius: 6,
+              ),
+              BoxShadow(
+                color: isDarkMode
+                    ? Darktheme.shadowColor.withOpacity(.06)
+                    : LightTheme.shadowColor.withOpacity(.06),
+                spreadRadius: .4,
+                blurRadius: 4,
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                flex: 10,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Chapter $chapterNumber',
+                      style: Theme.of(context).textTheme.headline6!.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                    ),
+                    SizedBox(height: getProportionateScreenHeight(4)),
+                    Text(
+                      chapterTitle,
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                  ],
+                ),
+              ),
+              Spacer(flex: 2),
+              Text(
+                chapterDuration,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Spacer(),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return AudioPlayerScreen();
+                      },
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(left: 3),
+                  child: Icon(
+                    CupertinoIcons.play_fill,
+                    size: 20,
+                    color: isDarkMode ? Colors.grey : LightTheme.secondaryColor,
+                  ),
+                ),
+                style: ButtonStyle(
+                  elevation: MaterialStateProperty.all(0),
+                  shape: MaterialStateProperty.all(CircleBorder()),
+                  padding: MaterialStateProperty.all(
+                    EdgeInsets.all(10),
+                  ),
+                  backgroundColor: MaterialStateProperty.all(Color(0xffF0F3FE)),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -266,6 +288,7 @@ class TextWithCustomUnderline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
     return GestureDetector(
       onTap: onTap,
       child: Column(
@@ -274,7 +297,13 @@ class TextWithCustomUnderline extends StatelessWidget {
             title,
             style: Theme.of(context).textTheme.headline5!.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: isActive ? Colors.black : Colors.black54,
+                  color: isDarkMode
+                      ? isActive
+                          ? Colors.white
+                          : Colors.white54
+                      : isActive
+                          ? Colors.black
+                          : Colors.black54,
                 ),
           ),
           SizedBox(height: getProportionateScreenHeight(2)),
@@ -284,7 +313,9 @@ class TextWithCustomUnderline extends StatelessWidget {
               width: getProportionateScreenWidth(50),
               height: 2,
               decoration: BoxDecoration(
-                color: decorationColor,
+                color: isDarkMode
+                    ? Darktheme.primaryColor
+                    : LightTheme.primaryColor,
                 borderRadius: BorderRadius.vertical(
                   top: Radius.circular(2),
                 ),
