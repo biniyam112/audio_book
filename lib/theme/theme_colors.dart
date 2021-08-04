@@ -6,7 +6,7 @@ class LightTheme {
   static const textColor = Color(0xFF222222);
   static const backgroundColor = Color(0xffeeeeee);
   static const secondaryColor = Color(0xff0000CD);
-  static const primaryColor = Color(0xff3FB684);
+  static const primaryColor = Color(0xFFFFC107);
 }
 
 class Darktheme {

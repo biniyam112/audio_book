@@ -7,19 +7,27 @@ ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
   scaffoldBackgroundColor: Darktheme.backgroundColor,
   primaryColor: Darktheme.primaryColor,
+  cardColor: Darktheme.backgroundColor,
+  backgroundColor: Darktheme.backgroundColor,
+  iconTheme: IconThemeData(
+    color: Colors.white,
+  ),
   // colorScheme: ColorScheme.dark(),
   inputDecorationTheme: InputDecorationTheme(
     isCollapsed: true,
+    isDense: true,
     contentPadding: EdgeInsets.symmetric(
       vertical: 14,
       horizontal: 30,
     ),
-    border: outlineInputBorderDarkTheme(),
-    enabledBorder: outlineInputBorderDarkTheme(),
-    focusedBorder: outlineInputBorderDarkTheme(),
+    fillColor: Color(0xffF0F5FE),
+    border: InputBorder.none,
+    errorStyle: TextStyle(height: 0),
+    enabledBorder: InputBorder.none,
+    focusedBorder: InputBorder.none,
   ),
   appBarTheme: AppBarTheme(
-    backgroundColor: Darktheme.backgroundColor,
+    backgroundColor: Colors.black,
     elevation: 0,
     centerTitle: true,
     titleTextStyle: TextStyle(
@@ -78,7 +86,7 @@ ThemeData darkTheme = ThemeData(
       color: Colors.white,
     ),
     headline3: TextStyle(
-      fontSize: 20,
+      fontSize: 22,
       fontWeight: FontWeight.bold,
       color: Colors.white,
     ),

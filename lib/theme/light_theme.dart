@@ -8,15 +8,21 @@ ThemeData lightTheme = ThemeData(
   scaffoldBackgroundColor: Colors.white,
   primaryColor: LightTheme.primaryColor,
   colorScheme: ColorScheme.light(),
+  iconTheme: IconThemeData(
+    color: Colors.black,
+  ),
   inputDecorationTheme: InputDecorationTheme(
     isCollapsed: true,
+    isDense: true,
     contentPadding: EdgeInsets.symmetric(
       vertical: 14,
       horizontal: 30,
     ),
-    border: outlineInputBorderLightTheme(),
-    enabledBorder: outlineInputBorderLightTheme(),
-    focusedBorder: outlineInputBorderLightTheme(),
+    fillColor: Color(0xffF0F5FE),
+    errorStyle: TextStyle(height: 0),
+    border: InputBorder.none,
+    enabledBorder: InputBorder.none,
+    focusedBorder: InputBorder.none,
   ),
   appBarTheme: AppBarTheme(
     backgroundColor: Colors.white,
@@ -27,6 +33,13 @@ ThemeData lightTheme = ThemeData(
       fontSize: 14,
       color: Colors.black,
       fontFamily: GoogleFonts.poppins().fontFamily,
+    ),
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ButtonStyle(
+      backgroundColor: MaterialStateProperty.all(
+        lightTheme.primaryColor,
+      ),
     ),
   ),
   textTheme: TextTheme(
@@ -48,7 +61,7 @@ ThemeData lightTheme = ThemeData(
       fontSize: 18,
     ),
     headline3: TextStyle(
-      fontSize: 20,
+      fontSize: 22,
       fontWeight: FontWeight.bold,
     ),
   ).apply(

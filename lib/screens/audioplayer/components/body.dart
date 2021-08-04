@@ -1,13 +1,40 @@
 import 'package:audio_books/constants.dart';
 import 'package:audio_books/services/page_manager.dart';
+import 'package:audio_books/services/service_locator.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme_colors.dart';
 import 'package:audio_books/theme/theme_provider.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import '../../../services/notifiers/play_button_notifier.dart';
+import '../../../services/notifiers/progress_notifier.dart';
+
+class Playlist extends StatelessWidget {
+  const Playlist({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    final pageManager = getIt<PageManager>();
+    return Expanded(
+      child: ValueListenableBuilder<List<String>>(
+        valueListenable: pageManager.playlistNotifier,
+        builder: (context, playlistTitles, _) {
+          return ListView.builder(
+            itemCount: playlistTitles.length,
+            itemBuilder: (context, index) {
+              return ListTile(
+                title: Text('${playlistTitles[index]}'),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
+}
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -25,7 +52,7 @@ class _BodyState extends State<Body> {
   @override
   void initState() {
     super.initState();
-    _pageManager = PageManager();
+    _pageManager = getIt<PageManager>();
     _pageManager.play();
     _pageController = PageController();
   }
@@ -43,75 +70,89 @@ class _BodyState extends State<Body> {
     return Column(
       children: [
         Spacer(),
-        Container(
-          width: SizeConfig.screenWidth,
-          height: SizeConfig.screenWidth,
-          child: PageView.builder(
-            controller: _pageController,
-            itemCount: _pageManager.queueListLength(),
-            onPageChanged: (index) {
-              if (_pageManager.currentAudioIndex() < index) {
-                _pageManager.next();
-                _pageManager.play();
-              } else {
-                _pageManager.previous();
-                _pageManager.play();
-              }
-            },
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: EdgeInsets.all(
-                  getProportionateScreenWidth(24),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(
-                      getProportionateScreenWidth(20),
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        offset: Offset(4, 4),
-                        color: isDarkMode
-                            ? Darktheme.shadowColor.withOpacity(.3)
-                            : LightTheme.shadowColor.withOpacity(.1),
-                        blurRadius: 4,
-                        spreadRadius: 4,
+        ValueListenableBuilder<List<String>>(
+            valueListenable: _pageManager.playlistNotifier,
+            builder: (_, playList, __) {
+              return ValueListenableBuilder<int>(
+                  valueListenable: _pageManager.currentIndexNotifier,
+                  builder: (_, currentSongIndex, __) {
+                    return Container(
+                      width: SizeConfig.screenWidth,
+                      height: SizeConfig.screenWidth,
+                      child: PageView.builder(
+                        controller: _pageController,
+                        itemCount: playList.length,
+                        onPageChanged: (index) {
+                          if (currentSongIndex < index) {
+                            _pageManager.next();
+                            _pageManager.play();
+                          } else {
+                            _pageManager.previous();
+                            _pageManager.play();
+                          }
+                        },
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: EdgeInsets.all(
+                              getProportionateScreenWidth(24),
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(
+                                  getProportionateScreenWidth(20),
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    offset: Offset(4, 4),
+                                    color: isDarkMode
+                                        ? Darktheme.shadowColor.withOpacity(.3)
+                                        : LightTheme.shadowColor
+                                            .withOpacity(.1),
+                                    blurRadius: 4,
+                                    spreadRadius: 4,
+                                  ),
+                                  BoxShadow(
+                                    offset: Offset(-4, -4),
+                                    color: isDarkMode
+                                        ? Darktheme.shadowColor.withOpacity(.3)
+                                        : LightTheme.shadowColor
+                                            .withOpacity(.1),
+                                    blurRadius: 4,
+                                    spreadRadius: 4,
+                                  ),
+                                ],
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(
+                                  getProportionateScreenWidth(20),
+                                ),
+                                child: Image.asset(
+                                  'assets/images/book_1.jpg',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
                       ),
-                      BoxShadow(
-                        offset: Offset(-4, -4),
-                        color: isDarkMode
-                            ? Darktheme.shadowColor.withOpacity(.3)
-                            : LightTheme.shadowColor.withOpacity(.1),
-                        blurRadius: 4,
-                        spreadRadius: 4,
-                      ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(
-                      getProportionateScreenWidth(20),
-                    ),
-                    child: Image.asset(
-                      'assets/images/book_1.jpg',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
+                    );
+                  });
+            }),
         Spacer(),
         Text(
           'Winter Story',
           style: Theme.of(context).textTheme.headline4,
         ),
         verticalSpacing(10),
-        Text(
-          'Chapter 1',
-          style: Theme.of(context).textTheme.headline5,
-        ),
+        ValueListenableBuilder<String>(
+            valueListenable: _pageManager.currentSongTitleNotifier,
+            builder: (_, title, __) {
+              return Text(
+                '$title',
+                style: Theme.of(context).textTheme.headline5,
+              );
+            }),
         verticalSpacing(20),
         Column(
           children: [
@@ -151,22 +192,13 @@ class _BodyState extends State<Body> {
               ),
             ),
             horizontalSpacing(6),
-            IconButton(
-              onPressed: () {
-                _pageController.previousPage(
-                  duration: fastDuration,
-                  curve: Curves.easeIn,
-                );
-                _pageManager.previous();
-              },
-              icon: Icon(
-                CupertinoIcons.backward_end_fill,
-                color: isDarkMode ? Colors.white : Color(0xff3b4252),
-                size: 30,
-              ),
+            PreviousSongButton(
+              pageController: _pageController,
+              pageManager: _pageManager,
+              isDarkMode: isDarkMode,
             ),
             ValueListenableBuilder<ButtonState>(
-              valueListenable: _pageManager.buttonNotifier,
+              valueListenable: _pageManager.playButtonNotifier,
               builder: (_, value, __) {
                 switch (value) {
                   case ButtonState.loading:
@@ -206,19 +238,10 @@ class _BodyState extends State<Body> {
                 }
               },
             ),
-            IconButton(
-              onPressed: () {
-                _pageController.nextPage(
-                  duration: fastDuration,
-                  curve: Curves.easeIn,
-                );
-                _pageManager.next();
-              },
-              icon: Icon(
-                CupertinoIcons.forward_end_fill,
-                size: 30,
-                color: isDarkMode ? Colors.white : Color(0xff3b4252),
-              ),
+            NextSongButton(
+              pageController: _pageController,
+              pageManager: _pageManager,
+              isDarkMode: isDarkMode,
             ),
             horizontalSpacing(6),
             Column(
@@ -269,6 +292,99 @@ class _BodyState extends State<Body> {
         ),
         Spacer(flex: 2),
       ],
+    );
+  }
+}
+
+class PreviousSongButton extends StatelessWidget {
+  const PreviousSongButton({
+    Key? key,
+    required PageController pageController,
+    required PageManager pageManager,
+    required this.isDarkMode,
+  })  : _pageController = pageController,
+        _pageManager = pageManager,
+        super(key: key);
+
+  final PageController _pageController;
+  final PageManager _pageManager;
+  final bool isDarkMode;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<bool>(
+        valueListenable: _pageManager.isFirstSongNotifier,
+        builder: (_, isFirst, __) {
+          return IconButton(
+            onPressed: isFirst
+                ? null
+                : () {
+                    _pageController.previousPage(
+                      duration: fastDuration,
+                      curve: Curves.easeIn,
+                    );
+                    _pageManager.previous();
+                    _pageManager.play();
+                  },
+            icon: Icon(
+              CupertinoIcons.backward_end_fill,
+              color: isDarkMode
+                  ? !isFirst
+                      ? Colors.white
+                      : Colors.white54
+                  : !isFirst
+                      ? Color(0xff3b4252)
+                      : Colors.black38,
+              size: 30,
+            ),
+          );
+        });
+  }
+}
+
+class NextSongButton extends StatelessWidget {
+  const NextSongButton({
+    Key? key,
+    required PageController pageController,
+    required PageManager pageManager,
+    required this.isDarkMode,
+  })  : _pageController = pageController,
+        _pageManager = pageManager,
+        super(key: key);
+
+  final PageController _pageController;
+  final PageManager _pageManager;
+  final bool isDarkMode;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<bool>(
+      valueListenable: _pageManager.isLastSongNotifier,
+      builder: (_, isLast, __) {
+        return IconButton(
+          onPressed: isLast
+              ? null
+              : () {
+                  _pageController.nextPage(
+                    duration: fastDuration,
+                    curve: Curves.easeIn,
+                  );
+                  _pageManager.next();
+                  _pageManager.play();
+                },
+          icon: Icon(
+            CupertinoIcons.forward_end_fill,
+            size: 30,
+            color: isDarkMode
+                ? !isLast
+                    ? Colors.white
+                    : Colors.white54
+                : !isLast
+                    ? Color(0xff3b4252)
+                    : Colors.black38,
+          ),
+        );
+      },
     );
   }
 }

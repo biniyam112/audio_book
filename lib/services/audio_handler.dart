@@ -156,6 +156,9 @@ class MyAudioHandler extends BaseAudioHandler {
   Future<void> seek(Duration position) => _player.seek(position);
 
   @override
+  Future<void> setSpeed(double speed) => _player.setSpeed(speed);
+
+  @override
   Future<void> skipToQueueItem(int index) async {
     if (index < 0 || index >= queue.value.length) return;
     if (_player.shuffleModeEnabled) {

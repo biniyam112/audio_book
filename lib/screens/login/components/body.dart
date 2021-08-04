@@ -22,20 +22,15 @@ class _BodyState extends State<Body> {
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: getProportionateScreenHeight(40)),
+                SizedBox(height: SizeConfig.screenHeight! * .04),
                 Text(
-                  'Already member',
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-                SizedBox(height: getProportionateScreenHeight(20)),
-                Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Text(
-                    'Enter email and password to continue',
-                    textAlign: TextAlign.center,
-                    style: Theme.of(context).textTheme.headline5,
-                  ),
+                  'Already\na member',
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline3!
+                      .copyWith(fontSize: 30),
                 ),
                 SizedBox(height: SizeConfig.screenHeight! * .04),
                 LoginForm(),
