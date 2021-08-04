@@ -1,10 +1,11 @@
 import 'package:audio_books/screens/components/form_error.dart';
-import 'package:audio_books/screens/home/home.dart';
+import 'package:audio_books/screens/phone_registration/phone_registration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../constants.dart';
 import '../../../sizeConfig.dart';
+import '../../components/input_field_container.dart';
 
 class SignUpForm extends StatefulWidget {
   SignUpForm({Key? key}) : super(key: key);
@@ -24,11 +25,20 @@ class _SignUpFormState extends State<SignUpForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          buildEmailFormField(),
+          InputFieldContainer(
+            title: 'Email',
+            child: buildEmailFormField(),
+          ),
           SizedBox(height: getProportionateScreenHeight(30)),
-          buildPasswordFormField(),
+          InputFieldContainer(
+            title: 'Password',
+            child: buildPasswordFormField(),
+          ),
           SizedBox(height: getProportionateScreenHeight(30)),
-          buildConfirmPasswordFormField(),
+          InputFieldContainer(
+            title: 'Confirm password',
+            child: buildConfirmPasswordFormField(),
+          ),
           SizedBox(height: getProportionateScreenHeight(20)),
           FormError(errors: errors),
           SizedBox(height: getProportionateScreenHeight(20)),
@@ -39,11 +49,12 @@ class _SignUpFormState extends State<SignUpForm> {
             ),
             onPressed: () {
               if (_formKey.currentState!.validate()) {
+                Navigator.pop(context);
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return HomeScreen();
+                      return PhoneRegistrationScreen();
                     },
                   ),
                 );
@@ -87,7 +98,7 @@ class _SignUpFormState extends State<SignUpForm> {
         return null;
       },
       decoration: InputDecoration(
-        labelText: 'Password',
+        fillColor: Color(0xffA2BAEA),
         hintText: 'confirm password',
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: Padding(
@@ -144,8 +155,8 @@ class _SignUpFormState extends State<SignUpForm> {
         return null;
       },
       decoration: InputDecoration(
-        labelText: 'Password',
-        hintText: 'enter password',
+        errorMaxLines: 1,
+        hintText: 'password',
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: Padding(
           padding: EdgeInsets.fromLTRB(
@@ -205,7 +216,6 @@ class _SignUpFormState extends State<SignUpForm> {
         return null;
       },
       decoration: InputDecoration(
-        labelText: 'Email',
         hintText: 'enter email',
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: Padding(

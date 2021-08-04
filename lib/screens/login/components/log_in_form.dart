@@ -1,6 +1,7 @@
 import 'package:audio_books/screens/components/form_error.dart';
-import 'package:audio_books/screens/home/home.dart';
+import 'package:audio_books/screens/components/input_field_container.dart';
 import 'package:audio_books/screens/otp/otp.dart';
+import 'package:audio_books/screens/phone_registration/phone_registration.dart';
 import 'package:audio_books/screens/signup/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -27,9 +28,15 @@ class _LoginFormState extends State<LoginForm> {
       key: _formKey,
       child: Column(
         children: [
-          buildEmailFormField(),
+          InputFieldContainer(
+            child: buildEmailFormField(),
+            title: 'Email',
+          ),
           SizedBox(height: getProportionateScreenHeight(30)),
-          buildPasswordFormField(),
+          InputFieldContainer(
+            title: 'Password',
+            child: buildPasswordFormField(),
+          ),
           SizedBox(height: getProportionateScreenHeight(10)),
           FormError(errors: errors),
           SizedBox(height: getProportionateScreenHeight(20)),
@@ -56,6 +63,7 @@ class _LoginFormState extends State<LoginForm> {
               Text('Don\'t have an account?'),
               TextButton(
                 onPressed: () {
+                  Navigator.pop(context);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -85,7 +93,7 @@ class _LoginFormState extends State<LoginForm> {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return HomeScreen();
+                      return PhoneRegistrationScreen();
                     },
                   ),
                 );
@@ -137,8 +145,7 @@ class _LoginFormState extends State<LoginForm> {
         return null;
       },
       decoration: InputDecoration(
-        labelText: 'Password',
-        hintText: 'enter your password',
+        hintText: 'password',
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: Padding(
           padding: EdgeInsets.fromLTRB(
@@ -194,8 +201,7 @@ class _LoginFormState extends State<LoginForm> {
         return null;
       },
       decoration: InputDecoration(
-        labelText: 'Email',
-        hintText: 'enter your email',
+        hintText: 'email',
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: Padding(
           padding: EdgeInsets.fromLTRB(

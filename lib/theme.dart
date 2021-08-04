@@ -1,4 +1,5 @@
 import 'package:audio_books/sizeConfig.dart';
+import 'package:audio_books/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -7,8 +8,8 @@ import 'constants.dart';
 class AppTheme {
   //?dark theme
   static ThemeData darkTheme = ThemeData(
-    scaffoldBackgroundColor: Darktheme.darkBackgroundColor,
-    primaryColor: primaryColor,
+    scaffoldBackgroundColor: Darktheme.backgroundColor,
+    primaryColor: Darktheme.primaryColor,
     inputDecorationTheme: InputDecorationTheme(
       isCollapsed: true,
       contentPadding: EdgeInsets.symmetric(
@@ -73,8 +74,8 @@ class AppTheme {
       fontFamily: GoogleFonts.poppins().fontFamily,
     ),
     buttonTheme: ButtonThemeData(
-      buttonColor: buttonColor,
-      splashColor: buttonSplashColor,
+      buttonColor: Darktheme.buttonColor,
+      splashColor: Darktheme.buttonSplashColor,
     ),
   );
 
@@ -82,7 +83,7 @@ class AppTheme {
   static ThemeData lightTheme = ThemeData(
     fontFamily: GoogleFonts.poppins().fontFamily,
     scaffoldBackgroundColor: Colors.white,
-    primaryColor: primaryColor,
+    primaryColor: Darktheme.primaryColor,
     inputDecorationTheme: InputDecorationTheme(
       isCollapsed: true,
       contentPadding: EdgeInsets.symmetric(
@@ -126,8 +127,8 @@ class AppTheme {
         fontWeight: FontWeight.bold,
       ),
     ).apply(
-      bodyColor: bodyTextColor,
-      displayColor: bodyTextColor,
+      bodyColor: Darktheme.textColor,
+      displayColor: Darktheme.textColor,
       fontFamily: GoogleFonts.poppins().fontFamily,
     ),
   );
@@ -162,6 +163,6 @@ class AppTheme {
 OutlineInputBorder outlineInputBorder() {
   return OutlineInputBorder(
     borderRadius: BorderRadius.circular(15),
-    borderSide: BorderSide(color: bodyTextColor),
+    borderSide: BorderSide(color: Darktheme.textColor),
   );
 }

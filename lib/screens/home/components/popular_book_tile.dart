@@ -1,7 +1,10 @@
+import 'package:audio_books/theme/dark_theme.dart';
+import 'package:audio_books/theme/theme_colors.dart';
+import 'package:audio_books/theme/theme_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../../constants.dart';
 import '../../../sizeConfig.dart';
 
 class PopularBookTile extends StatelessWidget {
@@ -11,23 +14,29 @@ class PopularBookTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
+
     return Container(
       height: getProportionateScreenHeight(300),
       width: getProportionateScreenWidth(200),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
+        color: isDarkMode ? Colors.black : Colors.white,
         boxShadow: [
           BoxShadow(
             offset: Offset(4, 4),
-            color: Darktheme.textColor.withOpacity(.1),
-            blurRadius: 4,
+            color: isDarkMode
+                ? Darktheme.shadowColor.withOpacity(.1)
+                : LightTheme.shadowColor.withOpacity(.1),
+            blurRadius: 10,
             spreadRadius: 1,
           ),
           BoxShadow(
             offset: Offset(-4, -4),
-            color: Darktheme.textColor.withOpacity(.1),
-            blurRadius: 4,
+            color: isDarkMode
+                ? Darktheme.shadowColor.withOpacity(.1)
+                : LightTheme.shadowColor.withOpacity(.1),
+            blurRadius: 10,
             spreadRadius: 1,
           ),
         ],
@@ -57,6 +66,31 @@ class PopularBookTile extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: Container(
               height: getProportionateScreenHeight(150),
+              decoration: BoxDecoration(
+                color: isDarkMode ? Colors.black : Colors.white,
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(10),
+                ),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: FractionalOffset.center,
+                  colors: isDarkMode
+                      ? [
+                          Colors.black.withOpacity(.8),
+                          Colors.black.withOpacity(.9),
+                          Colors.black,
+                          Colors.black,
+                          Colors.black,
+                        ]
+                      : [
+                          Colors.white.withOpacity(.8),
+                          Colors.white.withOpacity(.9),
+                          Colors.white,
+                          Colors.white,
+                          Colors.white,
+                        ],
+                ),
+              ),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
@@ -83,23 +117,6 @@ class PopularBookTile extends StatelessWidget {
                   ],
                 ),
               ),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(10),
-                ),
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: FractionalOffset.center,
-                  colors: [
-                    Colors.white.withOpacity(.8),
-                    Colors.white.withOpacity(.9),
-                    Colors.white,
-                    Colors.white,
-                    Colors.white,
-                  ],
-                ),
-              ),
             ),
           ),
         ],
@@ -117,6 +134,8 @@ class WritterRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
+
     return Row(
       children: [
         Container(
@@ -127,10 +146,10 @@ class WritterRow extends StatelessWidget {
           ),
           child: Icon(
             CupertinoIcons.pencil,
-            color: Colors.blue,
+            color: isDarkMode ? darkTheme.primaryColor : Colors.blue,
           ),
         ),
-        SizedBox(width: 8),
+        SizedBox(width: getProportionateScreenWidth(12)),
         Text(
           writterName,
           style: Theme.of(context).textTheme.headline6!.copyWith(
@@ -151,6 +170,8 @@ class NarattorRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
+
     return Row(
       children: [
         Container(
@@ -161,10 +182,10 @@ class NarattorRow extends StatelessWidget {
           ),
           child: Icon(
             CupertinoIcons.speaker_1,
-            color: Colors.blue,
+            color: isDarkMode ? darkTheme.primaryColor : Colors.blue,
           ),
         ),
-        SizedBox(width: 8),
+        SizedBox(width: getProportionateScreenWidth(12)),
         Text(
           narattorName,
           style: Theme.of(context).textTheme.headline6!.copyWith(
@@ -185,6 +206,8 @@ class BookCategoryRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
+
     return Row(
       children: [
         Container(
@@ -195,10 +218,10 @@ class BookCategoryRow extends StatelessWidget {
           ),
           child: Icon(
             Icons.menu_book,
-            color: Colors.blue,
+            color: isDarkMode ? darkTheme.primaryColor : Colors.blue,
           ),
         ),
-        SizedBox(width: 8),
+        SizedBox(width: getProportionateScreenWidth(12)),
         Text(
           category,
           style: Theme.of(context).textTheme.headline6!.copyWith(

@@ -1,9 +1,10 @@
-import 'package:audio_books/constants.dart';
-import 'package:audio_books/screens/bookchapters/book_chapters.dart';
 import 'package:audio_books/sizeConfig.dart';
+import 'package:audio_books/theme/theme_colors.dart';
+import 'package:audio_books/theme/theme_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 import 'details_bottom_part.dart';
 
@@ -20,6 +21,7 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
     return Container(
       height: SizeConfig.screenHeight,
       width: SizeConfig.screenWidth,
@@ -30,7 +32,7 @@ class _BodyState extends State<Body> {
               height: SizeConfig.screenHeight! * .4,
               width: SizeConfig.screenWidth,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: isDarkMode ? Colors.black : Colors.white,
               ),
               child: Padding(
                 padding: const EdgeInsets.all(14),
@@ -70,7 +72,9 @@ class _BodyState extends State<Body> {
                                       .textTheme
                                       .headline6!
                                       .copyWith(
-                                        color: Colors.black38,
+                                        color: isDarkMode
+                                            ? Colors.white70
+                                            : Colors.black38,
                                       ),
                                   children: [
                                     TextSpan(text: 'Author  '),
@@ -84,7 +88,9 @@ class _BodyState extends State<Body> {
                                       .textTheme
                                       .headline6!
                                       .copyWith(
-                                        color: Colors.black38,
+                                        color: isDarkMode
+                                            ? Colors.white70
+                                            : Colors.black,
                                       ),
                                   children: [
                                     TextSpan(text: 'Narattor  '),
@@ -106,7 +112,9 @@ class _BodyState extends State<Body> {
                                       child: Text(
                                         '#romance',
                                         style: TextStyle(
-                                          color: Colors.black87,
+                                          color: isDarkMode
+                                              ? Colors.white
+                                              : Colors.black,
                                         ),
                                       ),
                                     ),
@@ -126,13 +134,15 @@ class _BodyState extends State<Body> {
                             Text(
                               'Rating',
                               style: TextStyle(
-                                color: Colors.black54,
+                                color:
+                                    isDarkMode ? Colors.white : Colors.black54,
                               ),
                             ),
                             Text(
                               '4.9',
                               style: TextStyle(
-                                color: Colors.black87,
+                                color:
+                                    isDarkMode ? Colors.white : Colors.black54,
                                 fontFamily: GoogleFonts.montserrat().fontFamily,
                                 fontSize: 18,
                               ),
@@ -144,13 +154,15 @@ class _BodyState extends State<Body> {
                             Text(
                               'Downlaods',
                               style: TextStyle(
-                                color: Colors.black54,
+                                color:
+                                    isDarkMode ? Colors.white : Colors.black54,
                               ),
                             ),
                             Text(
                               '120',
                               style: TextStyle(
-                                color: Colors.black87,
+                                color:
+                                    isDarkMode ? Colors.white : Colors.black54,
                                 fontFamily: GoogleFonts.montserrat().fontFamily,
                                 fontSize: 18,
                               ),
@@ -160,7 +172,9 @@ class _BodyState extends State<Body> {
                         ElevatedButton(
                           style: ButtonStyle(
                             backgroundColor: MaterialStateProperty.all(
-                              Color(0xff3FB684),
+                              isDarkMode
+                                  ? Darktheme.primaryColor
+                                  : LightTheme.primaryColor,
                             ),
                           ),
                           child: Padding(
@@ -175,7 +189,7 @@ class _BodyState extends State<Body> {
                                   .headline5!
                                   .copyWith(
                                     color: Colors.white,
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.bold,
                                   ),
                             ),
                           ),

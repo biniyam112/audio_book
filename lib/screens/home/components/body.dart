@@ -1,9 +1,12 @@
-import 'package:audio_books/constants.dart';
 import 'package:audio_books/screens/bookdetails/book_details.dart';
 import 'package:audio_books/sizeConfig.dart';
+import 'package:audio_books/theme/theme_colors.dart';
+import 'package:audio_books/theme/theme_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:provider/provider.dart';
 
 import 'book_category.dart';
 import 'popular_book_tile.dart';
@@ -101,22 +104,21 @@ class BookTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
+
     return GestureDetector(
       onTap: () {
-        Navigator.push(
+        pushNewScreen(
           context,
-          MaterialPageRoute(
-            builder: (context) {
-              return BookDetailsScreen();
-            },
-          ),
+          screen: BookDetailsScreen(),
+          withNavBar: false,
         );
       },
       child: Container(
         height: 140,
         width: SizeConfig.screenWidth! - 20,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: isDarkMode ? Colors.black : Colors.white,
           borderRadius: BorderRadius.circular(
             getProportionateScreenWidth(16),
           ),
@@ -156,7 +158,9 @@ class BookTile extends StatelessWidget {
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
-                            color: Darktheme.textColor.withOpacity(.2),
+                            color: isDarkMode
+                                ? Darktheme.shadowColor.withOpacity(.2)
+                                : LightTheme.shadowColor.withOpacity(.2),
                             offset: Offset(-4, 4),
                             blurRadius: 4,
                             spreadRadius: .5,
@@ -209,7 +213,10 @@ class BookTile extends StatelessWidget {
                             fontFamily: GoogleFonts.poppins().fontFamily,
                           ),
                           children: [
-                            TextSpan(text: 'written by: '),
+                            TextSpan(
+                              text: 'written by: ',
+                              style: Theme.of(context).textTheme.headline5,
+                            ),
                             TextSpan(
                               text: 'Adrean Hunstler',
                               style: Theme.of(context).textTheme.headline5,
@@ -226,7 +233,10 @@ class BookTile extends StatelessWidget {
                             fontFamily: GoogleFonts.poppins().fontFamily,
                           ),
                           children: [
-                            TextSpan(text: 'translated by: '),
+                            TextSpan(
+                              text: 'narrated by: ',
+                              style: Theme.of(context).textTheme.headline5,
+                            ),
                             TextSpan(
                               text: 'Yohannis Dereje',
                               style: Theme.of(context).textTheme.headline5,
@@ -238,7 +248,7 @@ class BookTile extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.people,
-                            color: Colors.black54,
+                            color: isDarkMode ? Colors.white70 : Colors.black54,
                           ),
                           SizedBox(width: getProportionateScreenWidth(6)),
                           Text('138 listening'),
