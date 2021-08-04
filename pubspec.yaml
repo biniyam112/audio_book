@@ -30,6 +30,7 @@ dependencies:
   shared_preferences: ^2.0.6
   pin_code_fields: ^7.3.0
   just_audio: ^0.9.4
+  flutter_neumorphic: ^3.1.0
 
 dev_dependencies:
   flutter_test:

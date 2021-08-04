@@ -14,9 +14,9 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       body: Body(),
       bottomNavigationBar: BottomAppBar(
-        elevation: 6,
+        elevation: getProportionateScreenHeight(6),
         child: Container(
-          height: getProportionateScreenHeight(62),
+          height: getProportionateScreenHeight(65),
           width: SizeConfig.screenWidth,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -29,13 +29,13 @@ class HomeScreen extends StatelessWidget {
                     splashColor: Darktheme.textColor,
                     onTap: () {},
                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding:  EdgeInsets.all(getProportionateScreenHeight(8.0)),
                       child: Column(
                         children: [
                           SvgPicture.asset(
                             'assets/icons/Shop Icon.svg',
                           ),
-                          SizedBox(height: 4),
+                          SizedBox(height: getProportionateScreenHeight(4)),
                           Text(
                             'Home',
                             style: TextStyle(
