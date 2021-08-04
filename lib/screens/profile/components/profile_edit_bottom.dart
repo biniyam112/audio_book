@@ -1,10 +1,9 @@
-import 'package:audio_books/models/models.dart';
-import 'package:audio_books/screens/library/library.dart';
+import 'package:audio_books/screens/settings/settings.dart';
 import 'package:audio_books/sizeConfig.dart';
-import 'package:audio_books/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../apptheme.dart';
 import 'components.dart';
 
 class ProfileBottom extends StatefulWidget {
@@ -79,11 +78,11 @@ class _ProfileBottomState extends State<ProfileBottom> {
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LibraryScreen(
-                                    downloadedBooks: libraryMockData,
-                                  )));
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => SettingsScreen(),
+                        ),
+                      );
                     },
                     child: Text(
                       "Save",

@@ -32,7 +32,7 @@ class _LoginFormState extends State<LoginForm> {
             child: buildEmailFormField(),
             title: 'Email',
           ),
-          SizedBox(height: getProportionateScreenHeight(30)),
+          SizedBox(height: getProportionateScreenHeight(20)),
           InputFieldContainer(
             title: 'Password',
             child: buildPasswordFormField(),

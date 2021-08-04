@@ -1,4 +1,6 @@
 import 'package:audio_books/screens/components/custom_appbar.dart';
+import 'package:audio_books/screens/components/input_field_container.dart';
+import 'package:audio_books/screens/otp/otp.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme_provider.dart';
 import 'package:country_calling_code_picker/picker.dart';
@@ -13,7 +15,7 @@ class PhoneRegistrationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     SizeConfig().init(context);
     return Scaffold(
-      appBar: customAppBar(context: context, title: 'Register Phone'),
+      appBar: customAppBar(context: context, title: 'Verification'),
       body: Body(),
     );
   }
@@ -25,50 +27,79 @@ class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
-    return Padding(
-      padding: EdgeInsets.symmetric(
-        horizontal: getProportionateScreenWidth(30),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(height: SizeConfig.screenHeight! * .2),
-          Text(
-            'Enter \nPhone number',
-            style:
-                Theme.of(context).textTheme.headline3!.copyWith(fontSize: 30),
+    return Container(
+      height: SizeConfig.screenHeight,
+      width: SizeConfig.screenWidth,
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: getProportionateScreenWidth(30),
           ),
-          verticalSpacing(20),
-          Text(
-            'we will send you verification code',
-            style: Theme.of(context).textTheme.headline6!.copyWith(
-                  color: isDarkMode ? Colors.white38 : Colors.black38,
-                ),
-          ),
-          PhoneForm(),
-          ElevatedButton(
-            onPressed: () {},
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Next',
-                    style: Theme.of(context).textTheme.headline5!.copyWith(
-                          color: Colors.white,
-                        ),
-                  ),
-                  horizontalSpacing(5),
-                  Icon(
-                    CupertinoIcons.arrow_right,
-                    color: Colors.white,
-                  ),
-                ],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: SizeConfig.screenHeight! * .16),
+              Text(
+                'Enter \nPhone number',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline3!
+                    .copyWith(fontSize: 30),
               ),
-            ),
+              verticalSpacing(10),
+              Text(
+                'we will send you verification code',
+                style: Theme.of(context).textTheme.headline6!.copyWith(
+                      color: isDarkMode ? Colors.white38 : Colors.black38,
+                    ),
+              ),
+              verticalSpacing(40),
+              PhoneForm(),
+              verticalSpacing(12),
+              Center(
+                child: Container(
+                  height: getProportionateScreenHeight(40),
+                  width: getProportionateScreenWidth(100),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (cotext) {
+                            return OTPScreen();
+                          },
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(
+                          vertical: getProportionateScreenWidth(6)),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Next',
+                            style:
+                                Theme.of(context).textTheme.headline5!.copyWith(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                          ),
+                          horizontalSpacing(8),
+                          Icon(
+                            CupertinoIcons.chevron_right,
+                            color: Colors.white,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
@@ -101,40 +132,73 @@ class _PhoneFormState extends State<PhoneForm> {
   @override
   Widget build(BuildContext context) {
     final country = _selectedCountry;
-    return TextFormField(
-      onChanged: (value) {
-        phoneNumber = value;
-      },
-      decoration: InputDecoration(
-        prefix: GestureDetector(
-          onTap: () {
-            _showCountryPicker();
-          },
-          child: Row(
-            children: [
-              country == null
-                  ? Icon(CupertinoIcons.chevron_up)
-                  : Container(
-                      height: getProportionateScreenWidth(30),
-                      width: getProportionateScreenWidth(30),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          getProportionateScreenWidth(10),
+    return InputFieldContainer(
+      title: 'Phone',
+      child: TextFormField(
+        style: Theme.of(context)
+            .textTheme
+            .headline5!
+            .copyWith(color: Colors.black),
+        onChanged: (value) {
+          phoneNumber = value;
+        },
+        keyboardType: TextInputType.phone,
+        decoration: InputDecoration(
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: getProportionateScreenWidth(10),
+            vertical: getProportionateScreenHeight(10),
+          ),
+          hintText: 'phone',
+          hintStyle: Theme.of(context)
+              .textTheme
+              .headline5!
+              .copyWith(color: Colors.black45),
+          prefix: GestureDetector(
+            onTap: () {
+              _showCountryPicker();
+            },
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                country == null
+                    ? Padding(
+                        padding: EdgeInsets.only(
+                          right: getProportionateScreenWidth(10),
+                          left: 2,
+                        ),
+                        child: Icon(CupertinoIcons.chevron_up),
+                      )
+                    : Container(
+                        height: getProportionateScreenWidth(30),
+                        width: getProportionateScreenWidth(30),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            getProportionateScreenWidth(10),
+                          ),
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(
+                            getProportionateScreenWidth(10),
+                          ),
+                          child: Image.asset(
+                            country.flag,
+                            package: countryCodePackageName,
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                          getProportionateScreenWidth(10),
-                        ),
-                        child: Image.asset(
-                          country.flag,
-                          package: countryCodePackageName,
-                          fit: BoxFit.cover,
-                        ),
+                if (country != null)
+                  Padding(
+                    padding: EdgeInsets.only(left: 6, right: 18),
+                    child: Text(
+                      country.callingCode,
+                      style: TextStyle(
+                        color: Colors.black,
                       ),
                     ),
-              country == null ? Text('select') : Text(country.countryCode),
-            ],
+                  ),
+              ],
+            ),
           ),
         ),
       ),

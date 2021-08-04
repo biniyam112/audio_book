@@ -42,7 +42,8 @@ class _BodyState extends State<Body> {
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Expanded(
+                          Container(
+                            width: SizeConfig.screenWidth! * .43,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: Image.asset(
@@ -74,7 +75,7 @@ class _BodyState extends State<Body> {
                                       .copyWith(
                                         color: isDarkMode
                                             ? Colors.white70
-                                            : Colors.black38,
+                                            : Colors.black45,
                                       ),
                                   children: [
                                     TextSpan(text: 'Author  '),
@@ -90,7 +91,7 @@ class _BodyState extends State<Body> {
                                       .copyWith(
                                         color: isDarkMode
                                             ? Colors.white70
-                                            : Colors.black,
+                                            : Colors.black45,
                                       ),
                                   children: [
                                     TextSpan(text: 'Narattor  '),
@@ -99,28 +100,12 @@ class _BodyState extends State<Body> {
                                 ),
                               ),
                               SizedBox(height: getProportionateScreenHeight(6)),
-                              Wrap(
-                                spacing: getProportionateScreenWidth(4),
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(6),
-                                      color: Color(0xffEBECF2).withOpacity(.6),
-                                    ),
-                                    padding: EdgeInsets.all(6),
-                                    child: Center(
-                                      child: Text(
-                                        '#romance',
-                                        style: TextStyle(
-                                          color: isDarkMode
-                                              ? Colors.white
-                                              : Colors.black,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                              BookGenereCard(
+                                genere: '#romance',
                               ),
+                              verticalSpacing(6),
+                              RatingDisplay(ratingValue: 4.6),
+                              DownloadsCounter(downloadCount: 87),
                             ],
                           ),
                         ],
@@ -129,71 +114,13 @@ class _BodyState extends State<Body> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Column(
-                          children: [
-                            Text(
-                              'Rating',
-                              style: TextStyle(
-                                color:
-                                    isDarkMode ? Colors.white : Colors.black54,
-                              ),
-                            ),
-                            Text(
-                              '4.9',
-                              style: TextStyle(
-                                color:
-                                    isDarkMode ? Colors.white : Colors.black54,
-                                fontFamily: GoogleFonts.montserrat().fontFamily,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
+                        PurchaseButton(
+                          text: 'Get E-book',
+                          onPress: () {},
                         ),
-                        Column(
-                          children: [
-                            Text(
-                              'Downlaods',
-                              style: TextStyle(
-                                color:
-                                    isDarkMode ? Colors.white : Colors.black54,
-                              ),
-                            ),
-                            Text(
-                              '120',
-                              style: TextStyle(
-                                color:
-                                    isDarkMode ? Colors.white : Colors.black54,
-                                fontFamily: GoogleFonts.montserrat().fontFamily,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ],
-                        ),
-                        ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                              isDarkMode
-                                  ? Darktheme.primaryColor
-                                  : LightTheme.primaryColor,
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 10,
-                            ),
-                            child: Text(
-                              'Download for ${2} \$',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline5!
-                                  .copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            ),
-                          ),
-                          onPressed: () {},
+                        PurchaseButton(
+                          text: 'Get Audio book',
+                          onPress: () {},
                         ),
                       ],
                     ),
@@ -204,6 +131,142 @@ class _BodyState extends State<Body> {
             DetailsBottomPart(preface: preface),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class BookGenereCard extends StatelessWidget {
+  const BookGenereCard({
+    Key? key,
+    required this.genere,
+  }) : super(key: key);
+
+  final String genere;
+
+  @override
+  Widget build(BuildContext context) {
+    bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(6),
+        color: Color(0xffEBECF2).withOpacity(.6),
+      ),
+      padding: EdgeInsets.all(8),
+      child: Center(
+        child: Text(
+          genere,
+          style: TextStyle(
+            color: isDarkMode ? Colors.white : Colors.black,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class RatingDisplay extends StatelessWidget {
+  const RatingDisplay({
+    Key? key,
+    required this.ratingValue,
+  }) : super(key: key);
+  final double ratingValue;
+
+  @override
+  Widget build(BuildContext context) {
+    bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Rating',
+          style: TextStyle(
+            color: isDarkMode ? Colors.white : Colors.black54,
+          ),
+        ),
+        Text(
+          '$ratingValue',
+          style: TextStyle(
+            color: isDarkMode ? Colors.white : Colors.black87,
+            fontFamily: GoogleFonts.montserrat().fontFamily,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class DownloadsCounter extends StatelessWidget {
+  const DownloadsCounter({
+    Key? key,
+    required this.downloadCount,
+  }) : super(key: key);
+  final int downloadCount;
+
+  @override
+  Widget build(BuildContext context) {
+    bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Downlaods',
+          style: TextStyle(
+            color: isDarkMode ? Colors.white : Colors.black54,
+          ),
+        ),
+        Text(
+          '$downloadCount',
+          style: TextStyle(
+            color: isDarkMode ? Colors.white : Colors.black87,
+            fontFamily: GoogleFonts.montserrat().fontFamily,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class PurchaseButton extends StatelessWidget {
+  const PurchaseButton({
+    Key? key,
+    required this.text,
+    required this.onPress,
+  }) : super(key: key);
+
+  final String text;
+  final GestureTapCallback onPress;
+
+  @override
+  Widget build(BuildContext context) {
+    bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
+    return Container(
+      width: getProportionateScreenWidth(160),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          backgroundColor: MaterialStateProperty.all(
+            isDarkMode ? Darktheme.primaryColor : LightTheme.primaryColor,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            vertical: 10,
+          ),
+          child: Text(
+            text,
+            style: Theme.of(context).textTheme.headline5!.copyWith(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+        ),
+        onPressed: onPress,
       ),
     );
   }

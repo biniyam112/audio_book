@@ -7,7 +7,7 @@ PreferredSizeWidget customAppBar({
   return PreferredSize(
     preferredSize: Size(double.infinity, kToolbarHeight * 3),
     child: SafeArea(
-      minimum: EdgeInsets.only(top: 40, bottom: 10),
+      minimum: EdgeInsets.only(top: 50, bottom: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -15,7 +15,7 @@ PreferredSizeWidget customAppBar({
           Spacer(),
           Text(
             title,
-            style: Theme.of(context).textTheme.headline3,
+            style: Theme.of(context).textTheme.headline4,
           ),
           Spacer(),
         ],
