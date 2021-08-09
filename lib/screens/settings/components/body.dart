@@ -6,6 +6,7 @@ import 'package:audio_books/theme/theme_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class Body extends StatelessWidget {
@@ -71,20 +72,17 @@ class Body extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      Navigator.push(
+                      pushNewScreen(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return ProfileEditScreen(
-                              profile: Profile(
-                                fullName: 'fullName',
-                                email: 'email',
-                                password: 'password',
-                                phone: 'phone',
-                              ),
-                            );
-                          },
+                        screen: ProfileEditScreen(
+                          profile: Profile(
+                            fullName: 'fullName',
+                            email: 'email',
+                            password: 'password',
+                            phone: 'phone',
+                          ),
                         ),
+                        withNavBar: false,
                       );
                     },
                     child: Row(

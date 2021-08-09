@@ -9,14 +9,15 @@ class ProfileHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: SizeConfig.screenWidth,
-      height: SizeConfig.screenHeight! *.27,
+      height: SizeConfig.screenHeight! * .27,
       padding: EdgeInsets.only(top: getProportionateScreenHeight(30)),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Center(
-          child: SvgPicture.asset("assets/icons/profile.svg",
-         
-              semanticsLabel: 'A red up arrow'),
+          child: SvgPicture.asset(
+            "assets/icons/profile.svg",
+            semanticsLabel: 'A red up arrow',
+          ),
         ),
       ),
     );

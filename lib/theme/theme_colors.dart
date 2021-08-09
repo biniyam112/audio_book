@@ -15,6 +15,7 @@ class Darktheme {
   static const buttonColor = Color(0xfffd7e14);
   static const buttonSplashColor = Color(0xfffd7e14);
   static const backgroundColor = Color(0xFF22242C);
+  static const containerColor = Color(0xff17181D);
   static const textColor = Colors.white;
   static const secondaryColor = Color(0xff8AC185);
   static const shadowColor = Color(0xffaaaaaa);

@@ -1,3 +1,4 @@
+import 'package:audio_books/sizeConfig.dart';
 import 'package:flutter/material.dart';
 
 PreferredSizeWidget customAppBar({
@@ -7,7 +8,8 @@ PreferredSizeWidget customAppBar({
   return PreferredSize(
     preferredSize: Size(double.infinity, kToolbarHeight * 3),
     child: SafeArea(
-      minimum: EdgeInsets.only(top: 50, bottom: 10),
+      minimum:
+          EdgeInsets.only(top: getProportionateScreenHeight(40), bottom: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,

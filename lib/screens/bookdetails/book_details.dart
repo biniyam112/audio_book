@@ -1,3 +1,4 @@
+import 'package:audio_books/models/book.dart';
 import 'package:audio_books/theme/theme_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,8 @@ import 'package:provider/provider.dart';
 import 'components/body.dart';
 
 class BookDetailsScreen extends StatelessWidget {
-  const BookDetailsScreen({Key? key}) : super(key: key);
+  const BookDetailsScreen({Key? key, required this.book}) : super(key: key);
+  final Book book;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class BookDetailsScreen extends StatelessWidget {
           style: Theme.of(context).textTheme.headline4,
         ),
       ),
-      body: Body(),
+      body: Body(book: book),
     );
   }
 }

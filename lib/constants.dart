@@ -2,6 +2,7 @@
 const defaultPadding = 20.0;
 const slowDuration = Duration(milliseconds: 800);
 const fastDuration = Duration(milliseconds: 400);
+const superFastDuration = Duration(microseconds: 300);
 
 // Form Error
 final RegExp emailValidatorRegExp =

@@ -1,4 +1,3 @@
-import 'package:audio_books/screens/settings/settings.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -27,33 +26,32 @@ class _ProfileBottomState extends State<ProfileBottom> {
         key: _editFormKey,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          // crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextFieldClipper(
               child: TextFormField(
-                decoration: AppTheme.textFieldDecoration("First Name"),
+                decoration: AppTheme.textFieldDecoration("First Name", context),
               ),
             ),
             TextFieldClipper(
               child: TextFormField(
-                decoration: AppTheme.textFieldDecoration("Last Name"),
+                decoration: AppTheme.textFieldDecoration("Last Name", context),
               ),
             ),
             TextFieldClipper(
               child: TextFormField(
-                decoration: AppTheme.textFieldDecoration("Email"),
+                decoration: AppTheme.textFieldDecoration("Email", context),
               ),
             ),
             TextFieldClipper(
               child: TextFormField(
                 keyboardType: TextInputType.phone,
-                decoration: AppTheme.textFieldDecoration("Phone"),
+                decoration: AppTheme.textFieldDecoration("Phone", context),
               ),
             ),
             TextFieldClipper(
               child: TextFormField(
                 obscureText: true,
-                decoration: AppTheme.textFieldDecoration("Password"),
+                decoration: AppTheme.textFieldDecoration("Password", context),
               ),
             ),
             Padding(
@@ -63,7 +61,9 @@ class _ProfileBottomState extends State<ProfileBottom> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
                     child: Text(
                       "Cancel",
                       style:
@@ -77,12 +77,7 @@ class _ProfileBottomState extends State<ProfileBottom> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SettingsScreen(),
-                        ),
-                      );
+                      Navigator.pop(context);
                     },
                     child: Text(
                       "Save",

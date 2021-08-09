@@ -11,7 +11,10 @@ class ProfileBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
-        children: [ProfileHeader(), ProfileBottom()],
+        children: [
+          ProfileHeader(),
+          ProfileBottom(),
+        ],
       ),
     );
   }

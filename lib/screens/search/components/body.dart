@@ -1,4 +1,4 @@
-import 'package:audio_books/models/library_mock.dart';
+import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/screens.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,12 +30,13 @@ class _BodyState extends State<Body> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              verticalSpacing(10),
               SearchBar(),
               verticalSpacing(8),
               Container(
                 height: SizeConfig.screenHeight! * .75,
                 width: SizeConfig.screenWidth,
-                child: LibraryBottom(downloadedBooks: libraryMockData),
+                child: LibraryBottom(book: libraryMockData),
               ),
             ],
           ),

@@ -1,3 +1,6 @@
+import 'package:audio_books/models/models.dart';
+import 'package:audio_books/services/audio/page_manager.dart';
+import 'package:audio_books/services/audio/service_locator.dart';
 import 'package:audio_books/theme/theme_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -5,8 +8,20 @@ import 'package:provider/provider.dart';
 
 import 'components/body.dart';
 
-class AudioPlayerScreen extends StatelessWidget {
-  const AudioPlayerScreen({Key? key}) : super(key: key);
+class AudioPlayerScreen extends StatefulWidget {
+  const AudioPlayerScreen({Key? key, required this.book}) : super(key: key);
+  final Book book;
+
+  @override
+  _AudioPlayerScreenState createState() => _AudioPlayerScreenState();
+}
+
+class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
+  @override
+  void initState() {
+    getIt<PageManager>().init();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +44,7 @@ class AudioPlayerScreen extends StatelessWidget {
           style: Theme.of(context).textTheme.headline4,
         ),
       ),
-      body: Body(),
+      body: Body(book: widget.book),
     );
   }
 }

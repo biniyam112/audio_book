@@ -1,7 +1,7 @@
-import 'package:audio_books/models/library_mock.dart';
+import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/home/home.dart';
 import 'package:audio_books/screens/library/library.dart';
-import 'package:audio_books/screens/search/search.dart';
+import 'package:audio_books/screens/search/search_screen.dart';
 import 'package:audio_books/screens/settings/settings.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme_colors.dart';
@@ -37,9 +37,7 @@ class TabViewPage extends StatelessWidget {
       ),
       screens: [
         HomeScreen(),
-        LibraryScreen(
-          downloadedBooks: libraryMockData,
-        ),
+        LibraryScreen(downloadedBooks: libraryMockData),
         SearchScreen(),
         SettingsScreen(),
       ],
