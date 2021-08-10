@@ -12,25 +12,29 @@ class DataBaseHandler {
       join(await getDatabasesPath(), 'bookDB.db'),
       onCreate: (database, version) {
         return database.execute(
-          'Create table bookStore(id integer primary key,title Text,coverImage Text,author Text,bookFile Text,category Text,coverArt Text,percentCompleted integer)',
+          'Create table bookStore(id INTEGER PRIMARY KEY,title TEXT,author TEXT,bookFile LONGTEXT,category TEXT,coverArt MEDIUMTEXT,percentCompleted INTEGER)',
         );
       },
       version: 1,
     );
   }
 
-  Future<void> storeBook(DownloadedBook book) async {
+  Future<void> storeBook(DownloadedBook downloadedBook) async {
     final db = await dataBase;
     await db.insert(
       'bookStore',
-      book.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.ignore,
+      downloadedBook.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 
-  Future<List<DownloadedBook>> fetchBook() async {
+  Future<List<DownloadedBook>> fetchDownloadedBooks() async {
     final db = await dataBase;
-    final List<Map<String, dynamic>> maps = await db.query('bookStore');
+    final List<Map<String, dynamic>> maps = await db.query(
+      'bookStore',
+      limit: 2,
+    );
+    print('\nthe map length is ${maps.length}\n');
     return List.generate(
       maps.length,
       (index) => DownloadedBook.fromMap(

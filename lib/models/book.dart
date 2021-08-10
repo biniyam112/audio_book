@@ -24,8 +24,7 @@ List<Book> libraryMockData = [
     title: "Different Winter",
     author: "Mia Jackson",
     category: "History",
-    bookPath:
-        'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
     coverArt:
         "https://image.freepik.com/free-psd/high-angle-turned-open-book-mock-up_23-2148657114.jpg",
     chapersCount: 4,
@@ -34,12 +33,11 @@ List<Book> libraryMockData = [
     narattor: 'Abreham Mulatu',
   ),
   Book(
-    id: 0,
+    id: 1,
     title: "Hideout",
     author: "Ishikawa",
     category: "Fantasy",
-    bookPath:
-        'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
     coverArt:
         "https://image.freepik.com/free-vector/green-commercial-annual-report-template_1201-1061.jpg",
     chapersCount: 4,
@@ -48,12 +46,11 @@ List<Book> libraryMockData = [
     narattor: 'Dagnachew Hagere',
   ),
   Book(
-    id: 0,
+    id: 2,
     title: "The Price",
     author: "Machiavelli",
     category: "Politics",
-    bookPath:
-        'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
     coverArt:
         "https://image.freepik.com/free-psd/book-cover-mockup_400875-79.jpg",
     chapersCount: 32,
@@ -62,12 +59,11 @@ List<Book> libraryMockData = [
     narattor: 'Admasu Kibru',
   ),
   Book(
-    id: 0,
+    id: 3,
     title: "The Value of Design",
     author: "Mia Jackson",
     category: "Art",
-    bookPath:
-        'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
     coverArt:
         "https://cdn.pixabay.com/photo/2019/04/12/14/37/fantasy-4122305_960_720.jpg",
     chapersCount: 12,

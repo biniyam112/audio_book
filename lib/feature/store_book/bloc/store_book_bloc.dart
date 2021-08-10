@@ -9,16 +9,12 @@ class StoreBookBloc extends Bloc<StoreBookEvent, StoreBookState> {
 
   @override
   Stream<StoreBookState> mapEventToState(StoreBookEvent event) async* {
-    print('i am  here');
     yield StoringBookState(downloadProgress: 0);
     try {
-      print('also  herer');
       final storedBook = await storeBookRepo.storeBook(event.book);
       await Future.delayed(Duration.zero);
       yield BookStoredState(downloadedBook: storedBook);
-      print('also  here');
     } catch (e) {
-      print('\nThe error is $e\n');
       yield StoringBookFailedState(errorMessage: e.toString());
     }
   }

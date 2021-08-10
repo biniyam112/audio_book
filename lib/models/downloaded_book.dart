@@ -39,7 +39,7 @@ class DownloadedBook {
         id: json['id'],
         title: json['title'],
         author: json['author'],
-        bookFile: json['book'],
+        bookFile: json['bookFile'],
         category: json['category'],
         coverArt: json['coverArt'],
         percentCompleted: json['percentCompleted'],

@@ -1,4 +1,3 @@
-import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/screens.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,7 +35,7 @@ class _BodyState extends State<Body> {
               Container(
                 height: SizeConfig.screenHeight! * .75,
                 width: SizeConfig.screenWidth,
-                child: LibraryBottom(book: libraryMockData),
+                child: LibraryBottom(),
               ),
             ],
           ),

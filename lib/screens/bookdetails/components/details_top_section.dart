@@ -5,7 +5,7 @@ import 'package:audio_books/models/book.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/bookdetails/components/purchase_button.dart';
 import 'package:audio_books/screens/bookdetails/components/rating_display.dart';
-import 'package:audio_books/screens/pdfviewer/pdf_viewer_screen.dart';
+import 'package:audio_books/theme/theme_colors.dart';
 import 'package:audio_books/theme/theme_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -57,69 +57,31 @@ class DetailsTopSection extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                PurchaseButton(
-                  text: 'Get E-book',
-                  onPress: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Container(
-                          width: SizeConfig.screenWidth,
-                          padding: EdgeInsets.symmetric(
-                            vertical: 4,
-                          ),
-                          child: Text('Download started '),
-                        ),
-                        duration: Duration(seconds: 2),
-                      ),
-                    );
-                    BlocProvider.of<StoreBookBloc>(context)
-                        .add(StoreBookEvent(book));
-                    BlocListener<StoreBookBloc, StoreBookState>(
-                      listener: (context, state) {
-                        print('I\'m working');
-                        if (state is StoringBookState) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Container(
-                                width: SizeConfig.screenWidth,
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 4,
-                                ),
-                                child: Text('Downloading... '),
-                              ),
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                        }
-                        if (state is BookStoredState) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return PdfViewerScreen(
-                                  downloadedBook: state.downloadedBook,
-                                );
-                              },
-                            ),
-                          );
-                        }
-                        if (state is StoringBookFailedState) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Container(
-                                width: SizeConfig.screenWidth,
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 4,
-                                ),
-                                child: Text('Failed to fetch item '),
-                              ),
-                              duration: Duration(seconds: 2),
-                            ),
-                          );
-                        }
-                      },
-                    );
+                BlocListener<StoreBookBloc, StoreBookState>(
+                  listener: (context, state) {
+                    if (state is StoringBookState) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        buildSnackBar(context, text: 'Downloading... '),
+                      );
+                    }
+                    if (state is BookStoredState) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        buildSnackBar(context, text: 'Book added to library'),
+                      );
+                    }
+                    if (state is StoringBookFailedState) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        buildSnackBar(context, text: 'Failed to fetch item'),
+                      );
+                    }
                   },
+                  child: PurchaseButton(
+                    text: 'Get E-book',
+                    onPress: () {
+                      BlocProvider.of<StoreBookBloc>(context)
+                          .add(StoreBookEvent(book));
+                    },
+                  ),
                 ),
                 PurchaseButton(
                   text: 'Get Audio book',
@@ -130,6 +92,27 @@ class DetailsTopSection extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  SnackBar buildSnackBar(
+    BuildContext context, {
+    required String text,
+  }) {
+    bool isDarkMode =
+        Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
+
+    return SnackBar(
+      elevation: 6,
+      backgroundColor: isDarkMode ? Darktheme.backgroundColor : Colors.white,
+      content: Container(
+        width: SizeConfig.screenWidth,
+        child: Text(
+          '$text',
+          style: Theme.of(context).textTheme.headline5,
+        ),
+      ),
+      duration: Duration(seconds: 2),
     );
   }
 }

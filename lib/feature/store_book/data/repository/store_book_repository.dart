@@ -8,7 +8,6 @@ class StoreBookRepo {
   StoreBookRepo({required this.storeBookDP});
 
   Future<DownloadedBook> storeBook(Book book) async {
-    print('this is a win');
     return await storeBookDP.storeBook(book);
   }
 }

@@ -1,18 +1,19 @@
-import 'package:audio_books/models/book.dart';
-import 'package:audio_books/screens/screens.dart';
+import 'dart:convert';
+
+import 'package:audio_books/models/downloaded_book.dart';
+import 'package:audio_books/screens/pdfviewer/pdf_viewer_screen.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme_colors.dart';
 import 'package:audio_books/theme/theme_provider.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class LibraryItem extends StatelessWidget {
-  final Book book;
+  final DownloadedBook downloadedBook;
 
-  const LibraryItem({required this.book, Key? key}) : super(key: key);
+  const LibraryItem({required this.downloadedBook, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class LibraryItem extends StatelessWidget {
       onTap: () {
         pushNewScreen(
           context,
-          screen: BookDetailsScreen(book: book),
+          screen: PdfViewerScreen(downloadedBook: downloadedBook),
           withNavBar: false,
         );
       },
@@ -43,12 +44,8 @@ class LibraryItem extends StatelessWidget {
                 padding: EdgeInsets.symmetric(
                   vertical: getProportionateScreenHeight(0),
                 ),
-                child: CachedNetworkImage(
-                  imageUrl: '${book.coverArt}',
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      CircularProgressIndicator(
-                          value: downloadProgress.progress),
-                  errorWidget: (context, url, error) => Icon(Icons.error),
+                child: Image.memory(
+                  base64.decode(downloadedBook.coverArt),
                   fit: BoxFit.fitWidth,
                   width: double.infinity,
                   height: double.infinity,
@@ -62,7 +59,7 @@ class LibraryItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text(
-                    book.title,
+                    downloadedBook.title,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -70,7 +67,7 @@ class LibraryItem extends StatelessWidget {
                         fontSize: getProportionateScreenHeight(15)),
                   ),
                   Text(
-                    "By ${book.author}",
+                    "By ${downloadedBook.author}",
                     style: TextStyle(
                       color: isDarkMode ? Colors.white60 : Colors.grey.shade600,
                     ),

@@ -1,4 +1,3 @@
-import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/home/home.dart';
 import 'package:audio_books/screens/library/library.dart';
 import 'package:audio_books/screens/search/search_screen.dart';
@@ -37,7 +36,7 @@ class TabViewPage extends StatelessWidget {
       ),
       screens: [
         HomeScreen(),
-        LibraryScreen(downloadedBooks: libraryMockData),
+        LibraryScreen(),
         SearchScreen(),
         SettingsScreen(),
       ],

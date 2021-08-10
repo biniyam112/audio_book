@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:audio_books/models/downloaded_book.dart';
 import 'package:flutter/material.dart';
@@ -54,14 +53,15 @@ class _PdfReaderContentState extends State<PdfReaderContent> {
 
   @override
   Widget build(BuildContext context) {
-    File file = File.fromRawPath((base64.decode(widget.book.bookFile)));
-    return SfPdfViewer.file(
-      file,
+    // File file = File.fromRawPath(base64.decode(widget.book.bookFile).buffer.);
+    return SfPdfViewer.memory(
+      base64.decode(widget.book.bookFile),
       controller: widget.pdfViewController,
       key: _pdfViewerKey,
       onDocumentLoadFailed:
           (PdfDocumentLoadFailedDetails pdfDocumentLoadFailedDetails) {
-        print(pdfDocumentLoadFailedDetails.toString());
+        print('pdf level error ${pdfDocumentLoadFailedDetails.description}');
+        print('pdf level error ${pdfDocumentLoadFailedDetails.error}');
       },
       enableTextSelection: true,
       canShowScrollStatus: true,

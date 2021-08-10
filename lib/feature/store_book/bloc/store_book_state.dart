@@ -1,6 +1,10 @@
 import 'package:audio_books/models/downloaded_book.dart';
+import 'package:equatable/equatable.dart';
 
-class StoreBookState {}
+class StoreBookState extends Equatable {
+  @override
+  List<Object?> get props => props;
+}
 
 class IdleState extends StoreBookState {}
 

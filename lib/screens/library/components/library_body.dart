@@ -1,12 +1,9 @@
-import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/library/components/components.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:flutter/material.dart';
 
 class LibraryBody extends StatefulWidget {
-  final List<Book> book;
-
-  const LibraryBody({required this.book, Key? key}) : super(key: key);
+  const LibraryBody({Key? key}) : super(key: key);
 
   @override
   _LibraryBodyState createState() => _LibraryBodyState();
@@ -47,8 +44,8 @@ class _LibraryBodyState extends State<LibraryBody> {
         Expanded(
           child: TabBarView(
             children: [
-              LibraryBottom(book: widget.book),
-              LibraryBottom(book: widget.book),
+              LibraryBottom(),
+              LibraryBottom(),
             ],
           ),
         ),

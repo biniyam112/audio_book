@@ -1,4 +1,3 @@
-import 'package:audio_books/models/book.dart';
 import 'package:audio_books/screens/screens.dart';
 import 'package:audio_books/theme/theme_colors.dart';
 import 'package:audio_books/theme/theme_provider.dart';
@@ -6,10 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class LibraryScreen extends StatelessWidget {
-  final List<Book> downloadedBooks;
-
-  const LibraryScreen({required this.downloadedBooks, Key? key})
-      : super(key: key);
+  const LibraryScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,9 +21,7 @@ class LibraryScreen extends StatelessWidget {
             style: Theme.of(context).textTheme.headline4,
           ),
         ),
-        body: LibraryBody(
-          book: downloadedBooks,
-        ),
+        body: LibraryBody(),
       ),
     );
   }
