@@ -25,17 +25,17 @@ class FetchBooksBloc extends Bloc<FetchBooksEvent, FetchBooksState> {
 }
 
 class FetchBookFileBloc extends Bloc<FetchBookEvent, FetchBookState> {
-  FetchBookFileBloc({required this.fetchStoredBooksRepo})
+  FetchBookFileBloc({required this.fetchStoredBookFileRepo})
       : super(IdleBookState());
-  final FetchStoredBooksRepo fetchStoredBooksRepo;
+  final FetchStoredBookFileRepo fetchStoredBookFileRepo;
 
   @override
   Stream<FetchBookState> mapEventToState(FetchBookEvent event) async* {
     try {
-      final bookFile = await fetchStoredBooksRepo
+      final bookFile = await fetchStoredBookFileRepo
           .decryptStoredPdf(event.downloadedBook.bookFilePath);
-      print('the book is $bookFile');
       event.downloadedBook.setBookFile = bookFile;
+      print(event.downloadedBook.toMap());
       yield BookDataFetchedState(downloadedBook: event.downloadedBook);
     } catch (e) {
       print(e.toString());

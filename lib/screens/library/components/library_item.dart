@@ -25,10 +25,9 @@ class LibraryItem extends StatelessWidget {
     return BlocListener<FetchBookFileBloc, FetchBookState>(
       listener: (context, state) {
         if (state is BookDataFetchedState) {
-          downloadedBook.setBookFile = state.downloadedBook.bookFile;
           pushNewScreen(
             context,
-            screen: PdfViewerScreen(downloadedBook: downloadedBook),
+            screen: PdfViewerScreen(downloadedBook: state.downloadedBook),
             withNavBar: false,
           );
         }

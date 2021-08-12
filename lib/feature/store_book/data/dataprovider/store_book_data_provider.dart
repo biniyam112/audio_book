@@ -56,7 +56,7 @@ class StoreBookDP {
       final filePath = path.join(bookDirectory.path, '$bookTitle.pdf');
       final file = File(filePath);
       print('the file path is ${file.path}\n\n');
-      var encryptedData = await encryptionHandler.encryptData(pdfByteFile);
+      var encryptedData = encryptionHandler.encryptData(pdfByteFile);
       await file.writeAsString(encryptedData);
       return filePath;
     } catch (e) {

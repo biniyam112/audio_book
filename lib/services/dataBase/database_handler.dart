@@ -12,7 +12,7 @@ class DataBaseHandler {
       join(await getDatabasesPath(), 'bookDB.db'),
       onCreate: (database, version) {
         return database.execute(
-          'Create table bookStore(id INTEGER PRIMARY KEY,title TEXT,author TEXT,bookFile BLOB,category TEXT,coverArt BLOB,percentCompleted INTEGER)',
+          'Create table bookStore(id INTEGER PRIMARY KEY,title TEXT,author TEXT,bookFilePath TEXT,category TEXT,coverArt BLOB,percentCompleted INTEGER)',
         );
       },
       version: 1,
@@ -30,8 +30,7 @@ class DataBaseHandler {
 
   Future<List<DownloadedBook>> fetchDownloadedBooks() async {
     final db = await dataBase;
-    final List<Map<String, dynamic>> maps =
-        await db.rawQuery('select * from bookStore');
+    final List<Map<String, dynamic>> maps = await db.query('bookStore');
     print('\nthe map length is ${maps.length}\n');
     return List.generate(
       maps.length,

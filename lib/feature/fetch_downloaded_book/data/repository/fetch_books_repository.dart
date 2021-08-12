@@ -11,8 +11,14 @@ class FetchStoredBooksRepo {
   Future<List<DownloadedBook>> fetchDownloadedBooks() async {
     return await fetchStoredBooksDP.fetchDownloadedBooks();
   }
+}
+
+class FetchStoredBookFileRepo {
+  final FetchStoredBookFileDP fetchStoredBookFileDP;
+
+  FetchStoredBookFileRepo({required this.fetchStoredBookFileDP});
 
   Future<Uint8List> decryptStoredPdf(String filePath) async {
-    return await fetchStoredBooksDP.decryptStoredPdf(filePath);
+    return await fetchStoredBookFileDP.decryptStoredPdf(filePath);
   }
 }

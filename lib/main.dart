@@ -30,8 +30,13 @@ void main() async {
   );
   final FetchStoredBooksRepo fetchStoredBooksRepo = FetchStoredBooksRepo(
     fetchStoredBooksDP: FetchStoredBooksDP(
-      client: http.Client(),
       dataBaseHandler: DataBaseHandler()..createDatabase(),
+      encryptionHandler: EncryptionHandler(),
+    ),
+  );
+  final FetchStoredBookFileRepo fetchStoredBookFileRepo =
+      FetchStoredBookFileRepo(
+    fetchStoredBookFileDP: FetchStoredBookFileDP(
       encryptionHandler: EncryptionHandler(),
     ),
   );
@@ -41,6 +46,7 @@ void main() async {
       MyApp(
         storeBookRepo: storeBookRepo,
         fetchStoredBooksRepo: fetchStoredBooksRepo,
+        fetchStoredBookFileRepo: fetchStoredBookFileRepo,
       ),
     ),
   );
@@ -49,11 +55,13 @@ void main() async {
 class MyApp extends StatefulWidget {
   final StoreBookRepo storeBookRepo;
   final FetchStoredBooksRepo fetchStoredBooksRepo;
+  final FetchStoredBookFileRepo fetchStoredBookFileRepo;
 
   const MyApp({
     Key? key,
     required this.storeBookRepo,
     required this.fetchStoredBooksRepo,
+    required this.fetchStoredBookFileRepo,
   }) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
@@ -103,7 +111,7 @@ class _MyAppState extends State<MyApp> {
                 ),
                 BlocProvider(
                   create: (context) => FetchBookFileBloc(
-                    fetchStoredBooksRepo: widget.fetchStoredBooksRepo,
+                    fetchStoredBookFileRepo: widget.fetchStoredBookFileRepo,
                   ),
                 ),
               ],

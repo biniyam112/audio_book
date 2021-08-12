@@ -23,8 +23,9 @@ class LibraryBottom extends StatelessWidget {
             child: GridView.builder(
               itemCount: state.downloadedBooks.length,
               padding: EdgeInsets.symmetric(
-                  vertical: getProportionateScreenHeight(20),
-                  horizontal: getProportionateScreenWidth(30)),
+                vertical: getProportionateScreenHeight(20),
+                horizontal: getProportionateScreenWidth(30),
+              ),
               gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
                 maxCrossAxisExtent: 200,
                 childAspectRatio:

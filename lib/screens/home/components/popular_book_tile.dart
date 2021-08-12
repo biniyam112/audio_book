@@ -72,9 +72,16 @@ class PopularBookTile extends StatelessWidget {
                   child: CachedNetworkImage(
                     imageUrl: '${book.coverArt}',
                     progressIndicatorBuilder:
-                        (context, url, downloadProgress) =>
-                            CircularProgressIndicator(
-                                value: downloadProgress.progress),
+                        (context, url, downloadProgress) => Center(
+                      child: Container(
+                        height: 30,
+                        width: 30,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                              value: downloadProgress.progress),
+                        ),
+                      ),
+                    ),
                     errorWidget: (context, url, error) => Icon(Icons.error),
                     fit: BoxFit.fill,
                   ),

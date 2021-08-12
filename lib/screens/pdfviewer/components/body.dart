@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:audio_books/models/downloaded_book.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -53,8 +51,6 @@ class _PdfReaderContentState extends State<PdfReaderContent> {
 
   @override
   void dispose() {
-    SfPdfViewerState().dispose();
-    widget.book.setBookFile = Uint8List(0);
     super.dispose();
   }
 
@@ -62,15 +58,13 @@ class _PdfReaderContentState extends State<PdfReaderContent> {
   Widget build(BuildContext context) {
     return SfPdfViewer.memory(
       widget.book.bookFile,
-      onDocumentLoaded: (lodd) {
-        lodd.document.dispose();
-      },
       key: _pdfViewerKey,
       controller: widget.pdfViewController,
       onDocumentLoadFailed:
           (PdfDocumentLoadFailedDetails pdfDocumentLoadFailedDetails) {
         print('pdf level error ${pdfDocumentLoadFailedDetails.description}');
         print('pdf level error ${pdfDocumentLoadFailedDetails.error}');
+        Navigator.pop(context);
       },
       enableTextSelection: false,
       canShowScrollStatus: true,

@@ -7,7 +7,7 @@ class EncryptionHandler {
   late String encryptionKeyString;
   late Key key;
   late IV iv;
-  Future<String> encryptData(String fileToEncrypt) async {
+  String encryptData(String fileToEncrypt) {
     key = Key.fromUtf8(encryptionKeyString);
     iv = IV.fromUtf8(encryptionKeyString);
     final encrypter = Encrypter(
