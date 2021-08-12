@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:audio_books/models/downloaded_book.dart';
 import 'package:flutter/material.dart';
@@ -52,18 +52,27 @@ class _PdfReaderContentState extends State<PdfReaderContent> {
   final GlobalKey<SfPdfViewerState> _pdfViewerKey = GlobalKey();
 
   @override
+  void dispose() {
+    SfPdfViewerState().dispose();
+    widget.book.setBookFile = Uint8List(0);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // File file = File.fromRawPath(base64.decode(widget.book.bookFile).buffer.);
     return SfPdfViewer.memory(
-      base64.decode(widget.book.bookFile),
-      controller: widget.pdfViewController,
+      widget.book.bookFile,
+      onDocumentLoaded: (lodd) {
+        lodd.document.dispose();
+      },
       key: _pdfViewerKey,
+      controller: widget.pdfViewController,
       onDocumentLoadFailed:
           (PdfDocumentLoadFailedDetails pdfDocumentLoadFailedDetails) {
         print('pdf level error ${pdfDocumentLoadFailedDetails.description}');
         print('pdf level error ${pdfDocumentLoadFailedDetails.error}');
       },
-      enableTextSelection: true,
+      enableTextSelection: false,
       canShowScrollStatus: true,
       canShowScrollHead: true,
       canShowPaginationDialog: true,

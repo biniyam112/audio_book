@@ -1,15 +1,18 @@
+import 'dart:typed_data';
+
 import 'package:audio_books/models/models.dart';
 
 class DownloadedBook {
   final String title, author, category;
-  String bookFile, coverArt;
+  String bookFilePath, coverArt;
+  late Uint8List bookFile;
   final int id, percentCompleted;
 
   DownloadedBook({
     required this.id,
     required this.title,
     required this.author,
-    required this.bookFile,
+    required this.bookFilePath,
     required this.category,
     required this.coverArt,
     required this.percentCompleted,
@@ -19,7 +22,7 @@ class DownloadedBook {
         'id': id,
         'title': title,
         'author': author,
-        'bookFile': bookFile,
+        'bookFile': bookFilePath,
         'category': category,
         'coverArt': coverArt,
         'percentCompleted': percentCompleted,
@@ -29,9 +32,9 @@ class DownloadedBook {
         id: book.id,
         title: book.title,
         author: book.author,
-        bookFile: book.bookPath,
-        category: book.category,
+        bookFilePath: book.bookPath,
         coverArt: book.coverArt,
+        category: book.category,
         percentCompleted: 0,
       );
 
@@ -39,7 +42,7 @@ class DownloadedBook {
         id: json['id'],
         title: json['title'],
         author: json['author'],
-        bookFile: json['bookFile'],
+        bookFilePath: json['bookFile'],
         category: json['category'],
         coverArt: json['coverArt'],
         percentCompleted: json['percentCompleted'],
@@ -50,6 +53,10 @@ class DownloadedBook {
   }
 
   set setPdffile(String pdfFile) {
-    bookFile = pdfFile;
+    bookFilePath = pdfFile;
+  }
+
+  set setBookFile(Uint8List encodedFile) {
+    bookFile = encodedFile;
   }
 }

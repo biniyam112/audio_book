@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:audio_books/feature/fetch_downloaded_book/data/dataprovider/fetch_books_dataprovider.dart';
 import 'package:audio_books/models/downloaded_book.dart';
 
@@ -8,5 +10,9 @@ class FetchStoredBooksRepo {
 
   Future<List<DownloadedBook>> fetchDownloadedBooks() async {
     return await fetchStoredBooksDP.fetchDownloadedBooks();
+  }
+
+  Future<Uint8List> decryptStoredPdf(String filePath) async {
+    return await fetchStoredBooksDP.decryptStoredPdf(filePath);
   }
 }

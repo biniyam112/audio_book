@@ -24,7 +24,8 @@ List<Book> libraryMockData = [
     title: "Different Winter",
     author: "Mia Jackson",
     category: "History",
-    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
+    bookPath:
+        'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
     coverArt:
         "https://image.freepik.com/free-psd/high-angle-turned-open-book-mock-up_23-2148657114.jpg",
     chapersCount: 4,
@@ -37,7 +38,8 @@ List<Book> libraryMockData = [
     title: "Hideout",
     author: "Ishikawa",
     category: "Fantasy",
-    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
+    bookPath:
+        'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
     coverArt:
         "https://image.freepik.com/free-vector/green-commercial-annual-report-template_1201-1061.jpg",
     chapersCount: 4,

@@ -1,6 +1,9 @@
+import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_book_bloc.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_book_event.dart';
 import 'package:audio_books/screens/library/components/components.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LibraryBody extends StatefulWidget {
   const LibraryBody({Key? key}) : super(key: key);
@@ -10,6 +13,12 @@ class LibraryBody extends StatefulWidget {
 }
 
 class _LibraryBodyState extends State<LibraryBody> {
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<FetchBooksBloc>(context).add(FetchBooksEvent());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(

@@ -1,4 +1,3 @@
-import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_book_event.dart';
 import 'package:audio_books/feature/fetch_downloaded_book/data/dataprovider/fetch_books_dataprovider.dart';
 import 'package:audio_books/feature/fetch_downloaded_book/data/repository/fetch_books_repository.dart';
 import 'package:audio_books/feature/store_book/bloc/store_book_bloc.dart';
@@ -19,18 +18,21 @@ import 'package:http/http.dart' as http;
 
 import 'feature/fetch_downloaded_book/data/bloc/fetch_book_bloc.dart';
 import 'services/audio/service_locator.dart';
+import 'services/encryption/encryption_handler.dart';
 
 void main() async {
   final StoreBookRepo storeBookRepo = StoreBookRepo(
     storeBookDP: StoreBookDP(
       client: http.Client(),
       dataBaseHandler: DataBaseHandler()..createDatabase(),
+      encryptionHandler: EncryptionHandler(),
     ),
   );
   final FetchStoredBooksRepo fetchStoredBooksRepo = FetchStoredBooksRepo(
     fetchStoredBooksDP: FetchStoredBooksDP(
       client: http.Client(),
       dataBaseHandler: DataBaseHandler()..createDatabase(),
+      encryptionHandler: EncryptionHandler(),
     ),
   );
   await setupServiceLocator();
@@ -95,9 +97,14 @@ class _MyAppState extends State<MyApp> {
                       StoreBookBloc(storeBookRepo: widget.storeBookRepo),
                 ),
                 BlocProvider(
-                  create: (context) => FetchBookBloc(
+                  create: (context) => FetchBooksBloc(
                     fetchStoredBooksRepo: widget.fetchStoredBooksRepo,
-                  )..add(FetchBooksEvent()),
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) => FetchBookFileBloc(
+                    fetchStoredBooksRepo: widget.fetchStoredBooksRepo,
+                  ),
                 ),
               ],
               child: MaterialApp(

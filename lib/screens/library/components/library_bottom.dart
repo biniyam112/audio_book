@@ -12,12 +12,12 @@ class LibraryBottom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FetchBookBloc, FetchBookState>(
+    return BlocBuilder<FetchBooksBloc, FetchBooksState>(
       builder: (context, state) {
         if (state is BooksFetchedState) {
           return RefreshIndicator(
             onRefresh: () async {
-              var fetchBloc = BlocProvider.of<FetchBookBloc>(context);
+              var fetchBloc = BlocProvider.of<FetchBooksBloc>(context);
               fetchBloc.add(FetchBooksEvent());
             },
             child: GridView.builder(

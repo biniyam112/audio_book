@@ -3,22 +3,43 @@ import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_book_s
 import 'package:audio_books/feature/fetch_downloaded_book/data/repository/fetch_books_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class FetchBookBloc extends Bloc<FetchBooksEvent, FetchBookState> {
-  FetchBookBloc({required this.fetchStoredBooksRepo}) : super(IdleState());
+class FetchBooksBloc extends Bloc<FetchBooksEvent, FetchBooksState> {
+  FetchBooksBloc({required this.fetchStoredBooksRepo}) : super(IdleState());
   final FetchStoredBooksRepo fetchStoredBooksRepo;
 
   @override
-  Stream<FetchBookState> mapEventToState(FetchBooksEvent event) async* {
+  Stream<FetchBooksState> mapEventToState(FetchBooksEvent event) async* {
     print('fetching bloc');
     yield FetchingBooksState(progress: 0);
     try {
       final fetchedBooks = await fetchStoredBooksRepo.fetchDownloadedBooks();
       await Future.delayed(Duration.zero);
+
       yield BooksFetchedState(downloadedBooks: fetchedBooks);
       print('fetching and here');
     } catch (e) {
       print('\nThe error is $e\n');
       yield FetchingBooksFailedState(errorMessage: e.toString());
+    }
+  }
+}
+
+class FetchBookFileBloc extends Bloc<FetchBookEvent, FetchBookState> {
+  FetchBookFileBloc({required this.fetchStoredBooksRepo})
+      : super(IdleBookState());
+  final FetchStoredBooksRepo fetchStoredBooksRepo;
+
+  @override
+  Stream<FetchBookState> mapEventToState(FetchBookEvent event) async* {
+    try {
+      final bookFile = await fetchStoredBooksRepo
+          .decryptStoredPdf(event.downloadedBook.bookFilePath);
+      print('the book is $bookFile');
+      event.downloadedBook.setBookFile = bookFile;
+      yield BookDataFetchedState(downloadedBook: event.downloadedBook);
+    } catch (e) {
+      print(e.toString());
+      yield FetchingBookFailedState(errorMessage: e.toString());
     }
   }
 }
