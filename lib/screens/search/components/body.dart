@@ -35,7 +35,12 @@ class _BodyState extends State<Body> {
               Container(
                 height: SizeConfig.screenHeight! * .75,
                 width: SizeConfig.screenWidth,
-                child: LibraryBottom(),
+                child: Center(
+                  child: Text(
+                    'Search books here',
+                    style: Theme.of(context).textTheme.headline4,
+                  ),
+                ),
               ),
             ],
           ),

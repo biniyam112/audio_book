@@ -49,15 +49,16 @@ class Body extends StatelessWidget {
               ],
             ),
             BookShelf(
-              books: libraryMockData,
+              books: libraryMockDataRomance,
               categoryName: 'Romance',
               onPressed: () {},
             ),
             BookShelf(
-              books: libraryMockData,
+              books: libraryMockDataPolitics,
               categoryName: 'Politics',
               onPressed: () {},
             ),
+            verticalSpacing(10),
           ],
         ),
       ),

@@ -53,26 +53,29 @@ class BookTile extends StatelessWidget {
           children: [
             Expanded(
               flex: 2,
-              child: ClipRRect(
-                child: NeumorphicBackground(
-                  child: CachedNetworkImage(
-                    imageUrl: '${book.coverArt}',
-                    height: double.infinity,
-                    progressIndicatorBuilder:
-                        (context, url, downloadProgress) => Container(
-                      height: 30,
-                      width: 30,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                            value: downloadProgress.progress),
-                      ),
-                    ),
-                    errorWidget: (context, url, error) => Icon(Icons.error),
-                    fit: BoxFit.cover,
+              child: Hero(
+                tag: book.id,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(
+                    getProportionateScreenWidth(16),
                   ),
-                ),
-                borderRadius: BorderRadius.circular(
-                  getProportionateScreenWidth(16),
+                  child: NeumorphicBackground(
+                    child: CachedNetworkImage(
+                      imageUrl: '${book.coverArt}',
+                      height: double.infinity,
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) => Container(
+                        height: 30,
+                        width: 30,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                              value: downloadProgress.progress),
+                        ),
+                      ),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
               ),
             ),

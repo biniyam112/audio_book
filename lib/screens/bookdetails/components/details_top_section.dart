@@ -190,15 +190,23 @@ class TopDetailsImageSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: SizeConfig.screenWidth! * .43,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
-        child: CachedNetworkImage(
-          imageUrl: '${book.coverArt}',
-          progressIndicatorBuilder: (context, url, downloadProgress) =>
-              CircularProgressIndicator(value: downloadProgress.progress),
-          errorWidget: (context, url, error) => Icon(Icons.error),
-          height: SizeConfig.screenHeight! * .3,
-          fit: BoxFit.cover,
+      child: Hero(
+        tag: book.id,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(10),
+          child: CachedNetworkImage(
+            imageUrl: '${book.coverArt}',
+            progressIndicatorBuilder: (context, url, downloadProgress) =>
+                Center(
+                    child: Container(
+                        height: 30,
+                        width: 30,
+                        child: CircularProgressIndicator(
+                            value: downloadProgress.progress))),
+            errorWidget: (context, url, error) => Icon(Icons.error),
+            height: SizeConfig.screenHeight! * .3,
+            fit: BoxFit.cover,
+          ),
         ),
       ),
     );

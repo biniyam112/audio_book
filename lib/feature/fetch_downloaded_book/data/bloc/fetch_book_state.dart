@@ -22,18 +22,18 @@ class FetchingBooksFailedState extends FetchBooksState {
   FetchingBooksFailedState({required this.errorMessage});
 }
 
-class FetchBookState {}
+class FetchBookFileState {}
 
-class IdleBookState extends FetchBookState {}
+class BookDataFetchingState extends FetchBookFileState {}
 
-class BookDataFetchedState extends FetchBookState {
+class BookDataFetchedState extends FetchBookFileState {
   final DownloadedBook downloadedBook;
 
   BookDataFetchedState({required this.downloadedBook});
 }
 
-class FetchingBookFailedState extends FetchBookState {
+class FetchingBookDataFailedState extends FetchBookFileState {
   final String errorMessage;
 
-  FetchingBookFailedState({required this.errorMessage});
+  FetchingBookDataFailedState({required this.errorMessage});
 }

@@ -1,6 +1,6 @@
-import 'package:audio_books/feature/store_book/data/dataprovider/store_book_data_provider.dart';
-import 'package:audio_books/models/downloaded_book.dart';
-import 'package:audio_books/models/models.dart';
+import '../../../../models/downloaded_book.dart';
+import '../../../../models/models.dart';
+import '../dataprovider/store_book_data_provider.dart';
 
 class StoreBookRepo {
   final StoreBookDP storeBookDP;
@@ -9,5 +9,9 @@ class StoreBookRepo {
 
   Future<DownloadedBook> storeBook(Book book) async {
     return await storeBookDP.storeBook(book);
+  }
+
+  Future<void> storeBookProgress(DownloadedBook downloadedBook) async {
+    return await storeBookDP.storeBookProgress(downloadedBook);
   }
 }

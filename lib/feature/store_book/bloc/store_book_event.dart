@@ -1,11 +1,15 @@
 import 'package:audio_books/models/models.dart';
-import 'package:equatable/equatable.dart';
 
-class StoreBookEvent extends Equatable {
+class StoreEvent {}
+
+class StoreBookEvent extends StoreEvent {
   final Book book;
 
   StoreBookEvent(this.book);
+}
 
-  @override
-  List<Object?> get props => [];
+class StoreBookProgressEvent extends StoreEvent {
+  final DownloadedBook downloadedBook;
+
+  StoreBookProgressEvent({required this.downloadedBook});
 }

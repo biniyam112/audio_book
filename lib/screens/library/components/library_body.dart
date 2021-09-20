@@ -5,6 +5,8 @@ import 'package:audio_books/sizeConfig.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'e_book_library.dart';
+
 class LibraryBody extends StatefulWidget {
   const LibraryBody({Key? key}) : super(key: key);
 
@@ -53,8 +55,8 @@ class _LibraryBodyState extends State<LibraryBody> {
         Expanded(
           child: TabBarView(
             children: [
-              LibraryBottom(),
-              LibraryBottom(),
+              AudioBookLibrary(),
+              EBookLibrary(),
             ],
           ),
         ),

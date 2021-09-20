@@ -3,7 +3,6 @@ import 'package:audio_books/feature/fetch_downloaded_book/data/repository/fetch_
 import 'package:audio_books/feature/store_book/bloc/store_book_bloc.dart';
 import 'package:audio_books/feature/store_book/data/dataprovider/store_book_data_provider.dart';
 import 'package:audio_books/feature/store_book/data/repository/store_book_repository.dart';
-import 'package:audio_books/screens/components/tab_view.dart';
 import 'package:audio_books/services/dataBase/database_handler.dart';
 import 'package:audio_books/theme/dark_theme.dart';
 import 'package:audio_books/theme/light_theme.dart';
@@ -17,10 +16,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import 'feature/fetch_downloaded_book/data/bloc/fetch_book_bloc.dart';
+import 'screens/login/login.dart';
+import 'screens/onboarding/onboarding.dart';
 import 'services/audio/service_locator.dart';
 import 'services/encryption/encryption_handler.dart';
 
 void main() async {
+  Bloc.observer = SimpleBlocObserver();
   final StoreBookRepo storeBookRepo = StoreBookRepo(
     storeBookDP: StoreBookDP(
       client: http.Client(),
@@ -31,7 +33,6 @@ void main() async {
   final FetchStoredBooksRepo fetchStoredBooksRepo = FetchStoredBooksRepo(
     fetchStoredBooksDP: FetchStoredBooksDP(
       dataBaseHandler: DataBaseHandler()..createDatabase(),
-      encryptionHandler: EncryptionHandler(),
     ),
   );
   final FetchStoredBookFileRepo fetchStoredBookFileRepo =
@@ -123,13 +124,45 @@ class _MyAppState extends State<MyApp> {
                 themeMode: themeProvider.themeMode,
                 theme: lightTheme,
                 darkTheme: darkTheme,
-                // home: firstTime ? OnboardingScreen() : LoginScreen(),
-                home: TabViewPage(),
+                home: firstTime ? OnboardingScreen() : LoginScreen(),
+                // home: TabViewPage(),
               ),
             );
           },
         ),
       ],
     );
+  }
+}
+
+class SimpleBlocObserver extends BlocObserver {
+  @override
+  void onEvent(Bloc bloc, Object? event) {
+    super.onEvent(bloc, event);
+    print(event);
+  }
+
+  @override
+  void onChange(BlocBase bloc, Change change) {
+    super.onChange(bloc, change);
+    print(change);
+  }
+
+  @override
+  void onCreate(BlocBase bloc) {
+    super.onCreate(bloc);
+    print(bloc);
+  }
+
+  @override
+  void onTransition(Bloc bloc, Transition transition) {
+    super.onTransition(bloc, transition);
+    print(transition);
+  }
+
+  @override
+  void onError(BlocBase bloc, Object error, StackTrace stackTrace) {
+    print(error);
+    super.onError(bloc, error, stackTrace);
   }
 }

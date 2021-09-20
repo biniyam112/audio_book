@@ -45,11 +45,22 @@ dependencies:
   provider: ^5.0.0
   shared_preferences: ^2.0.6
   sqflite: ^2.0.0+3
+  flutter_native_splash: any
+  native_pdf_view: ^4.1.0
   syncfusion_flutter_pdfviewer: ^19.2.51-beta
+  # advance_pdf_viewer: ^2.0.0
+  # flutter_pdfview: ^1.1.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: "^0.9.1"
+
+flutter_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/launcher_icon.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -88,3 +99,16 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+flutter_native_splash:
+  color: "#fd7e14"
+
+  image: assets/maraki_logo.png
+
+  color_dark: "#fd7e14"
+  # background_image_dark: "assets/dark-background.png"
+  image_dark: assets/maraki_logo.png
+
+  android: true
+  ios: true
+  #web: false

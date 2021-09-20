@@ -4,23 +4,34 @@ import 'package:path/path.dart';
 import 'package:flutter/widgets.dart';
 
 class DataBaseHandler {
-  late Future<Database> dataBase;
+  late Database dataBase;
 
   void createDatabase() async {
     WidgetsFlutterBinding.ensureInitialized();
-    dataBase = openDatabase(
+    dataBase = await openDatabase(
       join(await getDatabasesPath(), 'bookDB.db'),
       onCreate: (database, version) {
         return database.execute(
-          'Create table bookStore(id INTEGER PRIMARY KEY,title TEXT,author TEXT,bookFilePath TEXT,category TEXT,coverArt BLOB,percentCompleted INTEGER)',
+          'Create table bookStore(id INTEGER PRIMARY KEY,title TEXT,author TEXT,bookFilePath TEXT,category TEXT,coverArtPath TEXT,percentCompleted DOUBLE)',
         );
       },
+      singleInstance: true,
       version: 1,
     );
   }
 
   Future<void> storeBook(DownloadedBook downloadedBook) async {
-    final db = await dataBase;
+    final db = dataBase;
+    print(' book to store : ${downloadedBook.toMap()}\n');
+    await db.insert(
+      'bookStore',
+      downloadedBook.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  Future<void> storeBookProgress(DownloadedBook downloadedBook) async {
+    final db = dataBase;
     await db.insert(
       'bookStore',
       downloadedBook.toMap(),
@@ -29,9 +40,8 @@ class DataBaseHandler {
   }
 
   Future<List<DownloadedBook>> fetchDownloadedBooks() async {
-    final db = await dataBase;
+    final db = dataBase;
     final List<Map<String, dynamic>> maps = await db.query('bookStore');
-    print('\nthe map length is ${maps.length}\n');
     return List.generate(
       maps.length,
       (index) => DownloadedBook.fromMap(

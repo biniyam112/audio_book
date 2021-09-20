@@ -4,9 +4,11 @@ import 'package:audio_books/models/models.dart';
 
 class DownloadedBook {
   final String title, author, category;
-  String bookFilePath, coverArt;
+  String bookFilePath, coverArtPath;
   late Uint8List bookFile;
-  final int id, percentCompleted;
+  late Uint8List coverArt;
+  final int id;
+  double percentCompleted = 0;
 
   DownloadedBook({
     required this.id,
@@ -14,7 +16,7 @@ class DownloadedBook {
     required this.author,
     required this.bookFilePath,
     required this.category,
-    required this.coverArt,
+    required this.coverArtPath,
     required this.percentCompleted,
   });
 
@@ -24,7 +26,7 @@ class DownloadedBook {
         'author': author,
         'bookFilePath': bookFilePath,
         'category': category,
-        'coverArt': coverArt,
+        'coverArtPath': coverArtPath,
         'percentCompleted': percentCompleted,
       };
 
@@ -33,7 +35,7 @@ class DownloadedBook {
         title: book.title,
         author: book.author,
         bookFilePath: book.bookPath,
-        coverArt: book.coverArt,
+        coverArtPath: book.coverArt,
         category: book.category,
         percentCompleted: 0,
       );
@@ -44,11 +46,15 @@ class DownloadedBook {
         author: json['author'],
         bookFilePath: json['bookFilePath'],
         category: json['category'],
-        coverArt: json['coverArt'],
-        percentCompleted: json['percentCompleted'],
+        coverArtPath: json['coverArtPath'],
+        percentCompleted: json['percentCompleted'] ?? 0,
       );
 
   set setCoverArt(String coverImage) {
+    coverArtPath = coverImage;
+  }
+
+  set setCoverArtFile(Uint8List coverImage) {
     coverArt = coverImage;
   }
 
@@ -58,5 +64,9 @@ class DownloadedBook {
 
   set setBookFile(Uint8List encodedFile) {
     bookFile = encodedFile;
+  }
+
+  set setPercentCompleted(double percentile) {
+    percentCompleted = percentile;
   }
 }

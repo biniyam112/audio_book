@@ -74,3 +74,115 @@ List<Book> libraryMockData = [
     narattor: 'Sisay Girma',
   ),
 ];
+List<Book> libraryMockDataPolitics = [
+  Book(
+    id: 4,
+    title: "Different Winter",
+    author: "Mia Jackson",
+    category: "History",
+    bookPath:
+        'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
+    coverArt:
+        "https://image.freepik.com/free-psd/high-angle-turned-open-book-mock-up_23-2148657114.jpg",
+    chapersCount: 4,
+    duration: 120,
+    publishmentDate: DateTime.now(),
+    narattor: 'Abreham Mulatu',
+  ),
+  Book(
+    id: 5,
+    title: "Hideout",
+    author: "Ishikawa",
+    category: "Fantasy",
+    bookPath:
+        'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
+    coverArt:
+        "https://image.freepik.com/free-vector/green-commercial-annual-report-template_1201-1061.jpg",
+    chapersCount: 4,
+    duration: 45,
+    publishmentDate: DateTime.now(),
+    narattor: 'Dagnachew Hagere',
+  ),
+  Book(
+    id: 6,
+    title: "The Price",
+    author: "Machiavelli",
+    category: "Politics",
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
+    coverArt:
+        "https://image.freepik.com/free-psd/book-cover-mockup_400875-79.jpg",
+    chapersCount: 32,
+    duration: 12,
+    publishmentDate: DateTime.now(),
+    narattor: 'Admasu Kibru',
+  ),
+  Book(
+    id: 7,
+    title: "The Value of Design",
+    author: "Mia Jackson",
+    category: "Art",
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
+    coverArt:
+        "https://cdn.pixabay.com/photo/2019/04/12/14/37/fantasy-4122305_960_720.jpg",
+    chapersCount: 12,
+    duration: 34,
+    publishmentDate: DateTime.now(),
+    narattor: 'Sisay Girma',
+  ),
+];
+List<Book> libraryMockDataRomance = [
+  Book(
+    id: 8,
+    title: "Different Winter",
+    author: "Mia Jackson",
+    category: "History",
+    bookPath:
+        'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
+    coverArt:
+        "https://image.freepik.com/free-psd/high-angle-turned-open-book-mock-up_23-2148657114.jpg",
+    chapersCount: 4,
+    duration: 120,
+    publishmentDate: DateTime.now(),
+    narattor: 'Abreham Mulatu',
+  ),
+  Book(
+    id: 9,
+    title: "Hideout",
+    author: "Ishikawa",
+    category: "Fantasy",
+    bookPath:
+        'https://cdn.syncfusion.com/content/PDFViewer/flutter-succinctly.pdf',
+    coverArt:
+        "https://image.freepik.com/free-vector/green-commercial-annual-report-template_1201-1061.jpg",
+    chapersCount: 4,
+    duration: 45,
+    publishmentDate: DateTime.now(),
+    narattor: 'Dagnachew Hagere',
+  ),
+  Book(
+    id: 10,
+    title: "The Price",
+    author: "Machiavelli",
+    category: "Politics",
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
+    coverArt:
+        "https://image.freepik.com/free-psd/book-cover-mockup_400875-79.jpg",
+    chapersCount: 32,
+    duration: 12,
+    publishmentDate: DateTime.now(),
+    narattor: 'Admasu Kibru',
+  ),
+  Book(
+    id: 11,
+    title: "The Value of Design",
+    author: "Mia Jackson",
+    category: "Art",
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
+    coverArt:
+        "https://cdn.pixabay.com/photo/2019/04/12/14/37/fantasy-4122305_960_720.jpg",
+    chapersCount: 12,
+    duration: 34,
+    publishmentDate: DateTime.now(),
+    narattor: 'Sisay Girma',
+  ),
+];

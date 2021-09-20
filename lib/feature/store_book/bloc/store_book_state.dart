@@ -25,3 +25,5 @@ class StoringBookFailedState extends StoreBookState {
 
   StoringBookFailedState({required this.errorMessage});
 }
+
+class BookProgressStoredState extends StoreBookState {}
