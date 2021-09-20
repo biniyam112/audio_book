@@ -1,3 +1,4 @@
+import 'package:audio_books/models/library_mock.dart';
 import 'package:audio_books/screens/home/home.dart';
 import 'package:audio_books/screens/library/library.dart';
 import 'package:audio_books/screens/search/search_screen.dart';
@@ -36,7 +37,7 @@ class TabViewPage extends StatelessWidget {
       ),
       screens: [
         HomeScreen(),
-        LibraryScreen(),
+        LibraryScreen(downloadedBooks: libraryMockData,),
         SearchScreen(),
         SettingsScreen(),
       ],
@@ -86,3 +87,5 @@ class TabViewPage extends StatelessWidget {
     );
   }
 }
+
+// let changedValue
