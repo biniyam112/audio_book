@@ -41,7 +41,7 @@ class Body extends StatelessWidget {
               ),
               verticalSpacing(40),
               PhoneForm(),
-              verticalSpacing(12),
+              verticalSpacing(24),
               Center(
                 child: Container(
                   height: getProportionateScreenHeight(40),

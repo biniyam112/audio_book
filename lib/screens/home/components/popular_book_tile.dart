@@ -10,8 +10,8 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import '../../../sizeConfig.dart';
 import '../../screens.dart';
 
-class PopularBookTile extends StatelessWidget {
-  const PopularBookTile({
+class PopularBooksTile extends StatelessWidget {
+  const PopularBooksTile({
     Key? key,
     required this.book,
   }) : super(key: key);

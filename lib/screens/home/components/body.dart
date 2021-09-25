@@ -1,4 +1,5 @@
 import 'package:audio_books/models/models.dart';
+import 'package:audio_books/screens/categoryallbooks/category_all_books.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,14 @@ class Body extends StatelessWidget {
                   padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
                   child: BookCategory(
                     categoryName: 'Popular Books',
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                CategoryAllBooks(category: 'Popular Books'),
+                          ));
+                    },
                   ),
                 ),
                 SingleChildScrollView(
@@ -37,7 +45,7 @@ class Body extends StatelessWidget {
                               horizontal: getProportionateScreenWidth(12),
                               vertical: 6,
                             ),
-                            child: PopularBookTile(
+                            child: PopularBooksTile(
                               book: libraryMockData[index],
                             ),
                           );
@@ -51,12 +59,26 @@ class Body extends StatelessWidget {
             BookShelf(
               books: libraryMockDataRomance,
               categoryName: 'Romance',
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          CategoryAllBooks(category: 'Romance'),
+                    ));
+              },
             ),
             BookShelf(
               books: libraryMockDataPolitics,
               categoryName: 'Politics',
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          CategoryAllBooks(category: 'Politics'),
+                    ));
+              },
             ),
             verticalSpacing(10),
           ],

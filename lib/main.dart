@@ -1,5 +1,8 @@
 import 'package:audio_books/feature/fetch_downloaded_book/data/dataprovider/fetch_books_dataprovider.dart';
 import 'package:audio_books/feature/fetch_downloaded_book/data/repository/fetch_books_repository.dart';
+import 'package:audio_books/feature/register_user/bloc/register_user_bloc.dart';
+import 'package:audio_books/feature/register_user/data_provider/register_user_dataprovider.dart';
+import 'package:audio_books/feature/register_user/repository/register_user_repository.dart';
 import 'package:audio_books/feature/store_book/bloc/store_book_bloc.dart';
 import 'package:audio_books/feature/store_book/data/dataprovider/store_book_data_provider.dart';
 import 'package:audio_books/feature/store_book/data/repository/store_book_repository.dart';
@@ -41,6 +44,11 @@ void main() async {
       encryptionHandler: EncryptionHandler(),
     ),
   );
+  final RegisterUserRepo registerUserRepo = RegisterUserRepo(
+    registerUserDP: RegisterUserDP(
+      client: http.Client(),
+    ),
+  );
   await setupServiceLocator();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
     (value) => runApp(
@@ -48,6 +56,7 @@ void main() async {
         storeBookRepo: storeBookRepo,
         fetchStoredBooksRepo: fetchStoredBooksRepo,
         fetchStoredBookFileRepo: fetchStoredBookFileRepo,
+        registerUserRepo: registerUserRepo,
       ),
     ),
   );
@@ -57,12 +66,14 @@ class MyApp extends StatefulWidget {
   final StoreBookRepo storeBookRepo;
   final FetchStoredBooksRepo fetchStoredBooksRepo;
   final FetchStoredBookFileRepo fetchStoredBookFileRepo;
+  final RegisterUserRepo registerUserRepo;
 
   const MyApp({
     Key? key,
     required this.storeBookRepo,
     required this.fetchStoredBooksRepo,
     required this.fetchStoredBookFileRepo,
+    required this.registerUserRepo,
   }) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
@@ -113,6 +124,11 @@ class _MyAppState extends State<MyApp> {
                 BlocProvider(
                   create: (context) => FetchBookFileBloc(
                     fetchStoredBookFileRepo: widget.fetchStoredBookFileRepo,
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) => RegisterUserBloc(
+                    registerUserRepo: widget.registerUserRepo,
                   ),
                 ),
               ],

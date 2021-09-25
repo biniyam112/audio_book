@@ -53,14 +53,16 @@ class Body extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: SizeConfig.screenHeight! * .04),
-              Text(
-                'By continuing you agree with our terms and conditions',
-                style: Theme.of(context).textTheme.headline6!.copyWith(
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black.withOpacity(.7),
-                    ),
-                textAlign: TextAlign.center,
+              SizedBox(height: SizeConfig.screenHeight! * .08),
+              Center(
+                child: Text(
+                  'By continuing you agree with our terms and conditions',
+                  style: Theme.of(context).textTheme.headline6!.copyWith(
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black.withOpacity(.7),
+                      ),
+                  textAlign: TextAlign.center,
+                ),
               ),
               SizedBox(height: getProportionateScreenHeight(20)),
             ],
