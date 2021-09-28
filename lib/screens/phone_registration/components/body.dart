@@ -1,4 +1,3 @@
-import 'package:audio_books/screens/otp/otp.dart';
 import 'package:audio_books/screens/phone_registration/components/phone_form.dart';
 import 'package:audio_books/theme/theme_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -41,48 +40,7 @@ class Body extends StatelessWidget {
               ),
               verticalSpacing(40),
               PhoneForm(),
-              verticalSpacing(24),
-              Center(
-                child: Container(
-                  height: getProportionateScreenHeight(40),
-                  width: getProportionateScreenWidth(100),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (cotext) {
-                            return OTPScreen();
-                          },
-                        ),
-                      );
-                    },
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(
-                          vertical: getProportionateScreenWidth(6)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Next',
-                            style:
-                                Theme.of(context).textTheme.headline5!.copyWith(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                          ),
-                          horizontalSpacing(8),
-                          Icon(
-                            CupertinoIcons.chevron_right,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
+              verticalSpacing(12),
             ],
           ),
         ),

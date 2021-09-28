@@ -1,8 +1,10 @@
 import 'package:audio_books/feature/register_user/bloc/register_user_bloc.dart';
 import 'package:audio_books/feature/register_user/bloc/register_user_event.dart';
 import 'package:audio_books/feature/register_user/bloc/register_user_state.dart';
+import 'package:audio_books/models/user.dart';
 import 'package:audio_books/screens/components/form_error.dart';
-import 'package:audio_books/screens/phone_registration/phone_registration.dart';
+import 'package:audio_books/screens/components/tab_view.dart';
+import 'package:audio_books/services/audio/service_locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -68,7 +70,7 @@ class _SignUpFormState extends State<SignUpForm>
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return PhoneRegistrationScreen();
+                      return TabViewPage();
                     },
                   ),
                 );
@@ -105,12 +107,15 @@ class _SignUpFormState extends State<SignUpForm>
                           ],
                         ),
                       )
-                    : Text('Sign up'),
+                    : Text('Register'),
               ),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
+                  var user = getIt.get<User>();
+                  user.setFirstName = firstName;
+                  user.setLastName = lastName;
                   BlocProvider.of<RegisterUserBloc>(context).add(
-                    RegisterUserEvent(),
+                    RegisterUserEvent(user: getIt.get<User>()),
                   );
                 }
               },

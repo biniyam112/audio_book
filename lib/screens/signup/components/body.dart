@@ -1,4 +1,3 @@
-import 'package:audio_books/screens/login/login.dart';
 import 'package:flutter/material.dart';
 
 import '../../../sizeConfig.dart';
@@ -22,7 +21,7 @@ class Body extends StatelessWidget {
             children: [
               SizedBox(height: SizeConfig.screenHeight! * .04),
               Text(
-                'Create\nAccount ',
+                'Finish\nRegistration ',
                 style: Theme.of(context)
                     .textTheme
                     .headline3!
@@ -30,30 +29,7 @@ class Body extends StatelessWidget {
               ),
               SizedBox(height: SizeConfig.screenHeight! * .05),
               SignUpForm(),
-              SizedBox(height: SizeConfig.screenHeight! * .02),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('Already have an account?'),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return LoginScreen();
-                          },
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'Login',
-                      style: TextStyle(fontSize: 14),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: SizeConfig.screenHeight! * .08),
+              SizedBox(height: SizeConfig.screenHeight! * .06),
               Center(
                 child: Text(
                   'By continuing you agree with our terms and conditions',

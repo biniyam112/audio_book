@@ -1,4 +1,4 @@
-import 'package:audio_books/screens/components/tab_view.dart';
+import 'package:audio_books/screens/signup/signup_screen.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -93,7 +93,7 @@ class Body extends StatelessWidget {
         context,
         MaterialPageRoute(
           builder: (context) {
-            return TabViewPage();
+            return SignupScreen();
           },
         ),
       );

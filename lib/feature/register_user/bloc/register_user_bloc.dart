@@ -12,7 +12,8 @@ class RegisterUserBloc extends Bloc<RegisterUserEvent, RegisterUserState> {
     yield RegsiteringUserState();
     try {
       await registerUserRepo.registerUser(
-          fullName: 'biniyam', phoneNumber: 'phoneNumber');
+        user: event.user,
+      );
       yield UserRegisteredState();
     } catch (e) {
       print(e);
