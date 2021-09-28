@@ -7,18 +7,18 @@ import 'package:flutter/widgets.dart';
 class DataBaseHandler {
   late Database dataBase;
 
-  void createDatabase() async {
+  Future<void> createDatabase() async {
     final String createbookStore =
-        'Create table bookStore(id INTEGER PRIMARY KEY,title TEXT,author TEXT,bookFilePath TEXT,category TEXT,coverArtPath TEXT,percentCompleted DOUBLE);';
+        'Create table bookStore(id INTEGER PRIMARY KEY,title TEXT,author TEXT,bookFilePath TEXT,category TEXT,coverArtPath TEXT,percentCompleted DOUBLE)';
     final String createUser =
-        'Create table user(id INTEGER PRIMARY KEY,firstName TEXT,lastName TEXT,phoneNumber TEXT,email TEXT,countryCode TEXT);';
+        'Create table user(id INTEGER PRIMARY KEY,firstName TEXT,lastName TEXT,phoneNumber TEXT,email TEXT DEFAULT NULL,countryCode TEXT)';
+
     WidgetsFlutterBinding.ensureInitialized();
     dataBase = await openDatabase(
-      join(await getDatabasesPath(), 'bookDB.db'),
-      onCreate: (database, version) {
-        return database.execute(
-          '$createUser $createbookStore',
-        );
+      join(await getDatabasesPath(), 'maraki.db'),
+      onCreate: (database, version) async {
+        await database.execute('$createbookStore');
+        await dataBase.execute('$createUser');
       },
       singleInstance: true,
       version: 1,
@@ -55,6 +55,7 @@ class DataBaseHandler {
 
   Future<User?> fetchUser() async {
     final db = dataBase;
+    print('the database instance is $dataBase');
     var user = await db.query('user');
     return User.fromMap(user[0]);
   }

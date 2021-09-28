@@ -14,10 +14,10 @@ class User {
   });
 
   Map<String, dynamic> tomap() => {
-        'id': id,
+        'id': 0,
         'firstName': firstName,
         'lastName': lastName,
-        'email': email,
+        'email': email ?? '',
         'phoneNumber': phoneNumber,
         'countryCode': countryCode,
       };

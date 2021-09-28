@@ -1,3 +1,4 @@
+import 'package:audio_books/screens/phone_registration/phone_registration.dart';
 import 'package:audio_books/screens/signup/signup_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +21,7 @@ class HiddenButton extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return SignupScreen();
+                return PhoneRegistrationScreen();
               },
             ),
           );

@@ -61,7 +61,7 @@ class _SignUpFormState extends State<SignUpForm>
           BlocListener<RegisterUserBloc, RegisterUserState>(
             listener: (context, state) {
               if (state is RegsiteringUserState) {
-                signUpLoading = !signUpLoading;
+                signUpLoading = true;
                 rippleAnimationController.forward();
               }
               if (state is UserRegisteredState) {
@@ -76,13 +76,19 @@ class _SignUpFormState extends State<SignUpForm>
                 );
               }
               if (state is RegsiteringUserFailedState) {
+                signUpLoading = false;
+                rippleAnimationController.stop();
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 4, horizontal: 8),
-                        child: Text(state.errorMessage),
+                    content: Container(
+                      width: SizeConfig.screenWidth,
+                      height: getProportionateScreenHeight(60),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 4, horizontal: 8),
+                          child: Text(state.errorMessage),
+                        ),
                       ),
                     ),
                   ),
