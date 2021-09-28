@@ -1,3 +1,7 @@
+import 'package:audio_books/feature/authorize_user/bloc/authorize_user_bloc.dart';
+import 'package:audio_books/feature/authorize_user/repository/authorize_user_repo.dart';
+import 'package:audio_books/feature/fetch_books/bloc/fetch_books_bloc.dart';
+import 'package:audio_books/feature/fetch_books/repository/fetch_books_repo.dart';
 import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_book_bloc.dart';
 import 'package:audio_books/feature/fetch_downloaded_book/data/repository/fetch_books_repository.dart';
 import 'package:audio_books/feature/initialize_database/bloc/initializa_database.dart';
@@ -30,6 +34,9 @@ class MyApp extends StatefulWidget {
   final RegisterUserRepo registerUserRepo;
   final DataBaseHandler dataBaseHandler;
   final InitDBRepo initDBRepo;
+  final AuthorizeUserRepo authorizeUserRepo;
+
+  final FetchBooksRepo fetchBooksRepo;
 
   const MyApp({
     Key? key,
@@ -39,6 +46,8 @@ class MyApp extends StatefulWidget {
     required this.registerUserRepo,
     required this.dataBaseHandler,
     required this.initDBRepo,
+    required this.authorizeUserRepo,
+    required this.fetchBooksRepo,
   }) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
@@ -100,7 +109,7 @@ class _MyAppState extends State<MyApp> {
                       StoreBookBloc(storeBookRepo: widget.storeBookRepo),
                 ),
                 BlocProvider(
-                  create: (context) => FetchBooksBloc(
+                  create: (context) => FetchDownBooksBloc(
                     fetchStoredBooksRepo: widget.fetchStoredBooksRepo,
                   ),
                 ),
@@ -122,6 +131,18 @@ class _MyAppState extends State<MyApp> {
                         dataBaseHandler: widget.dataBaseHandler,
                       ),
                     ),
+                ),
+                BlocProvider(
+                  create: (context) => AuthorizeUserBloc(
+                    authorizeUserRepo: widget.authorizeUserRepo,
+                  )..add(
+                      AuthoriseUserEvent.authorizeUser,
+                    ),
+                ),
+                BlocProvider(
+                  create: (context) => FetchBooksBloc(
+                    fetchBooksRepo: widget.fetchBooksRepo,
+                  ),
                 ),
               ],
               child: MaterialApp(

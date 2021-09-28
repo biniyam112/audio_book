@@ -1,3 +1,7 @@
+import 'package:audio_books/feature/authorize_user/data_provider/authorize_user_dp.dart';
+import 'package:audio_books/feature/authorize_user/repository/authorize_user_repo.dart';
+import 'package:audio_books/feature/fetch_books/data_provider/fetch_books_dataprovider.dart';
+import 'package:audio_books/feature/fetch_books/repository/fetch_books_repo.dart';
 import 'package:audio_books/feature/fetch_downloaded_book/data/dataprovider/fetch_books_dataprovider.dart';
 import 'package:audio_books/feature/fetch_downloaded_book/data/repository/fetch_books_repository.dart';
 import 'package:audio_books/feature/initialize_database/data_provider/init_db_dataProvider.dart';
@@ -51,6 +55,16 @@ void main() async {
       dataBaseHandler: dataBaseHandler,
     ),
   );
+  final AuthorizeUserRepo authorizeUserRepo = AuthorizeUserRepo(
+    authorizeUserDataProvider: AuthorizeUserDataProvider(
+      client: http.Client(),
+    ),
+  );
+  final FetchBooksRepo fetchBooksRepo = FetchBooksRepo(
+    fetchBooksDP: FetchBooksDP(
+      client: http.Client(),
+    ),
+  );
   await setupServiceLocator();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
     (value) => runApp(
@@ -61,6 +75,8 @@ void main() async {
         registerUserRepo: registerUserRepo,
         dataBaseHandler: dataBaseHandler,
         initDBRepo: initDBRepo,
+        authorizeUserRepo: authorizeUserRepo,
+        fetchBooksRepo: fetchBooksRepo,
       ),
     ),
   );

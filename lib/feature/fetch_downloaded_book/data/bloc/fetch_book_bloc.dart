@@ -5,12 +5,14 @@ import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_book_s
 import 'package:audio_books/feature/fetch_downloaded_book/data/repository/fetch_books_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class FetchBooksBloc extends Bloc<FetchBooksEvent, FetchBooksState> {
-  FetchBooksBloc({required this.fetchStoredBooksRepo}) : super(IdleState());
+class FetchDownBooksBloc
+    extends Bloc<FetchDownBooksEvent, FetchDownBooksState> {
+  FetchDownBooksBloc({required this.fetchStoredBooksRepo}) : super(IdleState());
   final FetchStoredBooksRepo fetchStoredBooksRepo;
 
   @override
-  Stream<FetchBooksState> mapEventToState(FetchBooksEvent event) async* {
+  Stream<FetchDownBooksState> mapEventToState(
+      FetchDownBooksEvent event) async* {
     yield FetchingBooksState(progress: 0);
     try {
       final fetchedBooks = await fetchStoredBooksRepo.fetchDownloadedBooks();

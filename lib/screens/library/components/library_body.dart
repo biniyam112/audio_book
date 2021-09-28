@@ -18,7 +18,7 @@ class _LibraryBodyState extends State<LibraryBody> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<FetchBooksBloc>(context).add(FetchBooksEvent());
+    BlocProvider.of<FetchDownBooksBloc>(context).add(FetchDownBooksEvent());
   }
 
   @override

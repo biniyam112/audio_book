@@ -1,8 +1,11 @@
+import 'package:audio_books/feature/fetch_books/bloc/fetch_books_bloc.dart';
+import 'package:audio_books/feature/fetch_books/bloc/fetch_books_state.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/categoryallbooks/category_all_books.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'book_category.dart';
 import 'book_shelf.dart';
@@ -56,16 +59,27 @@ class Body extends StatelessWidget {
                 ),
               ],
             ),
-            BookShelf(
-              books: libraryMockDataRomance,
-              categoryName: 'Romance',
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          CategoryAllBooks(category: 'Romance'),
-                    ));
+            BlocBuilder<FetchBooksBloc, FetchBooksState>(
+              builder: (context, state) {
+                if (state is BooksFetchedState) {
+                  var books = state.books;
+                  return BookShelf(
+                    books: books,
+                    categoryName: 'Romance',
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                CategoryAllBooks(category: 'Romance'),
+                          ));
+                    },
+                  );
+                }
+                if (state is BooksFetchingFailedState) {
+                  return Text('${state.errorMessage}');
+                }
+                return Text('not there yet');
               },
             ),
             BookShelf(

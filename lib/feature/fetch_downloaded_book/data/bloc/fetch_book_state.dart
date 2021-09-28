@@ -1,22 +1,22 @@
 import 'package:audio_books/models/downloaded_book.dart';
 
-class FetchBooksState {}
+class FetchDownBooksState {}
 
-class IdleState extends FetchBooksState {}
+class IdleState extends FetchDownBooksState {}
 
-class FetchingBooksState extends FetchBooksState {
+class FetchingBooksState extends FetchDownBooksState {
   final int progress;
 
   FetchingBooksState({required this.progress});
 }
 
-class BooksFetchedState extends FetchBooksState {
+class BooksFetchedState extends FetchDownBooksState {
   final List<DownloadedBook> downloadedBooks;
 
   BooksFetchedState({required this.downloadedBooks});
 }
 
-class FetchingBooksFailedState extends FetchBooksState {
+class FetchingBooksFailedState extends FetchDownBooksState {
   final String errorMessage;
 
   FetchingBooksFailedState({required this.errorMessage});

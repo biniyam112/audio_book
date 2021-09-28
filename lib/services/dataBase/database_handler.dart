@@ -2,7 +2,6 @@ import 'package:audio_books/models/downloaded_book.dart';
 import 'package:audio_books/models/user.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
-import 'package:flutter/widgets.dart';
 
 class DataBaseHandler {
   late Database dataBase;
@@ -13,9 +12,11 @@ class DataBaseHandler {
     final String createUser =
         'Create table user(id INTEGER PRIMARY KEY,firstName TEXT,lastName TEXT,phoneNumber TEXT,email TEXT DEFAULT NULL,countryCode TEXT)';
 
-    WidgetsFlutterBinding.ensureInitialized();
     dataBase = await openDatabase(
       join(await getDatabasesPath(), 'maraki.db'),
+      onConfigure: (database) {
+        print(dataBase.path);
+      },
       onCreate: (database, version) async {
         await database.execute('$createbookStore');
         await dataBase.execute('$createUser');

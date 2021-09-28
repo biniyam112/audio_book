@@ -13,13 +13,13 @@ class AudioBookLibrary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FetchBooksBloc, FetchBooksState>(
+    return BlocBuilder<FetchDownBooksBloc, FetchDownBooksState>(
       builder: (context, state) {
         if (state is BooksFetchedState) {
           return RefreshIndicator(
             onRefresh: () async {
-              var fetchBloc = BlocProvider.of<FetchBooksBloc>(context);
-              fetchBloc.add(FetchBooksEvent());
+              var fetchBloc = BlocProvider.of<FetchDownBooksBloc>(context);
+              fetchBloc.add(FetchDownBooksEvent());
             },
             child: Container(
               child: GridView.builder(
