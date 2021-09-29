@@ -4,6 +4,7 @@ import 'package:audio_books/theme/theme_provider.dart';
 import 'package:country_calling_code_picker/picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 class PhoneRegistrationScreen extends StatelessWidget {
@@ -14,7 +15,7 @@ class PhoneRegistrationScreen extends StatelessWidget {
     SizeConfig().init(context);
     return Scaffold(
       appBar: customAppBar(context: context, title: 'Register Phone'),
-      body: Body(),
+      body: SingleChildScrollView(child: Body()),
     );
   }
 }
@@ -101,43 +102,83 @@ class _PhoneFormState extends State<PhoneForm> {
   @override
   Widget build(BuildContext context) {
     final country = _selectedCountry;
-    return TextFormField(
-      onChanged: (value) {
-        phoneNumber = value;
-      },
-      decoration: InputDecoration(
-        prefix: GestureDetector(
-          onTap: () {
-            _showCountryPicker();
+    return Container(
+      margin:EdgeInsets.symmetric(vertical:getProportionateScreenHeight(10)),
+      child: TextFormField(
+          onChanged: (value) {
+            phoneNumber = value;
           },
-          child: Row(
-            children: [
-              country == null
-                  ? Icon(CupertinoIcons.chevron_up)
-                  : Container(
-                      height: getProportionateScreenWidth(30),
-                      width: getProportionateScreenWidth(30),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          getProportionateScreenWidth(10),
-                        ),
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(
-                          getProportionateScreenWidth(10),
-                        ),
-                        child: Image.asset(
-                          country.flag,
-                          package: countryCodePackageName,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-              country == null ? Text('select') : Text(country.countryCode),
-            ],
-          ),
-        ),
-      ),
+          decoration: InputDecoration(
+              focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Colors.black, width: 1.3  )),
+              enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Colors.black, width: 1.3)),
+              isDense: true,
+              prefixStyle: TextStyle(color: Colors.transparent),
+              contentPadding: EdgeInsets.symmetric(
+                  vertical: getProportionateScreenHeight(10)),
+              prefixIconConstraints: BoxConstraints(minWidth: 0, minHeight: 0),
+              prefixIcon: InkWell(
+                onTap: () {
+                  _showCountryPicker();
+                },
+                child: Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: getProportionateScreenWidth(5)),
+                  child: RichText(
+                      text: TextSpan(
+                    children: [
+                      country == null
+                          ? WidgetSpan(
+                              child: Icon(
+                                CupertinoIcons.chevron_up,
+                                color: Colors.black,
+                                size: getProportionateScreenHeight(20),
+                              ),
+                            )
+                          : WidgetSpan(
+                              child: Container(
+                                height: getProportionateScreenWidth(30),
+                                width: getProportionateScreenWidth(30),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                    getProportionateScreenWidth(10),
+                                  ),
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(
+                                    getProportionateScreenWidth(10),
+                                  ),
+                                  child: Image.asset(
+                                    country.flag,
+                                    package: countryCodePackageName,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                            ),
+                      country == null
+                          ? TextSpan(
+                              text: 'select ',
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: getProportionateScreenHeight(20)),
+                            )
+                          : WidgetSpan(
+                              child: Padding(
+                              child: Text(country.countryCode,
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize:
+                                          getProportionateScreenHeight(20))),
+                              padding: EdgeInsets.symmetric(horizontal: 10),
+                            ))
+                    ],
+                  )),
+                ),
+              ))),
     );
   }
 }

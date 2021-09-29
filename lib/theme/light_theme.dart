@@ -38,7 +38,7 @@ ThemeData lightTheme = ThemeData(
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
       backgroundColor: MaterialStateProperty.all(
-        lightTheme.primaryColor,
+        LightTheme.primaryColor,
       ),
     ),
   ),
