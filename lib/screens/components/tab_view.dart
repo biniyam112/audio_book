@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
- 
+
 class TabViewPage extends StatelessWidget {
   const TabViewPage({Key? key}) : super(key: key);
 

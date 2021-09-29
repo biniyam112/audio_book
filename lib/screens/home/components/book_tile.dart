@@ -54,7 +54,7 @@ class BookTile extends StatelessWidget {
             Expanded(
               flex: 2,
               child: Hero(
-                tag: book.id,
+                tag: '${book.id}',
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(
                     getProportionateScreenWidth(16),
@@ -116,7 +116,7 @@ class BookTile extends StatelessWidget {
                             vertical: getProportionateScreenWidth(5),
                           ),
                           child: Text(
-                            '${book.duration}mins',
+                            '${120} mins',
                             style: TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.w600,
@@ -257,7 +257,7 @@ class BookTile extends StatelessWidget {
                               color: Darktheme.primaryColor,
                             ),
                             SizedBox(width: getProportionateScreenWidth(6)),
-                            Text('${book.chapersCount} chapters'),
+                            Text('${5} chapters'),
                             Spacer(),
                           ],
                         ),

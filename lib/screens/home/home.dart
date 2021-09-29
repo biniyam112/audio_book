@@ -1,3 +1,6 @@
+import 'package:audio_books/feature/authorize_user/bloc/authorize_user_bloc.dart';
+import 'package:audio_books/feature/fetch_books/bloc/fetch_books_bloc.dart';
+import 'package:audio_books/feature/fetch_books/bloc/fetch_books_event.dart';
 import 'package:audio_books/models/user.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
 import 'package:audio_books/services/dataBase/database_handler.dart';
@@ -101,8 +104,12 @@ class CustomDrawer extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () {
-                    DataBaseHandler dataBaseHandler = DataBaseHandler();
-                    var user = dataBaseHandler.fetchUser();
+                    var databaseHandler = getIt.get<DataBaseHandler>();
+                    var user = databaseHandler.fetchUser();
+                    Provider.of<AuthorizeUserBloc>(context, listen: false)
+                        .add(AuthoriseUserEvent.authorizeUser);
+                    Provider.of<FetchBooksBloc>(context, listen: false)
+                        .add(FetchBooksEvent());
                     print(user);
                   },
                   child: Container(

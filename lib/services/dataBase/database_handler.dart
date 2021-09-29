@@ -10,16 +10,13 @@ class DataBaseHandler {
     final String createbookStore =
         'Create table bookStore(id INTEGER PRIMARY KEY,title TEXT,author TEXT,bookFilePath TEXT,category TEXT,coverArtPath TEXT,percentCompleted DOUBLE)';
     final String createUser =
-        'Create table user(id INTEGER PRIMARY KEY,firstName TEXT,lastName TEXT,phoneNumber TEXT,email TEXT DEFAULT NULL,countryCode TEXT)';
+        'Create table user(id INTEGER PRIMARY KEY,firstName TEXT,lastName TEXT,phoneNumber TEXT,email TEXT,countryCode TEXT)';
 
     dataBase = await openDatabase(
       join(await getDatabasesPath(), 'maraki.db'),
-      onConfigure: (database) {
-        print(dataBase.path);
-      },
       onCreate: (database, version) async {
-        await database.execute('$createbookStore');
-        await dataBase.execute('$createUser');
+        database.execute('$createbookStore');
+        dataBase.execute('$createUser');
       },
       singleInstance: true,
       version: 1,

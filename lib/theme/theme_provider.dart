@@ -9,12 +9,11 @@ class ThemeProvider extends ChangeNotifier {
 
   void toggleTheme(bool value) {
     value ? _themeMode = ThemeMode.dark : _themeMode = ThemeMode.light;
-    storeThemeData(value);
     notifyListeners();
   }
-}
 
-storeThemeData(bool isDarkTheme) async {
-  var sharedPreference = await SharedPreferences.getInstance();
-  sharedPreference.setBool('darkTheme', isDarkTheme);
+  storeThemeData(bool isDarkTheme) async {
+    var sharedPreference = await SharedPreferences.getInstance();
+    sharedPreference.setBool('darkTheme', isDarkTheme);
+  }
 }

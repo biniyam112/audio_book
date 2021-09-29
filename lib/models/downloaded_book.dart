@@ -3,11 +3,10 @@ import 'dart:typed_data';
 import 'package:audio_books/models/models.dart';
 
 class DownloadedBook {
-  final String title, author, category;
+  final String id, title, author, category;
   String bookFilePath, coverArtPath;
   late Uint8List bookFile;
   late Uint8List coverArt;
-  final int id;
   double percentCompleted = 0;
 
   DownloadedBook({

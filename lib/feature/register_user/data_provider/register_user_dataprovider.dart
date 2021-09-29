@@ -13,7 +13,7 @@ class RegisterUserDP {
       Uri.parse('http://www.marakigebeya.com.et/api/Subscribers/register'),
       body: jsonEncode(<String, String>{
         'fullName': '${user.firstName} ${user.lastName}',
-        'phoneNumber': user.phoneNumber!,
+        'phoneNumber': '${user.countryCode}${user.phoneNumber}',
       }),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',

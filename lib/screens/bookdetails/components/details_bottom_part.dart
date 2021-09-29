@@ -151,7 +151,7 @@ class _DetailsBottomPartState extends State<DetailsBottomPart> {
             style: Theme.of(context).textTheme.headline4,
           ),
           ...List.generate(
-            book.chapersCount,
+            4,
             (index) => ChapterTile(
               book: book,
               chapterNumber: index + 1,

@@ -57,7 +57,7 @@ class _MyAppState extends State<MyApp> {
   bool firstTime = true;
   bool userLoggedIn = false;
   @override
-  void initState() {
+  initState() {
     GetIt getIt = GetIt.instance;
     getIt.registerSingleton<User>(User());
     setThemeData(context);
@@ -69,7 +69,7 @@ class _MyAppState extends State<MyApp> {
   checkFirstTime() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     firstTime = sharedPreferences.getBool('firstTime') ?? true;
-    sharedPreferences.setBool('firstTime', false);
+    await sharedPreferences.setBool('firstTime', false);
   }
 
   checkUserLogin() async {
@@ -78,10 +78,11 @@ class _MyAppState extends State<MyApp> {
       if (dbUser != null) {
         getIt.registerSingleton<User>(dbUser);
         userLoggedIn = true;
+      } else {
+        userLoggedIn = false;
       }
-      userLoggedIn = false;
     } catch (e) {
-      print('user database error $e');
+      print('user first database error $e');
       userLoggedIn = false;
     }
   }
@@ -124,6 +125,7 @@ class _MyAppState extends State<MyApp> {
                   ),
                 ),
                 BlocProvider(
+                  lazy: false,
                   create: (context) => DatabaseBloc(
                     initDBRepo: widget.initDBRepo,
                   )..add(
@@ -135,9 +137,7 @@ class _MyAppState extends State<MyApp> {
                 BlocProvider(
                   create: (context) => AuthorizeUserBloc(
                     authorizeUserRepo: widget.authorizeUserRepo,
-                  )..add(
-                      AuthoriseUserEvent.authorizeUser,
-                    ),
+                  ),
                 ),
                 BlocProvider(
                   create: (context) => FetchBooksBloc(
