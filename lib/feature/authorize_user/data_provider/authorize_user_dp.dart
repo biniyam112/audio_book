@@ -20,10 +20,8 @@ class AuthorizeUserDataProvider {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-    print("phoneNumber ${user.countryCode}${user.phoneNumber}");
     if (response.statusCode == 200) {
       user.token = jsonDecode(response.body)['jwtToken'];
-      print('the token is ${user.token}');
       return response.body;
     } else {
       throw Exception('User authorization failed');

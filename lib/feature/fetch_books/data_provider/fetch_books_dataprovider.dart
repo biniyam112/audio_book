@@ -17,7 +17,6 @@ class FetchBooksDP {
     );
     if (response.statusCode == 200) {
       var books = jsonDecode(response.body) as List;
-      print('the fetched books are $books');
       return books.map((book) => Book.fromMap(book)).toList();
     } else {
       throw Exception(response.body);

@@ -32,7 +32,7 @@ class BookTile extends StatelessWidget {
       },
       child: Container(
         height: 150,
-        width: SizeConfig.screenWidth! - 20,
+        width: SizeConfig.screenWidth! - 120,
         decoration: BoxDecoration(
           color: isDarkMode
               ? Darktheme.containerColor.withOpacity(.9)

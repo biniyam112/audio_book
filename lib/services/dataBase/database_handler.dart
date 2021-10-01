@@ -1,22 +1,18 @@
 import 'package:audio_books/models/downloaded_book.dart';
-import 'package:audio_books/models/user.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class DataBaseHandler {
   late Database dataBase;
 
-  Future<void> createDatabase() async {
+  createDatabase() async {
     final String createbookStore =
         'Create table bookStore(id INTEGER PRIMARY KEY,title TEXT,author TEXT,bookFilePath TEXT,category TEXT,coverArtPath TEXT,percentCompleted DOUBLE)';
-    final String createUser =
-        'Create table user(id INTEGER PRIMARY KEY,firstName TEXT,lastName TEXT,phoneNumber TEXT,email TEXT,countryCode TEXT)';
 
     dataBase = await openDatabase(
-      join(await getDatabasesPath(), 'maraki.db'),
-      onCreate: (database, version) async {
-        database.execute('$createbookStore');
-        dataBase.execute('$createUser');
+      join((await getDatabasesPath()), 'maraki.db'),
+      onCreate: (database, version) {
+        return database.execute('$createbookStore');
       },
       singleInstance: true,
       version: 1,
@@ -40,22 +36,6 @@ class DataBaseHandler {
       downloadedBook.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
-  }
-
-  Future<void> storeUser(User user) async {
-    final db = dataBase;
-    await db.insert(
-      'user',
-      user.tomap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-  }
-
-  Future<User?> fetchUser() async {
-    final db = dataBase;
-    print('the database instance is $dataBase');
-    var user = await db.query('user');
-    return User.fromMap(user[0]);
   }
 
   Future<List<DownloadedBook>> fetchDownloadedBooks() async {

@@ -20,8 +20,6 @@ class RegisterUserDP {
       },
     );
     if (response.statusCode == 200) {
-      print(response.body);
-      dataBaseHandler.storeUser(user);
       return response.body;
     } else {
       throw Exception(response.body);

@@ -6,6 +6,6 @@ class InitDBRepo {
   InitDBRepo({required this.initDBDataProvider});
 
   Future<void> createDatabase() async {
-    await initDBDataProvider.createDatabase();
+    return await initDBDataProvider.createDatabase();
   }
 }

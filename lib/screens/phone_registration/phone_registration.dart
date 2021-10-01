@@ -12,8 +12,6 @@ class PhoneRegistrationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    // GetIt getIt = GetIt.instance;
-    // getIt.registerSingleton<User>(User());
 
     return Scaffold(
       appBar: customAppBar(context: context, title: 'Verification'),

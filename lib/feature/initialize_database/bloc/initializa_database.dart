@@ -12,17 +12,14 @@ class DatabaseBloc extends Bloc<DBEvent, InitializeDBState> {
   @override
   Stream<InitializeDBState> mapEventToState(DBEvent event) async* {
     yield InitializeDBState.idleState;
-    print('already with in the database initializateion phase');
     try {
       if (event is InitializeDBEvent) {
         getIt.registerSingleton<DataBaseHandler>(event.dataBaseHandler);
         await initDBRepo.createDatabase();
-        print('with in the database initializateion phase');
         yield InitializeDBState.initializedState;
       }
     } catch (e) {
       yield InitializeDBState.initFailedState;
-      print('this is bloc level error $e');
     }
   }
 }

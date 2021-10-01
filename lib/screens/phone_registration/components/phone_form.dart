@@ -23,6 +23,12 @@ class PhoneForm extends StatefulWidget {
 }
 
 class _PhoneFormState extends State<PhoneForm> {
+  @override
+  void initState() {
+    super.initState();
+    getIt.registerSingleton<User>(User());
+  }
+
   Country? _selectedCountry;
   late String phoneNumber;
   final _formKey = GlobalKey<FormState>();
