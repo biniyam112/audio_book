@@ -1,4 +1,3 @@
-import 'package:audio_books/feature/authorize_user/bloc/authorize_user_bloc.dart';
 import 'package:audio_books/feature/fetch_books/bloc/fetch_books_bloc.dart';
 import 'package:audio_books/feature/fetch_books/bloc/fetch_books_event.dart';
 import 'package:audio_books/models/user.dart';
@@ -22,6 +21,12 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   GlobalKey<ScaffoldState> homeKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    Provider.of<FetchBooksBloc>(context, listen: false).add(FetchBooksEvent());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,17 +84,16 @@ class CustomDrawer extends StatelessWidget {
                 DrawerTile(
                   title: 'Profile',
                   icon: CupertinoIcons.profile_circled,
-                  onPress: () {
-                    Provider.of<AuthorizeUserBloc>(context, listen: false)
-                        .add(AuthoriseUserEvent.authorizeUser);
-                    Provider.of<FetchBooksBloc>(context, listen: false)
-                        .add(FetchBooksEvent());
-                    print(user);
-                  },
+                  onPress: () {},
                 ),
                 DrawerTile(
-                  title: 'title',
-                  icon: CupertinoIcons.exclamationmark_bubble,
+                  title: 'Settings',
+                  icon: CupertinoIcons.settings,
+                  onPress: () {},
+                ),
+                DrawerTile(
+                  title: 'Log out',
+                  icon: CupertinoIcons.square_arrow_left,
                   onPress: () {},
                 ),
               ],

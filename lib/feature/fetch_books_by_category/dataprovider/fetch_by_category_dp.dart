@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:audio_books/models/models.dart';
 import 'package:http/http.dart' as http;
 
-class FetchBooksDP {
+class FetchBooksByCateDP {
   final http.Client client;
 
-  FetchBooksDP({required this.client});
+  FetchBooksByCateDP({required this.client});
 
-  Future<List<Book>> fetchAllBoks(String token) async {
+  Future<List<Book>> fetchByCategory({required String category, token}) async {
     token =
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6IjQwZGFiMDIyLTgwYjEtNDUwZS1hMGI0LWU4NjVmM2Y4MDgzYyIsIm5iZiI6MTYzMzA3NjExNCwiZXhwIjoxNjM1NjY4MTE0LCJpYXQiOjE2MzMwNzYxMTR9.LXTEYThysmfnSuQIzlysxUJPlXydIjh_vwDzzVbEjWo';
     var response = await client.get(
@@ -21,7 +21,7 @@ class FetchBooksDP {
       var books = jsonDecode(response.body) as List;
       return books.map((book) => Book.fromMap(book)).toList();
     } else {
-      throw Exception(response.body);
+      throw Exception('Unable to fetch books');
     }
   }
 }

@@ -27,8 +27,10 @@ class Body extends StatelessWidget {
                         context,
                         MaterialPageRoute(
                           builder: (context) {
-                            return AudioPlayerScreen(
-                                book: libraryMockData[index]);
+                            return Container();
+                            // return AudioPlayerScreen(
+                            //   book: libraryMockData[index],
+                            // );
                           },
                         ),
                       );

@@ -1,6 +1,5 @@
-import 'package:audio_books/feature/fetch_books/bloc/fetch_books_bloc.dart';
-import 'package:audio_books/feature/fetch_books/bloc/fetch_books_state.dart';
-import 'package:audio_books/models/models.dart';
+import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_bloc.dart';
+import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_state.dart';
 import 'package:audio_books/screens/categoryallbooks/category_all_books.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:flutter/cupertino.dart';
@@ -36,32 +35,41 @@ class Body extends StatelessWidget {
                     },
                   ),
                 ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      ...List.generate(
-                        libraryMockData.length,
-                        (index) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: getProportionateScreenWidth(12),
-                              vertical: 6,
+                BlocBuilder<FetchBooksByCategoryBloc,
+                    FetchBooksByCategoryState>(
+                  builder: (context, state) {
+                    if (state is CategoryBooksFetchedState) {
+                      var books = state.books;
+                      return SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            ...List.generate(
+                              books.length,
+                              (index) {
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: getProportionateScreenWidth(12),
+                                    vertical: 6,
+                                  ),
+                                  child: PopularBooksTile(
+                                    book: books[index],
+                                  ),
+                                );
+                              },
                             ),
-                            child: PopularBooksTile(
-                              book: libraryMockData[index],
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                          ],
+                        ),
+                      );
+                    }
+                    return Container();
+                  },
                 ),
               ],
             ),
-            BlocBuilder<FetchBooksBloc, FetchBooksState>(
+            BlocBuilder<FetchBooksByCategoryBloc, FetchBooksByCategoryState>(
               builder: (context, state) {
-                if (state is BooksFetchedState) {
+                if (state is CategoryBooksFetchedState) {
                   var books = state.books;
                   return BookShelf(
                     books: books,
@@ -76,22 +84,33 @@ class Body extends StatelessWidget {
                     },
                   );
                 }
-                if (state is BooksFetchingFailedState) {
+                if (state is CategoryFetchFailedState) {
                   return Text('${state.errorMessage}');
                 }
                 return Text('not there yet');
               },
             ),
-            BookShelf(
-              books: libraryMockDataPolitics,
-              categoryName: 'Politics',
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) =>
-                          CategoryAllBooks(category: 'Politics'),
-                    ));
+            BlocBuilder<FetchBooksByCategoryBloc, FetchBooksByCategoryState>(
+              builder: (context, state) {
+                if (state is CategoryBooksFetchedState) {
+                  var books = state.books;
+                  return BookShelf(
+                    books: books,
+                    categoryName: 'Politics',
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                CategoryAllBooks(category: 'Politics'),
+                          ));
+                    },
+                  );
+                }
+                if (state is CategoryFetchFailedState) {
+                  return Text('${state.errorMessage}');
+                }
+                return Text('not there yet');
               },
             ),
             verticalSpacing(10),

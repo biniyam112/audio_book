@@ -3,6 +3,8 @@ import 'package:audio_books/feature/authorize_user/repository/authorize_user_rep
 import 'package:audio_books/feature/check_first_time/check_first_time.dart';
 import 'package:audio_books/feature/fetch_books/bloc/fetch_books_bloc.dart';
 import 'package:audio_books/feature/fetch_books/repository/fetch_books_repo.dart';
+import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_bloc.dart';
+import 'package:audio_books/feature/fetch_books_by_category/repository/fetch_by_category_repo.dart';
 import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_book_bloc.dart';
 import 'package:audio_books/feature/fetch_downloaded_book/data/repository/fetch_books_repository.dart';
 import 'package:audio_books/feature/initialize_database/bloc/initializa_database.dart';
@@ -13,7 +15,7 @@ import 'package:audio_books/feature/register_user/repository/register_user_repos
 import 'package:audio_books/feature/set_theme_data/set_theme_data.dart';
 import 'package:audio_books/feature/store_book/bloc/store_book_bloc.dart';
 import 'package:audio_books/feature/store_book/data/repository/store_book_repository.dart';
-import 'package:audio_books/screens/phone_registration/phone_registration.dart';
+import 'package:audio_books/screens/components/tab_view.dart';
 import 'package:audio_books/services/dataBase/database_handler.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/dark_theme.dart';
@@ -34,6 +36,7 @@ class MyApp extends StatefulWidget {
   final DataBaseHandler dataBaseHandler;
   final InitDBRepo initDBRepo;
   final AuthorizeUserRepo authorizeUserRepo;
+  final FetchBooksByCateRepo fetchBooksByCateRepo;
 
   final FetchBooksRepo fetchBooksRepo;
 
@@ -47,6 +50,7 @@ class MyApp extends StatefulWidget {
     required this.initDBRepo,
     required this.authorizeUserRepo,
     required this.fetchBooksRepo,
+    required this.fetchBooksByCateRepo,
   }) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
@@ -117,6 +121,12 @@ class _MyAppState extends State<MyApp> {
                       SetThemeDataEvent(context: context),
                     ),
                 ),
+                BlocProvider(
+                  lazy: false,
+                  create: (context) => FetchBooksByCategoryBloc(
+                    fetchBooksByCateRepo: widget.fetchBooksByCateRepo,
+                  ),
+                ),
               ],
               child: MaterialApp(
                 title: 'Audio Book',
@@ -164,7 +174,8 @@ class LoadingTransition extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) {
-                  return PhoneRegistrationScreen();
+                  // return PhoneRegistrationScreen();
+                  return TabViewPage();
                 },
               ),
             );
@@ -174,8 +185,10 @@ class LoadingTransition extends StatelessWidget {
           return SizedBox(
             height: getProportionateScreenWidth(20),
             width: getProportionateScreenWidth(20),
-            child: CircularProgressIndicator(
-              color: Colors.white,
+            child: Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+              ),
             ),
           );
         },
