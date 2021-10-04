@@ -2,7 +2,6 @@ import 'package:audio_books/screens/components/form_error.dart';
 import 'package:audio_books/screens/components/input_field_container.dart';
 import 'package:audio_books/screens/otp/otp.dart';
 import 'package:audio_books/screens/phone_registration/phone_registration.dart';
-import 'package:audio_books/screens/signup/signup_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -32,7 +31,7 @@ class _LoginFormState extends State<LoginForm> {
             child: buildEmailFormField(),
             title: 'Email',
           ),
-          SizedBox(height: getProportionateScreenHeight(30)),
+          SizedBox(height: getProportionateScreenHeight(20)),
           InputFieldContainer(
             title: 'Password',
             child: buildPasswordFormField(),
@@ -63,12 +62,11 @@ class _LoginFormState extends State<LoginForm> {
               Text('Don\'t have an account?'),
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return SignupScreen();
+                        return PhoneRegistrationScreen();
                       },
                     ),
                   );

@@ -1,3 +1,5 @@
+import 'package:audio_books/screens/screens.dart';
+import 'package:audio_books/sizeConfig.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -19,54 +21,24 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(12),
+    return SingleChildScrollView(
+      child: Container(
+        height: SizeConfig.screenHeight,
+        width: SizeConfig.screenWidth,
+        child: SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              TextField(
-                onSubmitted: (text) {},
-                controller: searchFieldController,
-                decoration: InputDecoration(
-                  hintText: 'Search',
-                  hintStyle: TextStyle(
-                    color: Colors.black45,
-                  ),
-                  prefixIcon: Icon(
-                    CupertinoIcons.search,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(
-                      color: Colors.black54,
-                      width: 2,
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(
-                      color: Colors.black54,
-                      width: 2,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
-                    borderSide: BorderSide(
-                      color: Colors.black54,
-                      width: 2,
-                    ),
-                  ),
-                  suffixIcon: IconButton(
-                    icon: Icon(
-                      CupertinoIcons.clear_circled_solid,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        searchFieldController.clear();
-                      });
-                    },
+              verticalSpacing(10),
+              SearchBar(),
+              verticalSpacing(8),
+              Container(
+                height: SizeConfig.screenHeight! * .75,
+                width: SizeConfig.screenWidth,
+                child: Center(
+                  child: Text(
+                    'Search books here',
+                    style: Theme.of(context).textTheme.headline4,
                   ),
                 ),
               ),

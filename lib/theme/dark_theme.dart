@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 //?dark theme
 ThemeData darkTheme = ThemeData(
+  fontFamily: GoogleFonts.poppins().fontFamily,
   brightness: Brightness.dark,
   scaffoldBackgroundColor: Darktheme.backgroundColor,
   primaryColor: Darktheme.primaryColor,

@@ -1,7 +1,6 @@
-import 'package:audio_books/models/library_mock.dart';
 import 'package:audio_books/screens/home/home.dart';
 import 'package:audio_books/screens/library/library.dart';
-import 'package:audio_books/screens/search/search.dart';
+import 'package:audio_books/screens/search/search_screen.dart';
 import 'package:audio_books/screens/settings/settings.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme_colors.dart';
@@ -11,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
-
+ 
 class TabViewPage extends StatelessWidget {
   const TabViewPage({Key? key}) : super(key: key);
 
@@ -37,7 +36,7 @@ class TabViewPage extends StatelessWidget {
       ),
       screens: [
         HomeScreen(),
-        LibraryScreen(downloadedBooks: libraryMockData,),
+        LibraryScreen(),
         SearchScreen(),
         SettingsScreen(),
       ],

@@ -1,3 +1,4 @@
+import 'package:audio_books/models/book.dart';
 import 'package:audio_books/screens/audioplayer/audio_player.dart';
 import 'package:audio_books/theme/theme_colors.dart';
 import 'package:audio_books/theme/theme_provider.dart';
@@ -12,10 +13,10 @@ import '../../../sizeConfig.dart';
 class DetailsBottomPart extends StatefulWidget {
   const DetailsBottomPart({
     Key? key,
-    required this.preface,
+    required this.book,
   }) : super(key: key);
 
-  final String preface;
+  final Book book;
 
   @override
   _DetailsBottomPartState createState() => _DetailsBottomPartState();
@@ -99,7 +100,11 @@ class _DetailsBottomPartState extends State<DetailsBottomPart> {
                           2,
                           (index) {
                             return SingleChildScrollView(
-                              child: childProvider(index, context),
+                              child: childProvider(
+                                context,
+                                index: index,
+                                book: widget.book,
+                              ),
                             );
                           },
                         ),
@@ -115,11 +120,18 @@ class _DetailsBottomPartState extends State<DetailsBottomPart> {
     );
   }
 
-  Widget? childProvider(int index, BuildContext context) {
+  Widget? childProvider(
+    BuildContext context, {
+    required int index,
+    required Book book,
+  }) {
+    String preface =
+        'Through his collection of prefaces Gray allows the reader to trace metamorphoses in English from c. 675 to 1920. The survey ends with this latter date to avoid the expense of copyright royalties, but the book\'s more than six hundred pages still provide a cornucopia of material. Gray\'s introductory and marginal comments place the selections in literary and historical context. The book is printed handsomely in black and red and is embellished with attractive illustration.The Book of Prefaces would be an ideal text for teaching linguistic and perhaps even literary history were it not so riddled with errors, typographical and factual. To avoid copyright royalties, the publisher excluded not only most twentieth century authors but also twentieth century scholarly editions. In fact, the reader has no idea which editions Gray used, raising questions about the form and content of the selections. While most passages are given in their original and, when necessary, in translation, some appear only in modern dress. The innocent reader might thus be led to believe that Caxton\'s orthography underwent a dramatic revolution between his 1484 preface to The Canterbury Tales, printed here as Caxton wrote it, and the 1490 preface to the Aeneid, which Gray has purged of its fifteenth century look. The plan and, in places, the execution of this work are so good that one regrets that the final product does not fulfill its potential.';
+
     bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
     if (index == 0) {
       return Text(
-        widget.preface,
+        preface,
         maxLines: 20,
         overflow: TextOverflow.ellipsis,
         style: Theme.of(context).textTheme.headline5!.copyWith(
@@ -138,15 +150,14 @@ class _DetailsBottomPartState extends State<DetailsBottomPart> {
             'chapters',
             style: Theme.of(context).textTheme.headline4,
           ),
-          ChapterTile(
-            chapterNumber: 1,
-            chapterTitle: 'The day I came out',
-            chapterDuration: '45:04',
-          ),
-          ChapterTile(
-            chapterNumber: 2,
-            chapterTitle: 'The fllowing day',
-            chapterDuration: '23:04',
+          ...List.generate(
+            book.chapersCount,
+            (index) => ChapterTile(
+              book: book,
+              chapterNumber: index + 1,
+              chapterTitle: 'The day I came out',
+              chapterDuration: '45:04',
+            ),
           ),
         ],
       );
@@ -160,7 +171,9 @@ class ChapterTile extends StatelessWidget {
     required this.chapterNumber,
     required this.chapterTitle,
     required this.chapterDuration,
+    required this.book,
   }) : super(key: key);
+  final Book book;
   final String chapterTitle, chapterDuration;
   final int chapterNumber;
 
@@ -178,7 +191,7 @@ class ChapterTile extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return AudioPlayerScreen();
+                return AudioPlayerScreen(book: book);
               },
             ),
           );
@@ -245,7 +258,7 @@ class ChapterTile extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return AudioPlayerScreen();
+                        return AudioPlayerScreen(book: book);
                       },
                     ),
                   );

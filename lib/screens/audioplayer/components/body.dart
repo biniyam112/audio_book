@@ -1,20 +1,23 @@
 import 'package:audio_books/constants.dart';
-import 'package:audio_books/services/page_manager.dart';
-import 'package:audio_books/services/service_locator.dart';
+import 'package:audio_books/models/models.dart';
+import 'package:audio_books/services/audio/notifiers/progress_notifier.dart';
+import 'package:audio_books/services/audio/page_manager.dart';
+import 'package:audio_books/services/audio/play_button_notifier.dart';
+import 'package:audio_books/services/audio/service_locator.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme_colors.dart';
 import 'package:audio_books/theme/theme_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
-import '../../../services/notifiers/play_button_notifier.dart';
-import '../../../services/notifiers/progress_notifier.dart';
 
 class Playlist extends StatelessWidget {
   const Playlist({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     final pageManager = getIt<PageManager>();
@@ -37,17 +40,24 @@ class Playlist extends StatelessWidget {
 }
 
 class Body extends StatefulWidget {
-  const Body({Key? key}) : super(key: key);
+  const Body({
+    Key? key,
+    required this.book,
+  }) : super(key: key);
+  final Book book;
 
   @override
-  _BodyState createState() => _BodyState();
+  _BodyState createState() => _BodyState(book);
 }
 
 class _BodyState extends State<Body> {
+  final Book book;
   late PageManager _pageManager;
   late PageController _pageController;
 
   bool isFavorite = false;
+
+  _BodyState(this.book);
 
   @override
   void initState() {
@@ -127,8 +137,15 @@ class _BodyState extends State<Body> {
                                 borderRadius: BorderRadius.circular(
                                   getProportionateScreenWidth(20),
                                 ),
-                                child: Image.asset(
-                                  'assets/images/book_1.jpg',
+                                child: CachedNetworkImage(
+                                  imageUrl: '${book.coverArt}',
+                                  progressIndicatorBuilder:
+                                      (context, url, downloadProgress) =>
+                                          CircularProgressIndicator(
+                                              value: downloadProgress.progress),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                  height: SizeConfig.screenHeight! * .3,
                                   fit: BoxFit.cover,
                                 ),
                               ),
