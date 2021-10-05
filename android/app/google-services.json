@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1055014657539",
+    "project_id": "phone-verification-4da72",
+    "storage_bucket": "phone-verification-4da72.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1055014657539:android:6a35f348b59e20f5b07836",
+        "android_client_info": {
+          "package_name": "bininyam.developer.com.audio_books"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1055014657539-bf4g4gj6f8mdtciuk7ar2b59nmo8kf24.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "bininyam.developer.com.audio_books",
+            "certificate_hash": "bc3c1a888ed6ec24ba7a7f60c4899902a40e4d25"
+          }
+        },
+        {
+          "client_id": "1055014657539-0japfkp72a54ga4ur8oedupqpedbrld2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmkkS_ydLBBgwFJ2hKRBhCLxL8xs-HFAc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1055014657539-0japfkp72a54ga4ur8oedupqpedbrld2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

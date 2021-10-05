@@ -1,6 +1,5 @@
 import 'package:audio_books/models/downloaded_book.dart';
 import 'package:audio_books/models/models.dart';
-import 'package:audio_books/screens/audioplayer/audio_player.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

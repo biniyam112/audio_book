@@ -1,8 +1,8 @@
 import 'package:audio_books/screens/components/custom_appbar.dart';
 import 'package:audio_books/sizeConfig.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-// import 'package:get_it/get_it.dart';
 
 import 'components/body.dart';
 
@@ -14,8 +14,8 @@ class PhoneRegistrationScreen extends StatelessWidget {
     SizeConfig().init(context);
 
     return Scaffold(
-      appBar: customAppBar(context: context, title: 'Verification'),
-      body: Body(),
+      appBar: customAppBar(context: context, title: 'Register Phone'),
+      body: SingleChildScrollView(child: Body()),
     );
   }
 }

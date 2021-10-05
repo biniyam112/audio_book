@@ -13,6 +13,7 @@ import 'package:audio_books/feature/register_user/repository/register_user_repos
 import 'package:audio_books/feature/store_book/data/dataprovider/store_book_data_provider.dart';
 import 'package:audio_books/feature/store_book/data/repository/store_book_repository.dart';
 import 'package:audio_books/services/dataBase/database_handler.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,8 @@ import 'services/audio/service_locator.dart';
 import 'services/encryption/encryption_handler.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   Bloc.observer = SimpleBlocObserver();
   DataBaseHandler dataBaseHandler = DataBaseHandler();
   final StoreBookRepo storeBookRepo = StoreBookRepo(

@@ -10,6 +10,7 @@ import 'package:audio_books/feature/fetch_downloaded_book/data/repository/fetch_
 import 'package:audio_books/feature/initialize_database/bloc/initializa_database.dart';
 import 'package:audio_books/feature/initialize_database/bloc/initialize_db_event.dart';
 import 'package:audio_books/feature/initialize_database/repository/init_db_repository.dart';
+import 'package:audio_books/feature/otp/otp.dart';
 import 'package:audio_books/feature/register_user/bloc/register_user_bloc.dart';
 import 'package:audio_books/feature/register_user/repository/register_user_repository.dart';
 import 'package:audio_books/feature/set_theme_data/set_theme_data.dart';
@@ -27,6 +28,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 import 'onboarding/onboarding.dart';
+import 'phone_registration/phone_registration.dart';
 
 class MyApp extends StatefulWidget {
   final StoreBookRepo storeBookRepo;
@@ -127,6 +129,7 @@ class _MyAppState extends State<MyApp> {
                     fetchBooksByCateRepo: widget.fetchBooksByCateRepo,
                   ),
                 ),
+                BlocProvider(create: (context) => OtpBloc())
               ],
               child: MaterialApp(
                 title: 'Audio Book',
@@ -174,8 +177,8 @@ class LoadingTransition extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) {
-                  // return PhoneRegistrationScreen();
-                  return TabViewPage();
+                  return PhoneRegistrationScreen();
+                  // return TabViewPage();
                 },
               ),
             );

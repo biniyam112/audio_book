@@ -11,6 +11,7 @@ const String kEmailNullError = "Please Enter your email";
 const String kFirstNameNullError = "Please enter your first name";
 const String kLastNameNullError = "Please enter your last name";
 const String kPhoneNullError = "Please Enter phone number";
+const String kOtpError="OTP error";
 const String kCountryCodeNullError = "Please select country code";
 const String kInvalidPhoneNumberError = "Please enter valid phone number";
 const String kInvalidEmailError = "Please Enter Valid Email";
