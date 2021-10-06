@@ -16,7 +16,6 @@ class AmolePaymentDP {
       },
     );
     if (response.statusCode == 200) {
-      print(response.body);
     } else {
       throw Exception(response.reasonPhrase);
     }

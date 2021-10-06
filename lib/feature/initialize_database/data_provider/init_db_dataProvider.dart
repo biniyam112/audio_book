@@ -6,6 +6,6 @@ class InitDBDataProvider {
   InitDBDataProvider({required this.dataBaseHandler});
 
   Future<void> createDatabase() async {
-    await dataBaseHandler.createDatabase();
+   return await dataBaseHandler.createDatabase();
   }
 }

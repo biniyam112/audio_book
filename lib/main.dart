@@ -10,6 +10,7 @@ import 'package:audio_books/feature/register_user/data_provider/register_user_da
 import 'package:audio_books/feature/register_user/repository/register_user_repository.dart';
 import 'package:audio_books/feature/store_book/data/dataprovider/store_book_data_provider.dart';
 import 'package:audio_books/feature/store_book/data/repository/store_book_repository.dart';
+import 'package:audio_books/models/user.dart';
 import 'package:audio_books/services/dataBase/database_handler.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -17,6 +18,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:http/http.dart' as http;
 
 import 'bloc_observer.dart';
@@ -26,6 +28,9 @@ import 'services/encryption/encryption_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Hive.initFlutter();
+  Hive.registerAdapter(UserAdapter());
+  await Hive.openBox<User>('user');
   await Firebase.initializeApp();
   Bloc.observer = SimpleBlocObserver();
   DataBaseHandler dataBaseHandler = DataBaseHandler();

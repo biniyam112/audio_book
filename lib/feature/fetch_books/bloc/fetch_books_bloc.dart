@@ -18,7 +18,6 @@ class FetchBooksBloc extends Bloc<FetchBooksEvent, FetchBooksState> {
       var books = await fetchBooksRepo.fetchAllBoks(user.token!);
       yield BooksFetchedState(books: books);
     } catch (e) {
-      print(e);
       yield BooksFetchingFailedState(
           errorMessage: 'this is book fetch error : $e');
     }

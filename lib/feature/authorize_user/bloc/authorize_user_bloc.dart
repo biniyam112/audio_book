@@ -16,7 +16,6 @@ class AuthorizeUserBloc extends Bloc<AuthoriseUserEvent, AuthoriseUserState> {
         await authorizeUserRepo.authorizeUser(user);
         yield AuthoriseUserState.userAuthorizedState;
       } catch (e) {
-        print('the authrization error is $e');
         yield AuthoriseUserState.userAuthorizationFailedState;
       }
     }

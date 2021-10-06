@@ -19,7 +19,6 @@ class FetchDownBooksBloc
 
       yield BooksFetchedState(downloadedBooks: fetchedBooks);
     } catch (e) {
-      print('\nThe error is $e\n');
       yield FetchingBooksFailedState(errorMessage: e.toString());
     }
   }
@@ -39,7 +38,6 @@ class FetchBookFileBloc extends Bloc<FetchBookFileEvent, FetchBookFileState> {
       event.downloadedBook.setBookFile = Uint8List.fromList(bookFile.codeUnits);
       yield BookDataFetchedState(downloadedBook: event.downloadedBook);
     } catch (e) {
-      print(e.toString());
       yield FetchingBookDataFailedState(errorMessage: e.toString());
     }
   }

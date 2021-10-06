@@ -5,7 +5,7 @@ class OtpDataProvider {
   final FirebaseAuth _auth;
 
   OtpDataProvider() : _auth = getIt<FirebaseAuth>();
-
+  
   Future<void> sendOtp(
       String phoneNumber,
       Duration timeOut,
