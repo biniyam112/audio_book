@@ -18,3 +18,15 @@ class Podcast {
         category: json['category'],
       );
 }
+
+final List<Podcast> pods = [
+  Podcast(
+    id: 'id',
+    title: 'win today',
+    podcastImage:
+        'https://image.freepik.com/free-psd/arrangement-mock-up-book-cover_23-2149059351.jpg',
+    description: 'learn to live today',
+    creators: 'me, I created it',
+    category: 'motivation | self empowerment',
+  )
+];

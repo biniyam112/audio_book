@@ -1,5 +1,7 @@
+import 'package:audio_books/models/podcast.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class PodcastBody extends StatelessWidget {
@@ -28,22 +30,70 @@ class PodcastBody extends StatelessWidget {
                 shrinkWrap: true,
                 physics: BouncingScrollPhysics(parent: BouncingScrollPhysics()),
                 itemBuilder: (context, index) {
-                  return Container(
-                    height: getProportionateScreenHeight(200),
-                    width: SizeConfig.screenWidth! * .44,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: Darktheme.primaryColor,
-                    ),
-                    child: Column(
-                      children: [Text('this is podcast')],
-                    ),
+                  return PodcastCard(
+                    podcast: pods[0],
                   );
                 },
               ),
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class PodcastCard extends StatelessWidget {
+  const PodcastCard({
+    Key? key,
+    required this.podcast,
+  }) : super(key: key);
+  final Podcast podcast;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: getProportionateScreenHeight(200),
+      width: SizeConfig.screenWidth! * .44,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Darktheme.primaryColor,
+      ),
+      child: Column(
+        children: [
+          Expanded(
+            child: CachedNetworkImage(
+              imageUrl: podcast.podcastImage,
+            ),
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Text(
+                    '${podcast.title}',
+                    style: Theme.of(context).textTheme.headline3,
+                  ),
+                  Opacity(
+                    opacity: .8,
+                    child: Text(
+                      '${podcast.creators}',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                  ),
+                  Opacity(
+                    opacity: .8,
+                    child: Text(
+                      '${podcast.category}',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
