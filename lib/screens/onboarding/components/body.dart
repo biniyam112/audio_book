@@ -16,7 +16,7 @@ class _BodyState extends State<Body> {
   late String splashImage1;
   late String splashImage2;
   late String splashImage3;
-
+  
   @override
   void initState() {
     super.initState();

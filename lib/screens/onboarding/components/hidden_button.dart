@@ -1,4 +1,6 @@
+import 'package:audio_books/screens/components/tab_view.dart';
 import 'package:audio_books/screens/phone_registration/phone_registration.dart';
+import 'package:audio_books/services/hiveConfig/hive_boxes.dart';
 import 'package:flutter/material.dart';
 
 class HiddenButton extends StatelessWidget {
@@ -15,15 +17,28 @@ class HiddenButton extends StatelessWidget {
       visible: isVisible,
       child: ElevatedButton(
         onPressed: () {
-          Navigator.pop(context);
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return PhoneRegistrationScreen();
-              },
-            ),
-          );
+          if (HiveBoxes.hasUserSigned()) {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return TabViewPage();
+                },
+              ),
+            );
+          } else {
+            Navigator.pop(context);
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return PhoneRegistrationScreen();
+                },
+              ),
+            );
+          }
         },
         child: Padding(
           padding: EdgeInsets.symmetric(

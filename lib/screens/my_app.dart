@@ -16,9 +16,10 @@ import 'package:audio_books/feature/register_user/repository/register_user_repos
 import 'package:audio_books/feature/set_theme_data/set_theme_data.dart';
 import 'package:audio_books/feature/store_book/bloc/store_book_bloc.dart';
 import 'package:audio_books/feature/store_book/data/repository/store_book_repository.dart';
-import 'package:audio_books/models/user.dart';
-import 'package:audio_books/services/audio/service_locator.dart';
+import 'package:audio_books/screens/components/tab_view.dart';
+import 'package:audio_books/screens/phone_registration/phone_registration.dart';
 import 'package:audio_books/services/dataBase/database_handler.dart';
+import 'package:audio_books/services/hiveConfig/hive_config.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/dark_theme.dart';
 import 'package:audio_books/theme/light_theme.dart';
@@ -110,6 +111,7 @@ class _MyAppState extends State<MyApp> {
                     fetchBooksRepo: widget.fetchBooksRepo,
                   ),
                 ),
+                BlocProvider(create: (context) => OtpBloc()),
                 BlocProvider(
                   lazy: false,
                   create: (context) => CheckFirstTimeBloc()
@@ -173,27 +175,27 @@ class LoadingTransition extends StatelessWidget {
               ),
             );
           } else {
-            getIt.registerSingleton<User>(
-              User(
-                firstName: 'bini',
-                lastName: 'yom',
-                phoneNumber: '092343223424',
-                countryCode: '+251',
-                token:
-                    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJJZCI6ImQzOGU5YWUzLTA1NTktNDYwMi1iNDgxLWM3NDM5M2RhYThkZSIsIm5iZiI6MTYzMjg2MTA4NCwiZXhwIjoxNjM1NDUzMDg0LCJpYXQiOjE2MzI4NjEwODR9.PJ2-Q46dRbEza35YbQMnbUP7od2HXeI0oRXMFWj0BmA',
-              ),
-            );
-
-            Navigator.pop(context);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  // return PhoneRegistrationScreen();
-                  return TabViewPage();
-                },
-              ),
-            );
+            if (HiveBoxes.hasUserSigned()) {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return TabViewPage();
+                  },
+                ),
+              );
+            } else {
+              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return PhoneRegistrationScreen();
+                  },
+                ),
+              );
+            }
           }
         },
         builder: (context, ftState) {

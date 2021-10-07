@@ -1,7 +1,31 @@
+import 'package:hive/hive.dart';
+
+part 'user.g.dart';
+@HiveType(typeId: 1)
 class User {
+  @HiveField(0)
   int? id;
-  String? token, email, password;
-  String? firstName, lastName, phoneNumber, countryCode;
+
+  @HiveField(1)
+  String? token;
+
+  @HiveField(2)
+  String? email;
+
+  @HiveField(3)
+  String? password;
+
+  @HiveField(4)
+  String? firstName;
+
+  @HiveField(5)
+  String? lastName;
+
+  @HiveField(6)
+  String? phoneNumber;
+
+  @HiveField(7)
+  String? countryCode;
   User({
     this.id,
     this.firstName,
