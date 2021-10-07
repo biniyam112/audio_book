@@ -7,8 +7,8 @@ class Book {
       narattor,
       bookPath,
       description,
-      publishmentYear,
-      resourceType;
+      publishmentYear;
+  final int resourceType;
 
   Book({
     required this.id,
@@ -26,13 +26,14 @@ class Book {
   factory Book.fromMap(Map<String, dynamic> json) => Book(
         id: json['id'],
         title: json['name'],
-        author: json['author']['name'],
-        category: json['category']['name'],
-        bookPath: json['id'],
-        coverArt: json['coverArt'] ?? 'assets/images/book_0.jpg',
+        author: json['author']['name'] ?? 'no author available',
+        category: json['category']['name'] ?? 'unknown',
+        bookPath: json['bookFile'] ?? '',
+        coverArt: json['coverArt'] ??
+            'https://image.freepik.com/free-psd/top-view-book-coffee-cup-arrangement_23-2149040132.jpg',
         narattor: json['narrator'] ?? 'No narattor',
         publishmentYear: json['publicationYear'] ?? '?',
         description: json['description'] ?? 'No description yet',
-        resourceType: json['resourceType'],
+        resourceType: json['resourceType'] ?? 2,
       );
 }
