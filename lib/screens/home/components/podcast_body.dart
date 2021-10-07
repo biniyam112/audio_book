@@ -3,6 +3,7 @@ import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class PodcastBody extends StatelessWidget {
   const PodcastBody({Key? key}) : super(key: key);
@@ -64,6 +65,14 @@ class PodcastCard extends StatelessWidget {
           Expanded(
             child: CachedNetworkImage(
               imageUrl: podcast.podcastImage,
+              fit: BoxFit.cover,
+              errorWidget: (context, errorMessage, _) => Column(
+                children: [
+                  SvgPicture.asset('assets/icons/Error.svg'),
+                  verticalSpacing(6),
+                  Text('$errorMessage')
+                ],
+              ),
             ),
           ),
           Expanded(
@@ -82,11 +91,17 @@ class PodcastCard extends StatelessWidget {
                       style: Theme.of(context).textTheme.headline6,
                     ),
                   ),
-                  Opacity(
-                    opacity: .8,
-                    child: Text(
-                      '${podcast.category}',
-                      style: Theme.of(context).textTheme.headline6,
+                  Container(
+                    padding: EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4),
+                      color: Darktheme.primaryColor,
+                    ),
+                    child: Center(
+                      child: Text(
+                        '${podcast.category}',
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
                     ),
                   ),
                 ],
