@@ -28,7 +28,6 @@ class _PhoneFormState extends State<PhoneForm> {
   @override
   void initState() {
     super.initState();
-    getIt.registerSingleton<User>(User());
   }
 
   TextEditingController _controller = TextEditingController();
@@ -82,10 +81,8 @@ class _PhoneFormState extends State<PhoneForm> {
     }
   }
 
-
-// BC:3C:1A:88:8E:D6:EC:24:BA:7A:7F:60:C4:89:99:02:A4:0E:4D:25      
-// 5A:E8:7B:41:EE:7F:7F:1E:72:D5:89:42:40:1D:24:E0:22:A1:55:66 
-
+// BC:3C:1A:88:8E:D6:EC:24:BA:7A:7F:60:C4:89:99:02:A4:0E:4D:25
+// 5A:E8:7B:41:EE:7F:7F:1E:72:D5:89:42:40:1D:24:E0:22:A1:55:66
 
   @override
   Widget build(BuildContext context) {

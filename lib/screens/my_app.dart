@@ -16,8 +16,10 @@ import 'package:audio_books/feature/register_user/repository/register_user_repos
 import 'package:audio_books/feature/set_theme_data/set_theme_data.dart';
 import 'package:audio_books/feature/store_book/bloc/store_book_bloc.dart';
 import 'package:audio_books/feature/store_book/data/repository/store_book_repository.dart';
+import 'package:audio_books/models/user.dart';
 import 'package:audio_books/screens/components/tab_view.dart';
 import 'package:audio_books/screens/phone_registration/phone_registration.dart';
+import 'package:audio_books/services/audio/service_locator.dart';
 import 'package:audio_books/services/dataBase/database_handler.dart';
 import 'package:audio_books/services/hiveConfig/hive_config.dart';
 import 'package:audio_books/sizeConfig.dart';
@@ -61,6 +63,12 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    getIt.registerSingleton<User>(User());
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(

@@ -1,6 +1,5 @@
 import 'package:audio_books/screens/components/form_error.dart';
 import 'package:audio_books/screens/components/input_field_container.dart';
-import 'package:audio_books/screens/otp/otp.dart';
 import 'package:audio_books/screens/phone_registration/phone_registration.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -18,8 +17,9 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final List<String> errors = [];
-  String email = '';
-  String password = '';
+  String firstName = '';
+  String lastName = '';
+  String phoneNumber = '';
   bool rememberMe = false;
   @override
   Widget build(BuildContext context) {
@@ -28,33 +28,22 @@ class _LoginFormState extends State<LoginForm> {
       child: Column(
         children: [
           InputFieldContainer(
-            child: buildEmailFormField(),
-            title: 'Email',
+            child: buildFirstNameField(),
+            title: 'First name',
           ),
           SizedBox(height: getProportionateScreenHeight(20)),
           InputFieldContainer(
-            title: 'Password',
-            child: buildPasswordFormField(),
+            child: buildLastNameField(),
+            title: 'Last name',
+          ),
+          SizedBox(height: getProportionateScreenHeight(20)),
+          InputFieldContainer(
+            title: 'Phone number',
+            subtitle: 'Include country code',
+            child: buildPhoneField(),
           ),
           SizedBox(height: getProportionateScreenHeight(10)),
           FormError(errors: errors),
-          SizedBox(height: getProportionateScreenHeight(20)),
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return OTPScreen();
-                  },
-                ),
-              );
-            },
-            child: Text(
-              'Forgot password?',
-              style: TextStyle(fontSize: 14),
-            ),
-          ),
           SizedBox(height: getProportionateScreenHeight(20)),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -62,6 +51,7 @@ class _LoginFormState extends State<LoginForm> {
               Text('Don\'t have an account?'),
               TextButton(
                 onPressed: () {
+                  Navigator.pop(context);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -103,47 +93,40 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
-  TextFormField buildPasswordFormField() {
+// ? firstName form field
+  TextFormField buildFirstNameField() {
     return TextFormField(
-      obscureText: true,
       onSaved: (newValue) {
-        password = newValue!;
+        setState(() {
+          firstName = newValue!;
+        });
       },
       onChanged: (value) {
-        if (value.isNotEmpty && errors.contains(kPassNullError)) {
+        if (value.isNotEmpty && errors.contains(kFirstNameNullError)) {
           setState(() {
-            errors.remove(kPassNullError);
-          });
-        } else if (value.length >= 8 && errors.contains(kShortPassError)) {
-          setState(() {
-            errors.remove(kShortPassError);
+            errors.remove(kFirstNameNullError);
           });
         }
         setState(() {
-          password = value;
+          firstName = value;
         });
       },
+      keyboardType: TextInputType.name,
       validator: (value) {
-        if (value!.isEmpty && !errors.contains(kPassNullError)) {
+        if (value!.isEmpty && !errors.contains(kFirstNameNullError)) {
           setState(() {
-            errors.add(kPassNullError);
+            errors.add(kFirstNameNullError);
           });
           return '';
-        } else if (value.isNotEmpty &&
-            value.length < 8 &&
-            !errors.contains(kShortPassError)) {
-          setState(() {
-            errors.add(kShortPassError);
-          });
-          return '';
-        } else if ((value.isEmpty && errors.contains(kPassNullError)) ||
-            (value.length < 8 && errors.contains(kShortPassError))) {
+        } else if (value.isEmpty && errors.contains(kFirstNameNullError)) {
           return '';
         }
+
         return null;
       },
       decoration: InputDecoration(
-        hintText: 'password',
+        hintText: 'First name',
+        contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: Padding(
           padding: EdgeInsets.fromLTRB(
@@ -152,54 +135,46 @@ class _LoginFormState extends State<LoginForm> {
             getProportionateScreenWidth(20),
             getProportionateScreenWidth(20),
           ),
-          child: SvgPicture.asset('assets/icons/Lock.svg'),
+          child: SvgPicture.asset('assets/icons/User.svg'),
         ),
       ),
     );
   }
 
-  TextFormField buildEmailFormField() {
+  // ? lastname form field
+  TextFormField buildLastNameField() {
     return TextFormField(
       onSaved: (newValue) {
-        email = newValue!;
+        setState(() {
+          lastName = newValue!;
+        });
       },
       onChanged: (value) {
-        if (value.isNotEmpty && errors.contains(kEmailNullError)) {
+        if (value.isNotEmpty && errors.contains(klastNameNullError)) {
           setState(() {
-            errors.remove(kEmailNullError);
-          });
-        } else if (emailValidatorRegExp.hasMatch(value) &&
-            errors.contains(kInvalidEmailError)) {
-          setState(() {
-            errors.remove(kInvalidEmailError);
+            errors.remove(klastNameNullError);
           });
         }
         setState(() {
-          email = value;
+          lastName = value;
         });
       },
-      keyboardType: TextInputType.emailAddress,
+      keyboardType: TextInputType.name,
       validator: (value) {
-        if (value!.isEmpty && !errors.contains(kEmailNullError)) {
+        if (value!.isEmpty && !errors.contains(klastNameNullError)) {
           setState(() {
-            errors.add(kEmailNullError);
+            errors.add(klastNameNullError);
           });
           return '';
-        } else if (!emailValidatorRegExp.hasMatch(value) &&
-            !errors.contains(kInvalidEmailError)) {
-          setState(() {
-            errors.add(kInvalidEmailError);
-          });
-          return '';
-        } else if ((value.isEmpty && errors.contains(kEmailNullError)) ||
-            (!emailValidatorRegExp.hasMatch(value) &&
-                errors.contains(kInvalidEmailError))) {
+        } else if (value.isEmpty && errors.contains(klastNameNullError)) {
           return '';
         }
+
         return null;
       },
       decoration: InputDecoration(
-        hintText: 'email',
+        hintText: 'Last name',
+        contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: Padding(
           padding: EdgeInsets.fromLTRB(
@@ -208,7 +183,54 @@ class _LoginFormState extends State<LoginForm> {
             getProportionateScreenWidth(20),
             getProportionateScreenWidth(20),
           ),
-          child: SvgPicture.asset('assets/icons/Mail.svg'),
+          child: SvgPicture.asset('assets/icons/User.svg'),
+        ),
+      ),
+    );
+  }
+
+  TextFormField buildPhoneField() {
+    return TextFormField(
+      onSaved: (newValue) {
+        setState(() {
+          lastName = newValue!;
+        });
+      },
+      onChanged: (value) {
+        if (value.isNotEmpty && errors.contains(klastNameNullError)) {
+          setState(() {
+            errors.remove(klastNameNullError);
+          });
+        }
+        setState(() {
+          lastName = value;
+        });
+      },
+      keyboardType: TextInputType.phone,
+      validator: (value) {
+        if (value!.isEmpty && !errors.contains(klastNameNullError)) {
+          setState(() {
+            errors.add(klastNameNullError);
+          });
+          return '';
+        } else if (value.isEmpty && errors.contains(klastNameNullError)) {
+          return '';
+        }
+
+        return null;
+      },
+      decoration: InputDecoration(
+        hintText: 'Phone number',
+        contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+        floatingLabelBehavior: FloatingLabelBehavior.always,
+        suffixIcon: Padding(
+          padding: EdgeInsets.fromLTRB(
+            0,
+            getProportionateScreenWidth(20),
+            getProportionateScreenWidth(20),
+            getProportionateScreenWidth(20),
+          ),
+          child: SvgPicture.asset('assets/icons/Phone.svg'),
         ),
       ),
     );

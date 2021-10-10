@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:audio_books/feature/register_user/bloc/register_user_event.dart';
 import 'package:audio_books/feature/register_user/bloc/register_user_state.dart';
 import 'package:audio_books/feature/register_user/repository/register_user_repository.dart';
@@ -15,13 +17,16 @@ class RegisterUserBloc extends Bloc<RegisterUserEvent, RegisterUserState> {
       await registerUserRepo.registerUser(
         user: event.user,
       );
-      final userBox=HiveBoxes.getUserBox();
+      final userBox = HiveBoxes.getUserBox();
       userBox.put(HiveBoxes.userKey, event.user);
 
       yield UserRegisteredState();
-    } catch (e) {
-      print(e);
-      yield RegsiteringUserFailedState(errorMessage: e.toString());
+    } catch (error) {
+      Map<String, dynamic> errorMessage = jsonDecode(
+          error.toString().substring(error.toString().indexOf('\{')));
+      if (errorMessage.containsKey('message')) {
+        yield RegsiteringUserFailedState(errorMessage: errorMessage['message']);
+      }
     }
   }
 }

@@ -7,21 +7,41 @@ class InputFieldContainer extends StatelessWidget {
     Key? key,
     required this.child,
     required this.title,
+    this.subtitle = '',
   }) : super(key: key);
   final Widget child;
   final String title;
+  final String subtitle;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          title,
-          style: Theme.of(context).textTheme.headline5!.copyWith(
-                fontWeight: FontWeight.bold,
+        subtitle.isEmpty
+            ? Text(
+                title,
+                style: Theme.of(context).textTheme.headline5!.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              )
+            : Row(
+                children: [
+                  Text(
+                    title,
+                    style: Theme.of(context).textTheme.headline5!.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  Opacity(
+                    opacity: .7,
+                    child: Text(
+                      ' ($subtitle)',
+                      style: Theme.of(context).textTheme.headline6,
+                    ),
+                  ),
+                ],
               ),
-        ),
         verticalSpacing(4),
         Container(
           padding: EdgeInsets.symmetric(

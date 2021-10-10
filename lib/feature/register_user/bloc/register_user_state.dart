@@ -1,4 +1,9 @@
-class RegisterUserState {}
+import 'package:equatable/equatable.dart';
+
+class RegisterUserState extends Equatable {
+  @override
+  List<Object?> get props => [];
+}
 
 class IdleState extends RegisterUserState {}
 

@@ -35,8 +35,6 @@ class _BodyState extends State<Body> {
                 SizedBox(height: SizeConfig.screenHeight! * .04),
                 LoginForm(),
                 SizedBox(height: SizeConfig.screenHeight! * .08),
-                // NoAccountText(),
-                SizedBox(height: getProportionateScreenHeight(20)),
               ],
             ),
           ),

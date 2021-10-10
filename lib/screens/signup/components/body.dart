@@ -1,3 +1,4 @@
+import 'package:audio_books/screens/login/login.dart';
 import 'package:flutter/material.dart';
 
 import '../../../sizeConfig.dart';
@@ -40,7 +41,36 @@ class Body extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(height: getProportionateScreenHeight(20)),
+              SizedBox(height: getProportionateScreenHeight(4)),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Already have an account?',
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
+                  horizontalSpacing(2),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return LoginScreen();
+                          },
+                        ),
+                      );
+                    },
+                    child: Text(
+                      'Login',
+                      style: Theme.of(context).textTheme.headline5!.copyWith(
+                            color: Colors.blue[900],
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
         ),
