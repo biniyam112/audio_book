@@ -30,7 +30,7 @@ class Body extends StatelessWidget {
               ),
               SizedBox(height: SizeConfig.screenHeight! * .05),
               SignUpForm(),
-              SizedBox(height: SizeConfig.screenHeight! * .06),
+              SizedBox(height: SizeConfig.screenHeight! * .12),
               Center(
                 child: Text(
                   'By continuing you agree with our terms and conditions',
@@ -70,7 +70,7 @@ class Body extends StatelessWidget {
                     ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),

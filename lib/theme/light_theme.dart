@@ -64,6 +64,11 @@ ThemeData lightTheme = ThemeData(
       fontSize: 22,
       fontWeight: FontWeight.bold,
     ),
+    headline2: TextStyle(
+      fontSize: 30,
+      fontWeight: FontWeight.bold,
+      fontFamily: GoogleFonts.montserrat().fontFamily,
+    ),
   ).apply(
     bodyColor: LightTheme.textColor,
     displayColor: LightTheme.textColor,

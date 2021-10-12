@@ -1,6 +1,7 @@
 import 'package:audio_books/feature/authorize_user/repository/authorize_user_repo.dart';
 import 'package:audio_books/models/user.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
+import 'package:audio_books/services/hiveConfig/hive_boxes.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthorizeUserBloc extends Bloc<AuthoriseUserEvent, AuthoriseUserState> {
@@ -13,7 +14,10 @@ class AuthorizeUserBloc extends Bloc<AuthoriseUserEvent, AuthoriseUserState> {
       yield AuthoriseUserState.userAuthorizingState;
       try {
         var user = getIt.get<User>();
-        await authorizeUserRepo.authorizeUser(user);
+        var token = await authorizeUserRepo.authorizeUser(user);
+        user.token = token;
+        final userBox = HiveBoxes.getUserBox();
+        userBox.put(HiveBoxes.userKey, user);
         yield AuthoriseUserState.userAuthorizedState;
       } catch (e) {
         yield AuthoriseUserState.userAuthorizationFailedState;

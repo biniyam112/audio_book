@@ -7,6 +7,6 @@ class AuthorizeUserRepo {
   AuthorizeUserRepo({required this.authorizeUserDataProvider});
 
   Future<String> authorizeUser(User user) async {
-    return authorizeUserDataProvider.authorizeUser(user);
+    return await authorizeUserDataProvider.authorizeUser(user);
   }
 }

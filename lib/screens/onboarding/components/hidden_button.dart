@@ -18,7 +18,6 @@ class HiddenButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () {
           if (HiveBoxes.hasUserSigned()) {
-            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -28,8 +27,6 @@ class HiddenButton extends StatelessWidget {
               ),
             );
           } else {
-            Navigator.pop(context);
-
             Navigator.push(
               context,
               MaterialPageRoute(

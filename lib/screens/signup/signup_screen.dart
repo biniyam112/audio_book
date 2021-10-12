@@ -1,5 +1,4 @@
 import 'package:audio_books/screens/components/custom_appbar.dart';
-import 'package:audio_books/services/audio/service_locator.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:flutter/material.dart';
 

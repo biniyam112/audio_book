@@ -91,6 +91,12 @@ ThemeData darkTheme = ThemeData(
       fontWeight: FontWeight.bold,
       color: Colors.white,
     ),
+    headline2: TextStyle(
+      fontSize: 30,
+      fontWeight: FontWeight.bold,
+      color: Colors.white,
+      fontFamily: GoogleFonts.montserrat().fontFamily,
+    ),
   ).apply(
     decorationColor: Colors.white,
     displayColor: Colors.white,

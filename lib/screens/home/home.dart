@@ -30,8 +30,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void initState() {
-    BlocProvider.of<FetchBooksBloc>(context, listen: false)
-        .add(FetchBooksEvent());
+    BlocProvider.of<FetchBooksBloc>(context).add(FetchBooksEvent());
     BlocProvider.of<FetchBooksByCategoryBloc>(context)
         .add(FetchBooksByCategoryEvent(category: 'romance'));
     super.initState();
@@ -102,6 +101,7 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         ),
         body: TabBarView(
+          physics: NeverScrollableScrollPhysics(),
           children: [
             BooksBody(),
             PodcastBody(),
@@ -142,7 +142,10 @@ class CustomDrawer extends StatelessWidget {
                 DrawerTile(
                   title: 'Profile',
                   icon: CupertinoIcons.profile_circled,
-                  onPress: () {},
+                  onPress: () {
+                    BlocProvider.of<FetchBooksBloc>(context)
+                        .add(FetchBooksEvent());
+                  },
                 ),
                 DrawerTile(
                   title: 'Settings',

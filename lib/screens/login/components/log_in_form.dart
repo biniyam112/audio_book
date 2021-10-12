@@ -1,7 +1,15 @@
+import 'package:audio_books/feature/authorize_user/bloc/authorize_user_bloc.dart';
+import 'package:audio_books/feature/otp/bloc/bloc.dart';
+import 'package:audio_books/models/user.dart';
 import 'package:audio_books/screens/components/form_error.dart';
 import 'package:audio_books/screens/components/input_field_container.dart';
+import 'package:audio_books/screens/otp/otp.dart';
 import 'package:audio_books/screens/phone_registration/phone_registration.dart';
+import 'package:audio_books/services/audio/service_locator.dart';
+import 'package:audio_books/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../constants.dart';
@@ -20,76 +28,127 @@ class _LoginFormState extends State<LoginForm> {
   String firstName = '';
   String lastName = '';
   String phoneNumber = '';
+  String countryCode = '';
   bool rememberMe = false;
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: [
-          InputFieldContainer(
-            child: buildFirstNameField(),
-            title: 'First name',
-          ),
-          SizedBox(height: getProportionateScreenHeight(20)),
-          InputFieldContainer(
-            child: buildLastNameField(),
-            title: 'Last name',
-          ),
-          SizedBox(height: getProportionateScreenHeight(20)),
-          InputFieldContainer(
-            title: 'Phone number',
-            subtitle: 'Include country code',
-            child: buildPhoneField(),
-          ),
-          SizedBox(height: getProportionateScreenHeight(10)),
-          FormError(errors: errors),
-          SizedBox(height: getProportionateScreenHeight(20)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Don\'t have an account?'),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return PhoneRegistrationScreen();
-                      },
-                    ),
-                  );
+    return BlocConsumer<AuthorizeUserBloc, AuthoriseUserState>(
+      listener: (context, authstate) {
+        if (authstate == AuthoriseUserState.userAuthorizationFailedState) {
+          setState(() {
+            errors.add(kUserAuthorizationError);
+          });
+        }
+        if (authstate == AuthoriseUserState.userAuthorizingState) {
+          setState(() {
+            errors.remove(kUserAuthorizationError);
+          });
+        }
+        if (authstate == AuthoriseUserState.userAuthorizedState) {
+          BlocProvider.of<OtpBloc>(context)
+              .add(SendOtp(phoneNumber: phoneNumber));
+          if (errors.contains(kOtpError)) errors.remove(kOtpError);
+        }
+      },
+      builder: (context, authstate) {
+        return BlocConsumer<OtpBloc, OtpState>(listener: (context, otpstate) {
+          if (otpstate is OtpSent) {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return OTPScreen(fromLogin: true);
                 },
-                child: Text(
-                  'Sign up',
-                  style: TextStyle(fontSize: 14),
-                ),
               ),
-            ],
-          ),
-          SizedBox(height: getProportionateScreenHeight(20)),
-          ElevatedButton(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text('Login'),
-            ),
-            onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                _formKey.currentState!.save();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return PhoneRegistrationScreen();
+            );
+          }
+          if (otpstate is OtpFailure) {
+            errors.add(kOtpError);
+          }
+        }, builder: (context, otpstate) {
+          return Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                InputFieldContainer(
+                  child: buildFirstNameField(),
+                  title: 'First name',
+                ),
+                SizedBox(height: getProportionateScreenHeight(20)),
+                InputFieldContainer(
+                  child: buildLastNameField(),
+                  title: 'Last name',
+                ),
+                SizedBox(height: getProportionateScreenHeight(20)),
+                InputFieldContainer(
+                  title: 'Phone number',
+                  subtitle: 'Include country code',
+                  child: buildPhoneField(),
+                ),
+                SizedBox(height: getProportionateScreenHeight(20)),
+                FormError(errors: errors),
+                SizedBox(height: getProportionateScreenHeight(10)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Don\'t have an account?'),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return PhoneRegistrationScreen();
+                            },
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Sign up',
+                        style: Theme.of(context).textTheme.headline5!.copyWith(
+                              color: Colors.blue[900],
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: getProportionateScreenHeight(20)),
+                if (authstate == AuthoriseUserState.userAuthorizingState ||
+                    otpstate is OtpInProgress)
+                  Center(
+                    child: CircularProgressIndicator(
+                      color: Darktheme.primaryColor,
+                    ),
+                  ),
+                if (authstate == AuthoriseUserState.idleState ||
+                    authstate ==
+                        AuthoriseUserState.userAuthorizationFailedState ||
+                    (authstate == AuthoriseUserState.userAuthorizedState &&
+                        !(otpstate is OtpInProgress)))
+                  ElevatedButton(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Login'),
+                    ),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        var user = getIt.get<User>();
+                        user.setFirstName = firstName;
+                        user.setLastName = lastName;
+                        user.phoneNumber = phoneNumber;
+                        user.countryCode = countryCode;
+                        _formKey.currentState!.save();
+                        BlocProvider.of<AuthorizeUserBloc>(context)
+                            .add(AuthoriseUserEvent.authorizeUser);
+                      }
                     },
                   ),
-                );
-              }
-            },
-          ),
-        ],
-      ),
+              ],
+            ),
+          );
+        });
+      },
     );
   }
 
@@ -150,9 +209,9 @@ class _LoginFormState extends State<LoginForm> {
         });
       },
       onChanged: (value) {
-        if (value.isNotEmpty && errors.contains(klastNameNullError)) {
+        if (value.isNotEmpty && errors.contains(kLastNameNullError)) {
           setState(() {
-            errors.remove(klastNameNullError);
+            errors.remove(kLastNameNullError);
           });
         }
         setState(() {
@@ -161,12 +220,12 @@ class _LoginFormState extends State<LoginForm> {
       },
       keyboardType: TextInputType.name,
       validator: (value) {
-        if (value!.isEmpty && !errors.contains(klastNameNullError)) {
+        if (value!.isEmpty && !errors.contains(kLastNameNullError)) {
           setState(() {
-            errors.add(klastNameNullError);
+            errors.add(kLastNameNullError);
           });
           return '';
-        } else if (value.isEmpty && errors.contains(klastNameNullError)) {
+        } else if (value.isEmpty && errors.contains(kLastNameNullError)) {
           return '';
         }
 
@@ -189,36 +248,40 @@ class _LoginFormState extends State<LoginForm> {
     );
   }
 
+// ?phone formfield
   TextFormField buildPhoneField() {
     return TextFormField(
       onSaved: (newValue) {
         setState(() {
-          lastName = newValue!;
+          phoneNumber = newValue!;
         });
       },
       onChanged: (value) {
-        if (value.isNotEmpty && errors.contains(klastNameNullError)) {
+        if (value.isNotEmpty && errors.contains(kPhoneNullError)) {
           setState(() {
-            errors.remove(klastNameNullError);
+            errors.remove(kPhoneNullError);
           });
         }
         setState(() {
-          lastName = value;
+          phoneNumber = value;
         });
       },
       keyboardType: TextInputType.phone,
       validator: (value) {
-        if (value!.isEmpty && !errors.contains(klastNameNullError)) {
+        if (value!.isEmpty && !errors.contains(kPhoneNullError)) {
           setState(() {
-            errors.add(klastNameNullError);
+            errors.add(kPhoneNullError);
           });
           return '';
-        } else if (value.isEmpty && errors.contains(klastNameNullError)) {
+        } else if (value.isEmpty && errors.contains(kPhoneNullError)) {
           return '';
         }
 
         return null;
       },
+      inputFormatters: [
+        FilteringTextInputFormatter.allow(RegExp('[0-9+]+')),
+      ],
       decoration: InputDecoration(
         hintText: 'Phone number',
         contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),

@@ -1,5 +1,6 @@
 import 'package:audio_books/feature/otp/bloc/bloc.dart';
 import 'package:audio_books/feature/otp/bloc/otp_bloc.dart';
+import 'package:audio_books/screens/components/tab_view.dart';
 import 'package:audio_books/screens/signup/signup_screen.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:flutter/material.dart';
@@ -8,22 +9,21 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class Body extends StatelessWidget {
-  const Body({Key? key}) : super(key: key);
+  const Body({Key? key, required this.fromLogin}) : super(key: key);
+  final bool fromLogin;
 
   @override
   Widget build(BuildContext context) {
-    String phoneNumber = '23234324';
+    String phoneNumber = '';
 
     return BlocConsumer<OtpBloc, OtpState>(
       listener: (context, state) {
-
-        
         if (state is OtpVerified) {
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) {
-                return SignupScreen();
+                return fromLogin ? TabViewPage() : SignupScreen();
               },
             ),
           );
@@ -131,15 +131,5 @@ class Body extends StatelessWidget {
 
   void verifyPin(String pin, BuildContext context) {
     BlocProvider.of<OtpBloc>(context).add(VerifyOtp(otp: pin));
-    // if (pin == '123456') {
-    //   Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (context) {
-    //         return SignupScreen();
-    //       },
-    //     ),
-    //   );
-    // }
   }
 }

@@ -37,3 +37,236 @@ class Book {
         resourceType: json['resourceType'] ?? 2,
       );
 }
+
+List<Book> allBooks = [
+  Book(
+    id: '0',
+    bookPath: '',
+    narattor: 'Adam Markes',
+    coverArt:
+        'https://image.freepik.com/free-psd/top-view-book-coffee-cup-arrangement_23-2149040132.jpg',
+    category: 'History',
+    title: 'Redemtion',
+    author: 'Matia Moris',
+    publishmentYear: '2012',
+    description:
+        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
+    resourceType: 1,
+  ),
+  Book(
+    id: '1',
+    bookPath: '',
+    narattor: 'Adam Markes',
+    coverArt:
+        'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
+    category: 'History',
+    title: 'Redemtion',
+    author: 'Matia Moris',
+    publishmentYear: '2012',
+    description:
+        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
+    resourceType: 1,
+  ),
+  Book(
+    id: '2',
+    bookPath: '',
+    narattor: 'Adam Markes',
+    coverArt:
+        'https://image.freepik.com/free-psd/arrangement-mock-up-book-cover_23-2149059351.jpg',
+    category: 'History',
+    title: 'Redemtion',
+    author: 'Matia Moris',
+    publishmentYear: '2012',
+    description:
+        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
+    resourceType: 1,
+  ),
+  Book(
+    id: '3',
+    bookPath: '',
+    narattor: 'Adam Markes',
+    coverArt:
+        'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
+    category: 'History',
+    title: 'Redemtion',
+    author: 'Matia Moris',
+    publishmentYear: '2012',
+    description:
+        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
+    resourceType: 1,
+  ),
+];
+List<Book> romanceBooks = [
+  Book(
+    id: '4',
+    bookPath: '',
+    narattor: 'Adam Markes',
+    coverArt:
+        'https://image.freepik.com/free-psd/top-view-book-coffee-cup-arrangement_23-2149040132.jpg',
+    category: 'History',
+    title: 'Redemtion',
+    author: 'Matia Moris',
+    publishmentYear: '2012',
+    description:
+        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
+    resourceType: 1,
+  ),
+  Book(
+    id: '5',
+    bookPath: '',
+    narattor: 'Adam Markes',
+    coverArt:
+        'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
+    category: 'History',
+    title: 'Redemtion',
+    author: 'Matia Moris',
+    publishmentYear: '2012',
+    description:
+        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
+    resourceType: 1,
+  ),
+  Book(
+    id: '6',
+    bookPath: '',
+    narattor: 'Adam Markes',
+    coverArt:
+        'https://image.freepik.com/free-psd/arrangement-mock-up-book-cover_23-2149059351.jpg',
+    category: 'History',
+    title: 'Redemtion',
+    author: 'Matia Moris',
+    publishmentYear: '2012',
+    description:
+        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
+    resourceType: 1,
+  ),
+  Book(
+    id: '7',
+    bookPath: '',
+    narattor: 'Adam Markes',
+    coverArt:
+        'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
+    category: 'History',
+    title: 'Redemtion',
+    author: 'Matia Moris',
+    publishmentYear: '2012',
+    description:
+        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
+    resourceType: 1,
+  ),
+];
+List<Book> motivationalBooks = [
+  Book(
+    id: '8',
+    bookPath: '',
+    narattor: 'Adam Markes',
+    coverArt:
+        'https://image.freepik.com/free-psd/top-view-book-coffee-cup-arrangement_23-2149040132.jpg',
+    category: 'History',
+    title: 'Redemtion',
+    author: 'Matia Moris',
+    publishmentYear: '2012',
+    description:
+        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
+    resourceType: 1,
+  ),
+  Book(
+    id: '9',
+    bookPath: '',
+    narattor: 'Adam Markes',
+    coverArt:
+        'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
+    category: 'History',
+    title: 'Redemtion',
+    author: 'Matia Moris',
+    publishmentYear: '2012',
+    description:
+        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
+    resourceType: 1,
+  ),
+  Book(
+    id: '10',
+    bookPath: '',
+    narattor: 'Adam Markes',
+    coverArt:
+        'https://image.freepik.com/free-psd/arrangement-mock-up-book-cover_23-2149059351.jpg',
+    category: 'History',
+    title: 'Redemtion',
+    author: 'Matia Moris',
+    publishmentYear: '2012',
+    description:
+        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
+    resourceType: 1,
+  ),
+  Book(
+    id: '11',
+    bookPath: '',
+    narattor: 'Adam Markes',
+    coverArt:
+        'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
+    category: 'History',
+    title: 'Redemtion',
+    author: 'Matia Moris',
+    publishmentYear: '2012',
+    description:
+        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
+    resourceType: 1,
+  ),
+];
+List<Book> politicsBooks = [
+  Book(
+    id: '12',
+    bookPath: '',
+    narattor: 'Adam Markes',
+    coverArt:
+        'https://image.freepik.com/free-psd/top-view-book-coffee-cup-arrangement_23-2149040132.jpg',
+    category: 'History',
+    title: 'Redemtion',
+    author: 'Matia Moris',
+    publishmentYear: '2012',
+    description:
+        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
+    resourceType: 1,
+  ),
+  Book(
+    id: '13',
+    bookPath: '',
+    narattor: 'Adam Markes',
+    coverArt:
+        'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
+    category: 'History',
+    title: 'Redemtion',
+    author: 'Matia Moris',
+    publishmentYear: '2012',
+    description:
+        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
+    resourceType: 1,
+  ),
+  Book(
+    id: '14',
+    bookPath: '',
+    narattor: 'Adam Markes',
+    coverArt:
+        'https://image.freepik.com/free-psd/arrangement-mock-up-book-cover_23-2149059351.jpg',
+    category: 'History',
+    title: 'Redemtion',
+    author: 'Matia Moris',
+    publishmentYear: '2012',
+    description:
+        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
+    resourceType: 1,
+  ),
+  Book(
+    id: '15',
+    bookPath: '',
+    narattor: 'Adam Markes',
+    coverArt:
+        'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
+    category: 'History',
+    title: 'Redemtion',
+    author: 'Matia Moris',
+    publishmentYear: '2012',
+    description:
+        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
+    resourceType: 1,
+  ),
+];

@@ -173,7 +173,6 @@ class LoadingTransition extends StatelessWidget {
       child: BlocConsumer<CheckFirstTimeBloc, bool>(
         listener: (context, ftState) {
           if (ftState == true) {
-            Navigator.pop(context);
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -184,7 +183,6 @@ class LoadingTransition extends StatelessWidget {
             );
           } else {
             if (HiveBoxes.hasUserSigned()) {
-              Navigator.pop(context);
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -194,7 +192,6 @@ class LoadingTransition extends StatelessWidget {
                 ),
               );
             } else {
-              Navigator.pop(context);
               Navigator.push(
                 context,
                 MaterialPageRoute(

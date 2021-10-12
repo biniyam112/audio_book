@@ -231,8 +231,8 @@ class _PhoneFormState extends State<PhoneForm> {
                                 errors.remove(kCountryCodeNullError);
                               });
                             }
-                            if (user.countryCode != null &&
-                                user.phoneNumber != null) {
+                            if (user.countryCode!.isNotEmpty &&
+                                user.phoneNumber!.isNotEmpty) {
                               final phoneNumber =
                                   '${user.countryCode}${user.phoneNumber}';
                               print("OTP BLOC STATE $state");
@@ -240,15 +240,6 @@ class _PhoneFormState extends State<PhoneForm> {
                                   "USER PHONE*********************$phoneNumber");
                               BlocProvider.of<OtpBloc>(context)
                                   .add(SendOtp(phoneNumber: phoneNumber));
-                              // Navigator.pop(context);
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (cotext) {
-                              //       return OTPScreen();
-                              //     },
-                              //   ),
-                              // );
                             }
                           },
                           child: Padding(

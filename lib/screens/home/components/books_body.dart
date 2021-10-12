@@ -1,5 +1,6 @@
 import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_bloc.dart';
 import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_state.dart';
+import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/categoryallbooks/category_all_books.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
@@ -75,7 +76,29 @@ class BooksBody extends StatelessWidget {
                         );
                       }
                       if (state is CategoryFetchFailedState) {
-                        return Text('${state.errorMessage}');
+                        // return Text('${state.errorMessage}');
+                        return SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Row(
+                            children: [
+                              ...List.generate(
+                                allBooks.length,
+                                (index) {
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal:
+                                          getProportionateScreenWidth(12),
+                                      vertical: 6,
+                                    ),
+                                    child: PopularBooksTile(
+                                      book: allBooks[index],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+                        );
                       }
                       return Container();
                     },
@@ -100,7 +123,19 @@ class BooksBody extends StatelessWidget {
                     );
                   }
                   if (state is CategoryFetchFailedState) {
-                    return Text('${state.errorMessage}');
+                    // return Text('${state.errorMessage}');
+                    return BookShelf(
+                      books: romanceBooks,
+                      categoryName: 'Romance',
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  CategoryAllBooks(category: 'Romance'),
+                            ));
+                      },
+                    );
                   }
                   return Container();
                 },
@@ -124,7 +159,19 @@ class BooksBody extends StatelessWidget {
                     );
                   }
                   if (state is CategoryFetchFailedState) {
-                    return Text('${state.errorMessage}');
+                    // return Text('${state.errorMessage}');
+                    return BookShelf(
+                      books: motivationalBooks,
+                      categoryName: 'Motivational',
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  CategoryAllBooks(category: 'Motivational'),
+                            ));
+                      },
+                    );
                   }
                   return Container();
                 },
@@ -148,7 +195,19 @@ class BooksBody extends StatelessWidget {
                     );
                   }
                   if (state is CategoryFetchFailedState) {
-                    return Text('${state.errorMessage}');
+                    // return Text('${state.errorMessage}');
+                    return BookShelf(
+                      books: politicsBooks,
+                      categoryName: 'Politics',
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  CategoryAllBooks(category: 'Motivational'),
+                            ));
+                      },
+                    );
                   }
                   return Container();
                 },

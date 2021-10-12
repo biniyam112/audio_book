@@ -9,8 +9,6 @@ import 'package:audio_books/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:provider/provider.dart';
 
 import '../../../constants.dart';
 import '../../../sizeConfig.dart';
@@ -23,132 +21,87 @@ class SignUpForm extends StatefulWidget {
   _SignUpFormState createState() => _SignUpFormState();
 }
 
-class _SignUpFormState extends State<SignUpForm>
-    with SingleTickerProviderStateMixin {
+class _SignUpFormState extends State<SignUpForm> {
   late String firstName = '', lastName = '';
-  late AnimationController rippleAnimationController;
-  bool signUpLoading = false;
   final List<String> errors = [];
   final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    rippleAnimationController = AnimationController(
-      vsync: this,
-      duration: fastDuration,
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          InputFieldContainer(
-            title: 'First name',
-            child: buildFirstNameField(),
-          ),
-          SizedBox(height: getProportionateScreenHeight(30)),
-          InputFieldContainer(
-            title: 'Last name',
-            child: buildLastNameField(),
-          ),
-          SizedBox(height: getProportionateScreenHeight(30)),
-          SizedBox(height: getProportionateScreenHeight(20)),
-          FormError(errors: errors),
-          SizedBox(height: getProportionateScreenHeight(20)),
-          BlocListener<RegisterUserBloc, RegisterUserState>(
-            listener: (blocContext, state) {
-              if (state is RegsiteringUserState) {
-                signUpLoading = true;
-                rippleAnimationController.forward();
-              }
-              if (state is UserRegisteredState) {
-                Navigator.pop(context);
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return TabViewPage();
-                    },
-                  ),
-                );
-              }
-              if (state is RegsiteringUserFailedState) {
-                signUpLoading = false;
-                rippleAnimationController.stop();
-                buildShowSnackBar(context, state.errorMessage);
-              }
+    return BlocConsumer<RegisterUserBloc, RegisterUserState>(
+        listener: (blocContext, state) {
+      if (state is RegsiteringUserState) {
+        errors.remove(kPhoneInUseError);
+        errors.remove(kConnectionError);
+      }
+      if (state is UserRegisteredState) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return TabViewPage();
             },
-            child: ElevatedButton(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: signUpLoading
-                    ? Center(
-                        child: Row(
-                          children: [
-                            SpinKitRipple(
-                              borderWidth: 2,
-                              color: Colors.white,
-                              size: 10,
-                              controller: rippleAnimationController,
-                            ),
-                            horizontalSpacing(6),
-                            Text('Loading'),
-                          ],
-                        ),
-                      )
-                    : Text('Register'),
-              ),
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  var user = getIt.get<User>();
-                  user.setFirstName = firstName;
-                  user.setLastName = lastName;
-                  BlocProvider.of<RegisterUserBloc>(context).add(
-                    RegisterUserEvent(user: getIt.get<User>()),
-                  );
-                }
-              },
-            ),
           ),
-        ],
-      ),
-    );
-  }
-
-  void buildShowSnackBar(BuildContext context, String errorMessage) {
-    bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        elevation: 10,
-        padding: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(),
-        duration: Duration(seconds: 3),
-        backgroundColor: isDarkMode ? Darktheme.backgroundColor : Colors.white,
-        content: Expanded(
-          child: Container(
-            width: SizeConfig.screenWidth,
-            height: getProportionateScreenHeight(40),
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                child: Text(
-                  errorMessage,
-                  style: Theme.of(context).textTheme.headline5!.copyWith(
-                        color: Colors.red[400],
-                        fontWeight: FontWeight.w600,
-                      ),
+        );
+      }
+      if (state is RegsiteringUserFailedState) {
+        setState(() {
+          if (state.errorMessage.contains('Phone'))
+            errors.add(kPhoneInUseError);
+          else
+            errors.add(kConnectionError);
+        });
+      }
+    }, builder: (context, state) {
+      return Form(
+        key: _formKey,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            InputFieldContainer(
+              title: 'First name',
+              child: buildFirstNameField(),
+            ),
+            SizedBox(height: getProportionateScreenHeight(30)),
+            InputFieldContainer(
+              title: 'Last name',
+              child: buildLastNameField(),
+            ),
+            SizedBox(height: getProportionateScreenHeight(30)),
+            FormError(errors: errors),
+            SizedBox(height: getProportionateScreenHeight(40)),
+            if (state is RegsiteringUserState)
+              Center(
+                child: CircularProgressIndicator(
+                  color: Darktheme.primaryColor,
                 ),
               ),
-            ),
-          ),
+            if (state is IdleState || state is RegsiteringUserFailedState)
+              ElevatedButton(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Register'),
+                ),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    var user = getIt.get<User>();
+                    user.setFirstName = firstName;
+                    user.setLastName = lastName;
+                    BlocProvider.of<RegisterUserBloc>(context).add(
+                      RegisterUserEvent(user: getIt.get<User>()),
+                    );
+                  }
+                },
+              ),
+          ],
         ),
-      ),
-    );
+      );
+    });
   }
 
 // ? firstName form field
@@ -208,9 +161,9 @@ class _SignUpFormState extends State<SignUpForm>
         });
       },
       onChanged: (value) {
-        if (value.isNotEmpty && errors.contains(klastNameNullError)) {
+        if (value.isNotEmpty && errors.contains(kLastNameNullError)) {
           setState(() {
-            errors.remove(klastNameNullError);
+            errors.remove(kLastNameNullError);
           });
         }
         setState(() {
@@ -219,12 +172,12 @@ class _SignUpFormState extends State<SignUpForm>
       },
       keyboardType: TextInputType.name,
       validator: (value) {
-        if (value!.isEmpty && !errors.contains(klastNameNullError)) {
+        if (value!.isEmpty && !errors.contains(kLastNameNullError)) {
           setState(() {
-            errors.add(klastNameNullError);
+            errors.add(kLastNameNullError);
           });
           return '';
-        } else if (value.isEmpty && errors.contains(klastNameNullError)) {
+        } else if (value.isEmpty && errors.contains(kLastNameNullError)) {
           return '';
         }
 

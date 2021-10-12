@@ -21,8 +21,7 @@ class AuthorizeUserDataProvider {
       },
     );
     if (response.statusCode == 200) {
-      user.token = jsonDecode(response.body)['jwtToken'];
-      return response.body;
+      return jsonDecode(response.body)['jwtToken'];
     } else {
       throw Exception('User authorization failed');
     }
