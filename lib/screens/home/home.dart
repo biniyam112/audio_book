@@ -39,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
     return DefaultTabController(
       length: 2,
       initialIndex: 0,
@@ -46,6 +47,8 @@ class _HomeScreenState extends State<HomeScreen>
         key: homeKey,
         drawer: CustomDrawer(),
         appBar: AppBar(
+          backgroundColor:
+              isDarkMode ? Darktheme.backgroundColor : Colors.white,
           leading: IconButton(
             icon: Icon(CupertinoIcons.option),
             onPressed: () {
@@ -83,7 +86,9 @@ class _HomeScreenState extends State<HomeScreen>
                       style: Theme.of(context).textTheme.headline4!.copyWith(
                             color: _activeIndex == 0
                                 ? Darktheme.primaryColor
-                                : Colors.black,
+                                : isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
                           ),
                     ),
                     Text(
@@ -91,7 +96,9 @@ class _HomeScreenState extends State<HomeScreen>
                       style: Theme.of(context).textTheme.headline4!.copyWith(
                             color: _activeIndex == 1
                                 ? Darktheme.primaryColor
-                                : Colors.black,
+                                : isDarkMode
+                                    ? Colors.white
+                                    : Colors.black,
                           ),
                     ),
                   ],

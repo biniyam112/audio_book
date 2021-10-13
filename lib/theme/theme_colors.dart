@@ -18,5 +18,5 @@ class Darktheme {
   static const containerColor = Color(0xff17181D);
   static const textColor = Colors.white;
   static const secondaryColor = Color(0xff8AC185);
-  static const shadowColor = Color(0xffaaaaaa);
+  static const shadowColor = Color(0xff666666);
 }

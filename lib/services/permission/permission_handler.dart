@@ -6,7 +6,7 @@ class PermissionHandler {
     final permissionStatus = await storagePermission.status;
     if (permissionStatus == PermissionStatus.permanentlyDenied) {
       openAppSettings();
-    } else {
+    } else if (permissionStatus == PermissionStatus.denied) {
       storagePermission.request();
     }
     return storagePermission;

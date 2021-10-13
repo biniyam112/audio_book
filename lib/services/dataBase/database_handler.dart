@@ -7,7 +7,7 @@ class DataBaseHandler {
 
   createDatabase() async {
     final String createbookStore =
-        'Create table bookStore(id INTEGER PRIMARY KEY,title TEXT,author TEXT,bookFilePath TEXT,category TEXT,coverArtPath TEXT,percentCompleted DOUBLE)';
+        'Create table bookStore(id TEXT PRIMARY KEY,title TEXT,author TEXT,bookFilePath TEXT,category TEXT,coverArtPath TEXT,percentCompleted DOUBLE)';
 
     dataBase = await openDatabase(
       join((await getDatabasesPath()), 'maraki.db'),

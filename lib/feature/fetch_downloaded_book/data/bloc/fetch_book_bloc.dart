@@ -13,13 +13,13 @@ class FetchDownBooksBloc
   @override
   Stream<FetchDownBooksState> mapEventToState(
       FetchDownBooksEvent event) async* {
-    yield FetchingBooksState(progress: 0);
+    yield FetchingDownBooksState(progress: 0);
     try {
       final fetchedBooks = await fetchStoredBooksRepo.fetchDownloadedBooks();
 
-      yield BooksFetchedState(downloadedBooks: fetchedBooks);
+      yield DownBooksFetchedState(downloadedBooks: fetchedBooks);
     } catch (e) {
-      yield FetchingBooksFailedState(errorMessage: e.toString());
+      yield FetchingDownBooksFailedState(errorMessage: e.toString());
     }
   }
 }

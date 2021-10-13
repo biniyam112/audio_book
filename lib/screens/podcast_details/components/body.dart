@@ -1,17 +1,18 @@
+import 'dart:math';
+
 import 'package:audio_books/models/podcast.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'dart:math' as math;
+// import 'dart:math' as math;
 
 class Body extends StatelessWidget {
   const Body({Key? key, required this.podcast}) : super(key: key);
   final Podcast podcast;
   @override
   Widget build(BuildContext context) {
-    final math.Random random = math.Random();
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,33 +57,27 @@ class Body extends StatelessWidget {
                       ],
                     ),
                     Transform.translate(
-                      offset: Offset(10, 15),
+                      offset: Offset(20, 15),
                       child: Container(
+                        height: getProportionateScreenWidth(100),
+                        width: getProportionateScreenWidth(100),
                         padding: EdgeInsets.all(6),
                         decoration: BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: CachedNetworkImageProvider(
+                              '${podcast.podcastImage}',
+                            ),
+                          ),
+                          color: Darktheme.primaryColor,
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: Darktheme.shadowColor.withOpacity(.3),
-                              blurRadius: 6,
-                              spreadRadius: 4,
+                              color: Darktheme.shadowColor.withOpacity(.2),
+                              blurRadius: 4,
+                              spreadRadius: 1,
                             ),
                           ],
-                        ),
-                        child: CircleAvatar(
-                          radius: getProportionateScreenHeight(60),
-                          backgroundColor: Colors.grey,
-                          child: CachedNetworkImage(
-                            imageUrl: '${podcast.podcastImage}',
-                            placeholder: (context, _) => Center(
-                              child: CircularProgressIndicator(
-                                color: Darktheme.primaryColor,
-                              ),
-                            ),
-                            errorWidget: (context, _, __) => Center(
-                              child: SvgPicture.asset('assets/icons/Error.svg'),
-                            ),
-                          ),
                         ),
                       ),
                     ),
@@ -115,7 +110,6 @@ class Body extends StatelessWidget {
               ...List.generate(
                 6,
                 (index) => PodcastListCard(
-                  random: random,
                   chapterCount: index + 1,
                 ),
               ),
@@ -131,19 +125,17 @@ class PodcastListCard extends StatelessWidget {
   const PodcastListCard({
     Key? key,
     required this.chapterCount,
-    required this.random,
   }) : super(key: key);
   final int chapterCount;
 
-  final math.Random random;
-
   @override
   Widget build(BuildContext context) {
+    Random random = Random();
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 8.0),
       child: Container(
         width: SizeConfig.screenWidth! * .95,
-        height: getProportionateScreenHeight(70),
+        height: getProportionateScreenHeight(80),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -162,7 +154,7 @@ class PodcastListCard extends StatelessWidget {
                   'Chapter $chapterCount',
                   style: Theme.of(context).textTheme.headline4,
                 ),
-                verticalSpacing(6),
+                verticalSpacing(4),
                 Container(
                   width: SizeConfig.screenWidth! * .8,
                   child: Opacity(
@@ -174,27 +166,24 @@ class PodcastListCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  child: Center(
-                    child: Container(
-                      height: 4,
-                      width: SizeConfig.screenWidth! * .6,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10)),
-                      padding: EdgeInsets.symmetric(
-                          vertical: getProportionateScreenHeight(2),
-                          horizontal: getProportionateScreenWidth(5)),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: LinearProgressIndicator(
-                          value: (SizeConfig.screenWidth! *
-                              random.nextDouble() *
-                              .7),
-                          color: Darktheme.primaryColor,
-                          backgroundColor:
-                              Darktheme.shadowColor.withOpacity(.4),
-                        ),
+                verticalSpacing(6),
+                Center(
+                  child: Container(
+                    height: getProportionateScreenHeight(7),
+                    width: SizeConfig.screenWidth! * .7,
+                    decoration:
+                        BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                    padding: EdgeInsets.symmetric(
+                        vertical: getProportionateScreenHeight(2),
+                        horizontal: getProportionateScreenWidth(5)),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: LinearProgressIndicator(
+                        value: (SizeConfig.screenWidth! *
+                            random.nextDouble() *
+                            .7),
+                        color: Darktheme.primaryColor,
+                        backgroundColor: Darktheme.shadowColor.withOpacity(.4),
                       ),
                     ),
                   ),

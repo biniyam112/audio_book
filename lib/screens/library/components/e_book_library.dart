@@ -5,6 +5,7 @@ import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'library_item.dart';
 
@@ -15,7 +16,7 @@ class EBookLibrary extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FetchDownBooksBloc, FetchDownBooksState>(
       builder: (context, state) {
-        if (state is BooksFetchedState) {
+        if (state is DownBooksFetchedState) {
           return RefreshIndicator(
             onRefresh: () async {
               var fetchBloc = BlocProvider.of<FetchDownBooksBloc>(context);
@@ -43,7 +44,32 @@ class EBookLibrary extends StatelessWidget {
             ),
           );
         }
-        return CircularProgressIndicator(color: Darktheme.primaryColor);
+        if (state is FetchingDownBooksState) {
+          return Center(
+            child: SizedBox(
+              width: 30,
+              height: 30,
+              child: CircularProgressIndicator(
+                color: Darktheme.primaryColor,
+              ),
+            ),
+          );
+        }
+        if (state is FetchingDownBooksFailedState) {
+          return Center(
+            child: Row(
+              children: [
+                SvgPicture.asset('assets/icons/Error.svg'),
+                horizontalSpacing(8),
+                Text(
+                  'Failed to fetch items\n Siwpe down to refresh',
+                  style: Theme.of(context).textTheme.headline4,
+                ),
+              ],
+            ),
+          );
+        }
+        return Container();
       },
     );
   }

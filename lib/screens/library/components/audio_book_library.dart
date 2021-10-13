@@ -15,7 +15,7 @@ class AudioBookLibrary extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FetchDownBooksBloc, FetchDownBooksState>(
       builder: (context, state) {
-        if (state is BooksFetchedState) {
+        if (state is DownBooksFetchedState) {
           return RefreshIndicator(
             onRefresh: () async {
               var fetchBloc = BlocProvider.of<FetchDownBooksBloc>(context);

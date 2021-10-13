@@ -4,22 +4,22 @@ class FetchDownBooksState {}
 
 class IdleState extends FetchDownBooksState {}
 
-class FetchingBooksState extends FetchDownBooksState {
+class FetchingDownBooksState extends FetchDownBooksState {
   final int progress;
 
-  FetchingBooksState({required this.progress});
+  FetchingDownBooksState({required this.progress});
 }
 
-class BooksFetchedState extends FetchDownBooksState {
+class DownBooksFetchedState extends FetchDownBooksState {
   final List<DownloadedBook> downloadedBooks;
 
-  BooksFetchedState({required this.downloadedBooks});
+  DownBooksFetchedState({required this.downloadedBooks});
 }
 
-class FetchingBooksFailedState extends FetchDownBooksState {
+class FetchingDownBooksFailedState extends FetchDownBooksState {
   final String errorMessage;
 
-  FetchingBooksFailedState({required this.errorMessage});
+  FetchingDownBooksFailedState({required this.errorMessage});
 }
 
 class FetchBookFileState {}

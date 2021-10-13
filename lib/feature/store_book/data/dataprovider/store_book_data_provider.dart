@@ -74,7 +74,7 @@ class StoreBookDP {
       throw Exception('connection timed out');
     });
     if (response.statusCode == 200) {
-      return storeCoverArt(response.bodyBytes, bookTitle: book.title);
+      return storeCoverArt(response.bodyBytes, bookId: book.id);
     } else {
       throw Exception('Couldn\'t load cover image');
     }
@@ -82,7 +82,7 @@ class StoreBookDP {
 
   Future<String> storeCoverArt(
     Uint8List coverImageFile, {
-    required String bookTitle,
+    required String bookId,
   }) async {
     await PermissionHandler.requestStoragePermission();
     try {
@@ -91,7 +91,7 @@ class StoreBookDP {
         '${directory.path}',
         'images',
       )).create(recursive: true);
-      final filePath = path.join(bookDirectory.path, '$bookTitle.jpg');
+      final filePath = path.join(bookDirectory.path, '$bookId.jpg');
       final file = File(filePath);
       await file.writeAsBytes(coverImageFile);
       return filePath;

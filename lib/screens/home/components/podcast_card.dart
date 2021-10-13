@@ -4,7 +4,6 @@ import 'package:audio_books/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:provider/provider.dart';
 
 import '../../../sizeConfig.dart';
 
@@ -17,8 +16,6 @@ class PodcastCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isDarkMode =
-        Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -38,9 +35,6 @@ class PodcastCard extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Colors.transparent,
-            // color: isDarkMode
-            //     ? Darktheme.containerColor
-            //     : LightTheme.backgroundColor,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

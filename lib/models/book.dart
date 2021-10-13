@@ -41,7 +41,7 @@ class Book {
 List<Book> allBooks = [
   Book(
     id: '0',
-    bookPath: '',
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
     narattor: 'Adam Markes',
     coverArt:
         'https://image.freepik.com/free-psd/top-view-book-coffee-cup-arrangement_23-2149040132.jpg',
@@ -55,7 +55,8 @@ List<Book> allBooks = [
   ),
   Book(
     id: '1',
-    bookPath: '',
+    bookPath:
+        'https://peoplelikeus.org/piccies/codpaste/codpaste-teachingpack.pdf',
     narattor: 'Adam Markes',
     coverArt:
         'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
@@ -69,7 +70,7 @@ List<Book> allBooks = [
   ),
   Book(
     id: '2',
-    bookPath: '',
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
     narattor: 'Adam Markes',
     coverArt:
         'https://image.freepik.com/free-psd/arrangement-mock-up-book-cover_23-2149059351.jpg',
@@ -83,7 +84,7 @@ List<Book> allBooks = [
   ),
   Book(
     id: '3',
-    bookPath: '',
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
     narattor: 'Adam Markes',
     coverArt:
         'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
@@ -99,7 +100,7 @@ List<Book> allBooks = [
 List<Book> romanceBooks = [
   Book(
     id: '4',
-    bookPath: '',
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
     narattor: 'Adam Markes',
     coverArt:
         'https://image.freepik.com/free-psd/top-view-book-coffee-cup-arrangement_23-2149040132.jpg',
@@ -113,7 +114,7 @@ List<Book> romanceBooks = [
   ),
   Book(
     id: '5',
-    bookPath: '',
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
     narattor: 'Adam Markes',
     coverArt:
         'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
@@ -127,7 +128,7 @@ List<Book> romanceBooks = [
   ),
   Book(
     id: '6',
-    bookPath: '',
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
     narattor: 'Adam Markes',
     coverArt:
         'https://image.freepik.com/free-psd/arrangement-mock-up-book-cover_23-2149059351.jpg',
@@ -141,7 +142,7 @@ List<Book> romanceBooks = [
   ),
   Book(
     id: '7',
-    bookPath: '',
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
     narattor: 'Adam Markes',
     coverArt:
         'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
@@ -157,7 +158,7 @@ List<Book> romanceBooks = [
 List<Book> motivationalBooks = [
   Book(
     id: '8',
-    bookPath: '',
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
     narattor: 'Adam Markes',
     coverArt:
         'https://image.freepik.com/free-psd/top-view-book-coffee-cup-arrangement_23-2149040132.jpg',
@@ -171,7 +172,7 @@ List<Book> motivationalBooks = [
   ),
   Book(
     id: '9',
-    bookPath: '',
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
     narattor: 'Adam Markes',
     coverArt:
         'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
@@ -185,7 +186,7 @@ List<Book> motivationalBooks = [
   ),
   Book(
     id: '10',
-    bookPath: '',
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
     narattor: 'Adam Markes',
     coverArt:
         'https://image.freepik.com/free-psd/arrangement-mock-up-book-cover_23-2149059351.jpg',
@@ -199,7 +200,7 @@ List<Book> motivationalBooks = [
   ),
   Book(
     id: '11',
-    bookPath: '',
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
     narattor: 'Adam Markes',
     coverArt:
         'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
@@ -215,7 +216,7 @@ List<Book> motivationalBooks = [
 List<Book> politicsBooks = [
   Book(
     id: '12',
-    bookPath: '',
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
     narattor: 'Adam Markes',
     coverArt:
         'https://image.freepik.com/free-psd/top-view-book-coffee-cup-arrangement_23-2149040132.jpg',
@@ -229,7 +230,7 @@ List<Book> politicsBooks = [
   ),
   Book(
     id: '13',
-    bookPath: '',
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
     narattor: 'Adam Markes',
     coverArt:
         'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
@@ -243,7 +244,7 @@ List<Book> politicsBooks = [
   ),
   Book(
     id: '14',
-    bookPath: '',
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
     narattor: 'Adam Markes',
     coverArt:
         'https://image.freepik.com/free-psd/arrangement-mock-up-book-cover_23-2149059351.jpg',
@@ -257,7 +258,7 @@ List<Book> politicsBooks = [
   ),
   Book(
     id: '15',
-    bookPath: '',
+    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
     narattor: 'Adam Markes',
     coverArt:
         'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',

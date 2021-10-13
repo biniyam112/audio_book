@@ -1,3 +1,4 @@
+import 'package:audio_books/theme/theme.dart';
 import 'package:audio_books/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -12,7 +13,7 @@ class SettingsScreen extends StatelessWidget {
     bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: isDarkMode ? Colors.black : Colors.white,
+        backgroundColor: isDarkMode ? Darktheme.backgroundColor : Colors.white,
         title: Text(
           'Settings',
           style: Theme.of(context).textTheme.headline4,
