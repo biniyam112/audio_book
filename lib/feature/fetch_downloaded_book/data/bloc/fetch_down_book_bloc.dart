@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
-import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_book_event.dart';
-import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_book_state.dart';
-import 'package:audio_books/feature/fetch_downloaded_book/data/repository/fetch_books_repository.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_down_book_event.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_down_book_state.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/data/repository/fetch_down_books_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class FetchDownBooksBloc

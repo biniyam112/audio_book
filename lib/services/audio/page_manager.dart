@@ -1,3 +1,4 @@
+import 'package:audio_books/models/chapter.dart';
 import 'package:audio_books/services/audio/play_button_notifier.dart';
 import 'package:audio_books/services/audio/playlist_repository.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
@@ -23,8 +24,8 @@ class PageManager {
   final _audioHandler = getIt<AudioHandler>();
 
   // Events: Calls coming from the UI
-  void init() async {
-    await _loadPlaylist();
+  void init(List<Chapter> chapters) async {
+    await _loadPlaylist(chapters);
     _listenToChangesInPlaylist();
     _listenToPlaybackState();
     _listenToCurrentPosition();
@@ -33,9 +34,9 @@ class PageManager {
     _listenToChangesInSong();
   }
 
-  Future<void> _loadPlaylist() async {
+  Future<void> _loadPlaylist(List<Chapter> chapters) async {
     final songRepository = getIt<PlaylistRepository>();
-    final playlist = await songRepository.fetchInitialPlaylist();
+    final playlist = songRepository.fetchInitialPlaylist(chapters);
     final mediaItems = playlist
         .map((song) => MediaItem(
               id: song['id'] ?? '',
@@ -157,9 +158,9 @@ class PageManager {
     }
   }
 
-  Future<void> add() async {
+  Future<void> add(Chapter chapter) async {
     final songRepository = getIt<PlaylistRepository>();
-    final song = await songRepository.fetchAnotherSong();
+    final song = songRepository.fetchAnotherSong(chapter);
     final mediaItem = MediaItem(
       id: song['id'] ?? '',
       album: song['album'] ?? '',

@@ -5,8 +5,10 @@ import 'package:audio_books/feature/fetch_books/bloc/fetch_books_bloc.dart';
 import 'package:audio_books/feature/fetch_books/repository/fetch_books_repo.dart';
 import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_bloc.dart';
 import 'package:audio_books/feature/fetch_books_by_category/repository/fetch_by_category_repo.dart';
-import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_book_bloc.dart';
-import 'package:audio_books/feature/fetch_downloaded_book/data/repository/fetch_books_repository.dart';
+import 'package:audio_books/feature/fetch_chapters/bloc/fetch_chapters_bloc.dart';
+import 'package:audio_books/feature/fetch_chapters/repository/fetch_chapters_repo.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_down_book_bloc.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/data/repository/fetch_down_books_repository.dart';
 import 'package:audio_books/feature/initialize_database/bloc/initializa_database.dart';
 import 'package:audio_books/feature/initialize_database/bloc/initialize_db_event.dart';
 import 'package:audio_books/feature/initialize_database/repository/init_db_repository.dart';
@@ -43,6 +45,7 @@ class MyApp extends StatefulWidget {
   final InitDBRepo initDBRepo;
   final AuthorizeUserRepo authorizeUserRepo;
   final FetchBooksByCateRepo fetchBooksByCateRepo;
+  final FetchChaptersRepo fetchChaptersRepo;
 
   final FetchBooksRepo fetchBooksRepo;
 
@@ -57,6 +60,7 @@ class MyApp extends StatefulWidget {
     required this.authorizeUserRepo,
     required this.fetchBooksRepo,
     required this.fetchBooksByCateRepo,
+    required this.fetchChaptersRepo,
   }) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
@@ -140,7 +144,12 @@ class _MyAppState extends State<MyApp> {
                     fetchBooksByCateRepo: widget.fetchBooksByCateRepo,
                   ),
                 ),
-                BlocProvider(create: (context) => OtpBloc())
+                BlocProvider(create: (context) => OtpBloc()),
+                BlocProvider(
+                  create: (context) => FetchChaptersBloc(
+                    fetchChaptersRepo: widget.fetchChaptersRepo,
+                  ),
+                ),
               ],
               child: MaterialApp(
                 title: 'Audio Book',
@@ -183,6 +192,16 @@ class LoadingTransition extends StatelessWidget {
             );
           } else {
             if (HiveBoxes.hasUserSigned()) {
+              var user = getIt.get<User>();
+              var userBox = HiveBoxes.getUserBox();
+              var storedUser = userBox.get(HiveBoxes.userKey)!;
+              user.firstName = storedUser.firstName;
+              user.lastName = storedUser.lastName;
+              user.phoneNumber = storedUser.phoneNumber;
+              user.token = storedUser.token;
+              user.email = storedUser.email;
+              user.id = storedUser.id;
+
               Navigator.push(
                 context,
                 MaterialPageRoute(

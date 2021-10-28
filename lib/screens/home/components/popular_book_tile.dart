@@ -83,7 +83,7 @@ class PopularBooksTile extends StatelessWidget {
                       ),
                     ),
                     errorWidget: (context, url, error) => Icon(Icons.error),
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),

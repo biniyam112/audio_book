@@ -3,7 +3,9 @@ import 'package:audio_books/feature/fetch_books/bloc/fetch_books_event.dart';
 import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_bloc.dart';
 import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_event.dart';
 import 'package:audio_books/models/user.dart';
+import 'package:audio_books/screens/login/login.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
+import 'package:audio_books/services/hiveConfig/hive_boxes.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme_colors.dart';
 import 'package:audio_books/theme/theme_provider.dart';
@@ -162,7 +164,18 @@ class CustomDrawer extends StatelessWidget {
                 DrawerTile(
                   title: 'Log out',
                   icon: CupertinoIcons.square_arrow_left,
-                  onPress: () {},
+                  onPress: () async {
+                    var userBox = HiveBoxes.getUserBox();
+                    await userBox.clear();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return LoginScreen();
+                        },
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

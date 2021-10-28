@@ -1,6 +1,6 @@
-import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_book_bloc.dart';
-import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_book_event.dart';
-import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_book_state.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_down_book_bloc.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_down_book_event.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_down_book_state.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme_colors.dart';
 import 'package:flutter/material.dart';

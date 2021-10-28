@@ -4,8 +4,10 @@ import 'package:audio_books/feature/fetch_books/data_provider/fetch_books_datapr
 import 'package:audio_books/feature/fetch_books/repository/fetch_books_repo.dart';
 import 'package:audio_books/feature/fetch_books_by_category/dataprovider/fetch_by_category_dp.dart';
 import 'package:audio_books/feature/fetch_books_by_category/repository/fetch_by_category_repo.dart';
-import 'package:audio_books/feature/fetch_downloaded_book/data/dataprovider/fetch_books_dataprovider.dart';
-import 'package:audio_books/feature/fetch_downloaded_book/data/repository/fetch_books_repository.dart';
+import 'package:audio_books/feature/fetch_chapters/dataprovider/fetch_chapters_dataprovider.dart';
+import 'package:audio_books/feature/fetch_chapters/repository/fetch_chapters_repo.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/data/dataprovider/fetch_down_books_dataprovider.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/data/repository/fetch_down_books_repository.dart';
 import 'package:audio_books/feature/initialize_database/data_provider/init_db_dataProvider.dart';
 import 'package:audio_books/feature/initialize_database/repository/init_db_repository.dart';
 import 'package:audio_books/feature/register_user/data_provider/register_user_dataprovider.dart';
@@ -80,6 +82,11 @@ void main() async {
       client: http.Client(),
     ),
   );
+  final FetchChaptersRepo fetchChaptersRepo = FetchChaptersRepo(
+    fetchChaptersDP: FetchChaptersDP(
+      client: http.Client(),
+    ),
+  );
   await setupServiceLocator();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
     (value) => runApp(
@@ -93,6 +100,7 @@ void main() async {
         authorizeUserRepo: authorizeUserRepo,
         fetchBooksRepo: fetchBooksRepo,
         fetchBooksByCateRepo: fetchBooksByCateRepo,
+        fetchChaptersRepo: fetchChaptersRepo,
       ),
     ),
   );

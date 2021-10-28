@@ -15,10 +15,9 @@ class FetchBooksDP {
         'Authorization': token,
       },
     );
-    print('___________________${response.reasonPhrase}____________________');
     if (response.statusCode == 200) {
-      print(response.reasonPhrase);
       var books = jsonDecode(response.body)['items'] as List;
+      print(books);
       return books.map((book) => Book.fromMap(book)).toList();
     } else {
       print(response.headers);

@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
 
 part 'user.g.dart';
+
 @HiveType(typeId: 1)
 class User {
   @HiveField(0)
@@ -13,18 +14,15 @@ class User {
   String? email;
 
   @HiveField(3)
-  String? password;
-
-  @HiveField(4)
   String? firstName;
 
-  @HiveField(5)
+  @HiveField(4)
   String? lastName;
 
-  @HiveField(6)
+  @HiveField(5)
   String? phoneNumber;
 
-  @HiveField(7)
+  @HiveField(6)
   String? countryCode;
   User({
     this.id,
@@ -34,16 +32,26 @@ class User {
     this.countryCode,
     this.token,
     this.email,
-    this.password,
   });
 
+  factory User.copywith(User user) => User(
+        id: user.id,
+        countryCode: user.countryCode,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        phoneNumber: user.phoneNumber,
+        token: user.token,
+      );
+
   Map<String, dynamic> tomap() => {
-        'id': 0,
+        'id': id,
         'firstName': firstName,
         'lastName': lastName,
-        'email': email ?? '',
+        'email': email,
         'phoneNumber': phoneNumber,
         'countryCode': countryCode,
+        'token': token,
       };
   factory User.fromMap(Map<String, dynamic> json) => User(
         id: json['id'],
@@ -52,6 +60,7 @@ class User {
         email: json['email'],
         phoneNumber: json['phoneNumber'],
         countryCode: json['countryCode'],
+        token: json['token'],
       );
 
   set setFirstName(String firstName) {
@@ -68,5 +77,9 @@ class User {
 
   set setCountryCode(String countryCode) {
     this.countryCode = countryCode;
+  }
+
+  set setToken(String token) {
+    this.token = token;
   }
 }

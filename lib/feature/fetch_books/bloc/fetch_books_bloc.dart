@@ -13,14 +13,15 @@ class FetchBooksBloc extends Bloc<FetchBooksEvent, FetchBooksState> {
   @override
   Stream<FetchBooksState> mapEventToState(FetchBooksEvent event) async* {
     yield BooksFetchingState();
+    var books;
     try {
       var user = getIt.get<User>();
       print(user.tomap());
-      var books = await fetchBooksRepo.fetchAllBoks(user.token!);
+      books = await fetchBooksRepo.fetchAllBoks(user.token!);
       yield BooksFetchedState(books: books);
     } catch (e) {
       yield BooksFetchingFailedState(
-          errorMessage: 'this is book fetch error : $e');
+          errorMessage: 'this is book fetch error : $e\n $books');
     }
   }
 }

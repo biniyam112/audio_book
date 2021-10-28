@@ -1,4 +1,5 @@
 import 'package:audio_books/constants.dart';
+import 'package:audio_books/models/chapter.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/services/audio/notifiers/progress_notifier.dart';
 import 'package:audio_books/services/audio/page_manager.dart';
@@ -15,49 +16,52 @@ import 'package:provider/provider.dart';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 
-class Playlist extends StatelessWidget {
-  const Playlist({Key? key}) : super(key: key);
+// class Playlist extends StatelessWidget {
+//   const Playlist({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    final pageManager = getIt<PageManager>();
-    return Expanded(
-      child: ValueListenableBuilder<List<String>>(
-        valueListenable: pageManager.playlistNotifier,
-        builder: (context, playlistTitles, _) {
-          return ListView.builder(
-            itemCount: playlistTitles.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text('${playlistTitles[index]}'),
-              );
-            },
-          );
-        },
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     final pageManager = getIt<PageManager>();
+//     return Expanded(
+//       child: ValueListenableBuilder<List<String>>(
+//         valueListenable: pageManager.playlistNotifier,
+//         builder: (context, playlistTitles, _) {
+//           return ListView.builder(
+//             itemCount: playlistTitles.length,
+//             itemBuilder: (context, index) {
+//               return ListTile(
+//                 title: Text('${playlistTitles[index]}'),
+//               );
+//             },
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }
 
 class Body extends StatefulWidget {
   const Body({
     Key? key,
     required this.book,
+    required this.chapter,
   }) : super(key: key);
   final Book book;
+  final Chapter chapter;
 
   @override
-  _BodyState createState() => _BodyState(book);
+  _BodyState createState() => _BodyState(book, chapter);
 }
 
 class _BodyState extends State<Body> {
   final Book book;
+  final Chapter chapter;
   late PageManager _pageManager;
   late PageController _pageController;
 
   bool isFavorite = false;
 
-  _BodyState(this.book);
+  _BodyState(this.book, this.chapter);
 
   @override
   void initState() {
@@ -66,12 +70,6 @@ class _BodyState extends State<Body> {
     _pageManager.play();
     _pageController = PageController();
   }
-
-  // @override
-  // void dispose() {
-  //   _pageManager.dispose();
-  //   super.dispose();
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +136,7 @@ class _BodyState extends State<Body> {
                                   getProportionateScreenWidth(20),
                                 ),
                                 child: CachedNetworkImage(
-                                  imageUrl: '${book.coverArt}',
+                                  imageUrl: book.coverArt,
                                   progressIndicatorBuilder:
                                       (context, url, downloadProgress) =>
                                           CircularProgressIndicator(
@@ -158,7 +156,7 @@ class _BodyState extends State<Body> {
             }),
         Spacer(),
         Text(
-          'Winter Story',
+          '${book.title}',
           style: Theme.of(context).textTheme.headline4,
         ),
         verticalSpacing(10),
