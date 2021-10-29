@@ -22,8 +22,6 @@ class CreatePlayList extends PlaylistRepository {
 
   Map<String, String> _nextSong(Chapter chapter) {
     // ? have to impelement own logic here
-    print(
-        '*********************************${chapter.fileUrl}********************************\n\n');
     _songIndex += 1;
     return {
       'id': _songIndex.toString().padLeft(2, '0'),

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:http/http.dart' as http;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PingSiteBloc extends Bloc<PingSiteEvent, PingSiteState> {
@@ -9,9 +10,10 @@ class PingSiteBloc extends Bloc<PingSiteEvent, PingSiteState> {
   Stream<PingSiteState> mapEventToState(PingSiteEvent event) async* {
     yield PingSiteState.inProcess;
     try {
-      final result =
-          await InternetAddress.lookup('http://www.marakigebeya.com.et');
-      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+      final client = http.Client();
+      final result = await client.get(Uri.parse(event.address));
+
+      if (result.statusCode == 200) {
         yield PingSiteState.success;
       }
     } on SocketException catch (_) {

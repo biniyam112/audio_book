@@ -13,6 +13,7 @@ import 'package:audio_books/feature/initialize_database/bloc/initializa_database
 import 'package:audio_books/feature/initialize_database/bloc/initialize_db_event.dart';
 import 'package:audio_books/feature/initialize_database/repository/init_db_repository.dart';
 import 'package:audio_books/feature/otp/otp.dart';
+import 'package:audio_books/feature/ping_site/bloc/ping_site_bloc.dart';
 import 'package:audio_books/feature/register_user/bloc/register_user_bloc.dart';
 import 'package:audio_books/feature/register_user/repository/register_user_repository.dart';
 import 'package:audio_books/feature/set_theme_data/set_theme_data.dart';
@@ -150,6 +151,9 @@ class _MyAppState extends State<MyApp> {
                     fetchChaptersRepo: widget.fetchChaptersRepo,
                   ),
                 ),
+                BlocProvider(
+                  create: (context) => PingSiteBloc(),
+                ),
               ],
               child: MaterialApp(
                 title: 'Audio Book',
@@ -201,7 +205,11 @@ class LoadingTransition extends StatelessWidget {
               user.token = storedUser.token;
               user.email = storedUser.email;
               user.id = storedUser.id;
-
+              BlocProvider.of<PingSiteBloc>(context).add(
+                PingSiteEvent(
+                    address:
+                        'http://www.marakigebeya.com.et/swagger/v1/swagger.json'),
+              );
               Navigator.push(
                 context,
                 MaterialPageRoute(

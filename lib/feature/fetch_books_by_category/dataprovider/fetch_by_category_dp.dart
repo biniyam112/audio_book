@@ -16,7 +16,6 @@ class FetchBooksByCateDP {
       },
     );
     if (response.statusCode == 200) {
-      print(response.body);
       var books = jsonDecode(response.body)['items'] as List;
       return books.map((book) => Book.fromMap(book)).toList();
     } else {

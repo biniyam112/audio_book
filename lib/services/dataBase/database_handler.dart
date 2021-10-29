@@ -21,7 +21,6 @@ class DataBaseHandler {
 
   Future<void> storeBook(DownloadedBook downloadedBook) async {
     final db = dataBase;
-    print(' book to store : ${downloadedBook.toMap()}\n');
     await db.insert(
       'bookStore',
       downloadedBook.toMap(),
