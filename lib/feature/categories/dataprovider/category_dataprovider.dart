@@ -11,6 +11,9 @@ class CategoryDataProvider {
   Future<List<Category>> fetchCategories(String token) async {
     final response = await client.get(
       Uri.parse('http://www.marakigebeya.com.et/api/Books/GetCategory'),
+      headers: {
+        'Authorization': token,
+      },
     );
     if (response.statusCode == 200) {
       var categories = jsonDecode(response.body)['items'] as List;

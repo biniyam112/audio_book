@@ -1,7 +1,7 @@
-import 'package:audio_books/feature/fetch_books/bloc/fetch_books_bloc.dart';
-import 'package:audio_books/feature/fetch_books/bloc/fetch_books_event.dart';
-import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_bloc.dart';
-import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_event.dart';
+import 'package:audio_books/feature/categories/bloc/category_bloc.dart';
+import 'package:audio_books/feature/categories/bloc/category_event.dart';
+import 'package:audio_books/feature/featured_books/bloc/featured_books_bloc.dart';
+import 'package:audio_books/feature/featured_books/bloc/featured_books_event.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme_colors.dart';
 import 'package:audio_books/theme/theme_provider.dart';
@@ -28,9 +28,8 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void initState() {
-    BlocProvider.of<FetchBooksBloc>(context).add(FetchBooksEvent());
-    BlocProvider.of<FetchBooksByCategoryBloc>(context)
-        .add(FetchBooksByCategoryEvent(category: 'romance'));
+    BlocProvider.of<CategoryBloc>(context).add(FetchCategoryEvent());
+    BlocProvider.of<FeaturedBooksBloc>(context).add(FetchFeaturedBooks());
     super.initState();
   }
 

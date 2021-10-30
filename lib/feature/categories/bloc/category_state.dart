@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 
 class CategoryState extends Equatable {
   @override
-  List<Object?> get props => [props];
+  List<Object?> get props => [];
 }
 
 class IdleState extends CategoryState {}

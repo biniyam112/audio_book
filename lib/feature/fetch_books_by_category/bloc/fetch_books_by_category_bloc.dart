@@ -15,18 +15,18 @@ class FetchBooksByCategoryBloc
   @override
   Stream<FetchBooksByCategoryState> mapEventToState(
       FetchBooksByCategoryEvent event) async* {
-    yield CategoryFetchingState();
+    yield CategoryBooksFetchingState();
     try {
       if (event is FetchBooksByCategoryEvent) {
         var user = getIt.get<User>();
         var books = await fetchBooksByCateRepo.fetchByCategory(
-          category: event.category,
+          categoryId: event.category.id,
           user: user,
         );
         yield CategoryBooksFetchedState(books: books);
       }
     } catch (e) {
-      yield CategoryFetchFailedState(errorMessage: e.toString());
+      yield CategoryBooksFetchFailedState(errorMessage: e.toString());
     }
   }
 }

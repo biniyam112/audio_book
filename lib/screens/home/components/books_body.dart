@@ -1,5 +1,9 @@
-import 'package:audio_books/feature/fetch_books/bloc/fetch_books_bloc.dart';
-import 'package:audio_books/feature/fetch_books/bloc/fetch_books_event.dart';
+import 'package:audio_books/feature/categories/bloc/category_bloc.dart';
+import 'package:audio_books/feature/categories/bloc/category_event.dart';
+import 'package:audio_books/feature/categories/bloc/category_state.dart';
+import 'package:audio_books/feature/featured_books/bloc/featured_books_bloc.dart';
+import 'package:audio_books/feature/featured_books/bloc/featured_books_event.dart';
+import 'package:audio_books/feature/featured_books/bloc/featured_books_state.dart';
 import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_bloc.dart';
 import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_event.dart';
 import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_state.dart';
@@ -33,53 +37,53 @@ class BooksBody extends StatelessWidget {
                     'http://www.marakigebeya.com.et/swagger/v1/swagger.json',
               ),
             );
-            BlocProvider.of<FetchBooksBloc>(context).add(FetchBooksEvent());
-            BlocProvider.of<FetchBooksByCategoryBloc>(context)
-                .add(FetchBooksByCategoryEvent(category: 'romance'));
+            BlocProvider.of<CategoryBloc>(context).add(FetchCategoryEvent());
+            BlocProvider.of<FeaturedBooksBloc>(context)
+                .add(FetchFeaturedBooks());
           },
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()),
+              parent: AlwaysScrollableScrollPhysics(),
+            ),
             child: BlocBuilder<PingSiteBloc, PingSiteState>(
-                builder: (blocContext, state) {
-              if (state == PingSiteState.inProcess) {
+                builder: (blocContext, pingState) {
+              if (pingState == PingSiteState.inProcess) {
                 return Center(
                   child: CircularProgressIndicator(
                     color: Darktheme.primaryColor,
                   ),
                 );
               }
-              if (state == PingSiteState.failed) {
-                print('\n\nping failed bro\n\n');
+              if (pingState == PingSiteState.failed) {
                 return NoConnectionWidget();
               }
-              if (state == PingSiteState.success) {
+              if (pingState == PingSiteState.success) {
                 return Column(
                   children: [
-                    Column(
-                      children: [
-                        Padding(
-                          padding:
-                              EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-                          child: BookCategory(
-                            categoryName: 'Featured Books',
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CategoryAllBooks(
-                                      category: 'Popular Books'),
+                    BlocBuilder<FeaturedBooksBloc, FeaturedBooksState>(
+                      builder: (context, state) {
+                        if (state is FeaturedBooksFetched) {
+                          var books = state.books;
+                          return Column(
+                            children: [
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 6, horizontal: 12),
+                                child: BookCategory(
+                                  categoryName: 'Featured Books',
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => CategoryAllBooks(
+                                          category: 'Featured Books',
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
-                              );
-                            },
-                          ),
-                        ),
-                        BlocBuilder<FetchBooksByCategoryBloc,
-                            FetchBooksByCategoryState>(
-                          builder: (context, state) {
-                            if (state is CategoryBooksFetchedState) {
-                              var books = state.books;
-                              return SingleChildScrollView(
+                              ),
+                              SingleChildScrollView(
                                 scrollDirection: Axis.horizontal,
                                 child: Row(
                                   children: [
@@ -100,46 +104,101 @@ class BooksBody extends StatelessWidget {
                                     ),
                                   ],
                                 ),
-                              );
-                            }
-                            if (state is CategoryFetchingState) {
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  color: Darktheme.primaryColor,
-                                ),
-                              );
-                            }
-                            if (state is CategoryFetchFailedState) {
-                              return Text('${state.errorMessage}');
-                            }
-                            return Container();
-                          },
-                        ),
-                      ],
+                              ),
+                            ],
+                          );
+                        }
+                        if (state is FeaturedBooksFetching) {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              color: Darktheme.primaryColor,
+                            ),
+                          );
+                        }
+                        if (state is FeaturedBooksFetchingFailed) {
+                          return Text('${state.errorMessage}');
+                        }
+                        return Container(
+                          child: Text('Idle state is here'),
+                        );
+                      },
                     ),
                     verticalSpacing(10),
-                    BlocBuilder<FetchBooksByCategoryBloc,
-                        FetchBooksByCategoryState>(
-                      builder: (context, state) {
-                        if (state is CategoryBooksFetchedState) {
-                          var books = state.books;
-                          return BookShelf(
-                            books: books,
-                            categoryName: 'Politics',
-                            onPressed: () {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        CategoryAllBooks(category: 'Politics'),
-                                  ));
+                    BlocBuilder<CategoryBloc, CategoryState>(
+                      builder: (blocContext, categoryState) {
+                        if (categoryState is CategoriesFetchedState) {
+                          var categories = categoryState.categories;
+
+                          BlocProvider.of<FetchBooksByCategoryBloc>(context)
+                              .add(
+                            FetchBooksByCategoryEvent(
+                              category: categories[0],
+                            ),
+                          );
+                          List.generate(
+                            categories.length,
+                            (index) {
+                              return BlocBuilder<FetchBooksByCategoryBloc,
+                                  FetchBooksByCategoryState>(
+                                builder: (context, booksState) {
+                                  if (booksState is CategoryBooksFetchedState) {
+                                    var books = booksState.books;
+                                    print(books);
+                                    return BookShelf(
+                                      categoryName: '${categories[0].name}',
+                                      books: books,
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                CategoryAllBooks(
+                                              category: categories[0].name,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  }
+                                  if (booksState
+                                      is CategoryBooksFetchingState) {
+                                    return SizedBox(
+                                        height: 40,
+                                        width: 40,
+                                        child: Center(
+                                          child: CircularProgressIndicator(
+                                            color: Darktheme.primaryColor,
+                                          ),
+                                        ));
+                                  }
+                                  if (booksState
+                                      is CategoryBooksFetchFailedState) {
+                                    return Text('${booksState.errorMessage}');
+                                  }
+                                  return Container(
+                                    child: Text('idle satte bookstate'),
+                                  );
+                                },
+                              );
                             },
                           );
                         }
-                        if (state is CategoryFetchFailedState) {
-                          return Text('${state.errorMessage}');
+                        if (categoryState is CategoriesFetchingState) {
+                          return SizedBox(
+                              height: 40,
+                              width: 40,
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  color: Darktheme.primaryColor,
+                                ),
+                              ));
                         }
-                        return Container();
+                        if (categoryState is CategoriesFetchingFailedState) {
+                          return Text('${categoryState.errorMessage}');
+                        }
+                        return Container(
+                          child: Text('idle category state'),
+                        );
                       },
                     ),
                     verticalSpacing(10),

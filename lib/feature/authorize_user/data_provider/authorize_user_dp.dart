@@ -23,6 +23,8 @@ class AuthorizeUserDataProvider {
     if (response.statusCode == 200) {
       return jsonDecode(response.body)['jwtToken'];
     } else {
+      print(response.headers);
+      print(response.body);
       throw Exception('User authorization failed');
     }
   }

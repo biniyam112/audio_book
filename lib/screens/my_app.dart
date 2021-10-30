@@ -1,6 +1,10 @@
 import 'package:audio_books/feature/authorize_user/bloc/authorize_user_bloc.dart';
 import 'package:audio_books/feature/authorize_user/repository/authorize_user_repo.dart';
+import 'package:audio_books/feature/categories/bloc/category_bloc.dart';
+import 'package:audio_books/feature/categories/repository/category_repo.dart';
 import 'package:audio_books/feature/check_first_time/check_first_time.dart';
+import 'package:audio_books/feature/featured_books/bloc/featured_books_bloc.dart';
+import 'package:audio_books/feature/featured_books/repository/featured_books_repository.dart';
 import 'package:audio_books/feature/fetch_books/bloc/fetch_books_bloc.dart';
 import 'package:audio_books/feature/fetch_books/repository/fetch_books_repo.dart';
 import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_bloc.dart';
@@ -47,8 +51,9 @@ class MyApp extends StatefulWidget {
   final AuthorizeUserRepo authorizeUserRepo;
   final FetchBooksByCateRepo fetchBooksByCateRepo;
   final FetchChaptersRepo fetchChaptersRepo;
-
   final FetchBooksRepo fetchBooksRepo;
+  final CategoryRepo categoryRepo;
+  final FeaturedBooksRepo featuredBooksRepo;
 
   const MyApp({
     Key? key,
@@ -62,6 +67,8 @@ class MyApp extends StatefulWidget {
     required this.fetchBooksRepo,
     required this.fetchBooksByCateRepo,
     required this.fetchChaptersRepo,
+    required this.categoryRepo,
+    required this.featuredBooksRepo,
   }) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
@@ -153,6 +160,16 @@ class _MyAppState extends State<MyApp> {
                 ),
                 BlocProvider(
                   create: (context) => PingSiteBloc(),
+                ),
+                BlocProvider(
+                  create: (context) => CategoryBloc(
+                    categoryRepo: widget.categoryRepo,
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) => FeaturedBooksBloc(
+                    featuredBooksRepo: widget.featuredBooksRepo,
+                  ),
                 ),
               ],
               child: MaterialApp(

@@ -10,10 +10,10 @@ class CategoryBooksFetchedState extends FetchBooksByCategoryState {
   CategoryBooksFetchedState({required this.books});
 }
 
-class CategoryFetchFailedState extends FetchBooksByCategoryState {
+class CategoryBooksFetchFailedState extends FetchBooksByCategoryState {
   final String errorMessage;
 
-  CategoryFetchFailedState({required this.errorMessage});
+  CategoryBooksFetchFailedState({required this.errorMessage});
 }
 
-class CategoryFetchingState extends FetchBooksByCategoryState {}
+class CategoryBooksFetchingState extends FetchBooksByCategoryState {}

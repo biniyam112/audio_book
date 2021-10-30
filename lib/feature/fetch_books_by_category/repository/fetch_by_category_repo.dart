@@ -8,11 +8,11 @@ class FetchBooksByCateRepo {
   FetchBooksByCateRepo({required this.fetchBooksByCateDP});
 
   Future<List<Book>> fetchByCategory({
-    required String category,
+    required String categoryId,
     required User user,
   }) async {
     return await fetchBooksByCateDP.fetchByCategory(
-      category: category,
+      categoryId: categoryId,
       token: user.token,
     );
   }

@@ -1,5 +1,7 @@
+import 'package:audio_books/models/category.dart';
+
 class FetchBooksByCategoryEvent {
-  final String category;
+  final Category category;
 
   FetchBooksByCategoryEvent({required this.category});
 }

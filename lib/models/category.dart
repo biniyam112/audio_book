@@ -1,5 +1,6 @@
 class Category {
-  String? id, name, status;
+  String id, name;
+  int status;
 
   Category({
     required this.id,
@@ -7,9 +8,9 @@ class Category {
     required this.status,
   });
 
-  factory Category.fromMap(Map<dynamic, String> json) => Category(
-        id: json['id'],
-        name: json['name'],
-        status: json['status'],
+  factory Category.fromMap(Map<String, dynamic> json) => Category(
+        id: json['id'] ?? '?',
+        name: json['name'] ?? '?',
+        status: json['status'] ?? 0,
       );
 }
