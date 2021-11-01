@@ -5,10 +5,11 @@ class Book {
       category,
       coverArt,
       narattor,
+      edition,
       bookPath,
       description,
-      publishmentYear;
-  final int resourceType;
+      publishmentYear,
+      resourceType;
 
   Book({
     required this.id,
@@ -17,6 +18,7 @@ class Book {
     required this.coverArt,
     required this.category,
     required this.title,
+    required this.edition,
     required this.author,
     required this.publishmentYear,
     required this.description,
@@ -25,249 +27,17 @@ class Book {
 
   factory Book.fromMap(Map<String, dynamic> json) => Book(
         id: json['id'],
-        title: json['name'],
-        author: json['author']['name'] ?? 'no author available',
-        category: json['category']['name'] ?? 'unknown',
+        title: json['bookName'],
+        author: json['author'] ?? 'no author available',
+        edition: json['edition'] ?? '1',
+        category: json['category'] ?? 'unknown',
         bookPath: json['bookFile'] ?? '',
-        coverArt: json['coverArt'] ??
-            'https://image.freepik.com/free-psd/top-view-book-coffee-cup-arrangement_23-2149040132.jpg',
+        coverArt: json['imagePath'] != null
+            ? Uri.http('www.marakigebeya.com.et', json['imagePath']).toString()
+            : 'https://image.freepik.com/free-psd/top-view-book-coffee-cup-arrangement_23-2149040132.jpg',
         narattor: json['narrator'] ?? 'No narattor',
         publishmentYear: json['publicationYear'] ?? '?',
         description: json['description'] ?? 'No description yet',
-        resourceType: json['resourceType'] ?? 2,
+        resourceType: json['resourceType'] ?? 'not specified',
       );
 }
-
-List<Book> allBooks = [
-  Book(
-    id: '0',
-    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
-    narattor: 'Adam Markes',
-    coverArt:
-        'https://image.freepik.com/free-psd/top-view-book-coffee-cup-arrangement_23-2149040132.jpg',
-    category: 'History',
-    title: 'Redemtion',
-    author: 'Matia Moris',
-    publishmentYear: '2012',
-    description:
-        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
-    resourceType: 1,
-  ),
-  Book(
-    id: '1',
-    bookPath:
-        'https://peoplelikeus.org/piccies/codpaste/codpaste-teachingpack.pdf',
-    narattor: 'Adam Markes',
-    coverArt:
-        'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
-    category: 'History',
-    title: 'Redemtion',
-    author: 'Matia Moris',
-    publishmentYear: '2012',
-    description:
-        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
-    resourceType: 1,
-  ),
-  Book(
-    id: '2',
-    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
-    narattor: 'Adam Markes',
-    coverArt:
-        'https://image.freepik.com/free-psd/arrangement-mock-up-book-cover_23-2149059351.jpg',
-    category: 'History',
-    title: 'Redemtion',
-    author: 'Matia Moris',
-    publishmentYear: '2012',
-    description:
-        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
-    resourceType: 1,
-  ),
-  Book(
-    id: '3',
-    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
-    narattor: 'Adam Markes',
-    coverArt:
-        'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
-    category: 'History',
-    title: 'Redemtion',
-    author: 'Matia Moris',
-    publishmentYear: '2012',
-    description:
-        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
-    resourceType: 1,
-  ),
-];
-List<Book> romanceBooks = [
-  Book(
-    id: '4',
-    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
-    narattor: 'Adam Markes',
-    coverArt:
-        'https://image.freepik.com/free-psd/top-view-book-coffee-cup-arrangement_23-2149040132.jpg',
-    category: 'History',
-    title: 'Redemtion',
-    author: 'Matia Moris',
-    publishmentYear: '2012',
-    description:
-        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
-    resourceType: 1,
-  ),
-  Book(
-    id: '5',
-    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
-    narattor: 'Adam Markes',
-    coverArt:
-        'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
-    category: 'History',
-    title: 'Redemtion',
-    author: 'Matia Moris',
-    publishmentYear: '2012',
-    description:
-        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
-    resourceType: 1,
-  ),
-  Book(
-    id: '6',
-    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
-    narattor: 'Adam Markes',
-    coverArt:
-        'https://image.freepik.com/free-psd/arrangement-mock-up-book-cover_23-2149059351.jpg',
-    category: 'History',
-    title: 'Redemtion',
-    author: 'Matia Moris',
-    publishmentYear: '2012',
-    description:
-        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
-    resourceType: 1,
-  ),
-  Book(
-    id: '7',
-    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
-    narattor: 'Adam Markes',
-    coverArt:
-        'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
-    category: 'History',
-    title: 'Redemtion',
-    author: 'Matia Moris',
-    publishmentYear: '2012',
-    description:
-        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
-    resourceType: 1,
-  ),
-];
-List<Book> motivationalBooks = [
-  Book(
-    id: '8',
-    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
-    narattor: 'Adam Markes',
-    coverArt:
-        'https://image.freepik.com/free-psd/top-view-book-coffee-cup-arrangement_23-2149040132.jpg',
-    category: 'History',
-    title: 'Redemtion',
-    author: 'Matia Moris',
-    publishmentYear: '2012',
-    description:
-        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
-    resourceType: 1,
-  ),
-  Book(
-    id: '9',
-    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
-    narattor: 'Adam Markes',
-    coverArt:
-        'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
-    category: 'History',
-    title: 'Redemtion',
-    author: 'Matia Moris',
-    publishmentYear: '2012',
-    description:
-        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
-    resourceType: 1,
-  ),
-  Book(
-    id: '10',
-    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
-    narattor: 'Adam Markes',
-    coverArt:
-        'https://image.freepik.com/free-psd/arrangement-mock-up-book-cover_23-2149059351.jpg',
-    category: 'History',
-    title: 'Redemtion',
-    author: 'Matia Moris',
-    publishmentYear: '2012',
-    description:
-        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
-    resourceType: 1,
-  ),
-  Book(
-    id: '11',
-    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
-    narattor: 'Adam Markes',
-    coverArt:
-        'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
-    category: 'History',
-    title: 'Redemtion',
-    author: 'Matia Moris',
-    publishmentYear: '2012',
-    description:
-        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
-    resourceType: 1,
-  ),
-];
-List<Book> politicsBooks = [
-  Book(
-    id: '12',
-    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
-    narattor: 'Adam Markes',
-    coverArt:
-        'https://image.freepik.com/free-psd/top-view-book-coffee-cup-arrangement_23-2149040132.jpg',
-    category: 'History',
-    title: 'Redemtion',
-    author: 'Matia Moris',
-    publishmentYear: '2012',
-    description:
-        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
-    resourceType: 1,
-  ),
-  Book(
-    id: '13',
-    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
-    narattor: 'Adam Markes',
-    coverArt:
-        'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
-    category: 'History',
-    title: 'Redemtion',
-    author: 'Matia Moris',
-    publishmentYear: '2012',
-    description:
-        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
-    resourceType: 1,
-  ),
-  Book(
-    id: '14',
-    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
-    narattor: 'Adam Markes',
-    coverArt:
-        'https://image.freepik.com/free-psd/arrangement-mock-up-book-cover_23-2149059351.jpg',
-    category: 'History',
-    title: 'Redemtion',
-    author: 'Matia Moris',
-    publishmentYear: '2012',
-    description:
-        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
-    resourceType: 1,
-  ),
-  Book(
-    id: '15',
-    bookPath: 'http://www.africau.edu/images/default/sample.pdf',
-    narattor: 'Adam Markes',
-    coverArt:
-        'https://image.freepik.com/free-psd/book-hardcover-mockup-three-views_125540-226.jpg',
-    category: 'History',
-    title: 'Redemtion',
-    author: 'Matia Moris',
-    publishmentYear: '2012',
-    description:
-        'Eiusmod consequat Lorem amet ipsum exercitation mollit dolore est pariatur. Sit cupidatat incididunt mollit qui enim laborum sit laboris consectetur aliquip cillum irure excepteur. Ut dolore enim minim et culpa magna consequat. Magna sit quis dolor aute est quis ipsum excepteur cillum consectetur duis.',
-    resourceType: 1,
-  ),
-];

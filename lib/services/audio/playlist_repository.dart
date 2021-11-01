@@ -1,32 +1,33 @@
+import 'package:audio_books/models/chapter.dart';
+
 abstract class PlaylistRepository {
-  Future<List<Map<String, String>>> fetchInitialPlaylist();
-  Future<Map<String, String>> fetchAnotherSong();
+  List<Map<String, String>> fetchInitialPlaylist(List<Chapter> chapters);
+  Map<String, String> fetchAnotherSong(Chapter chapter);
 }
 
 class CreatePlayList extends PlaylistRepository {
   @override
-  Future<List<Map<String, String>>> fetchInitialPlaylist(
-      {int length = 3}) async {
-    return List.generate(length, (index) => _nextSong());
+  List<Map<String, String>> fetchInitialPlaylist(List<Chapter> chapters,
+      {int length = 1}) {
+    return List.generate(
+        chapters.length, (index) => _nextSong(chapters[index]));
   }
 
   @override
-  Future<Map<String, String>> fetchAnotherSong() async {
-    return _nextSong();
+  Map<String, String> fetchAnotherSong(Chapter chapter) {
+    return _nextSong(chapter);
   }
 
   var _songIndex = 0;
-  static const _maxSongNumber = 16;
 
-  Map<String, String> _nextSong() {
+  Map<String, String> _nextSong(Chapter chapter) {
     // ? have to impelement own logic here
-    _songIndex = (_songIndex % _maxSongNumber) + 1;
+    _songIndex += 1;
     return {
       'id': _songIndex.toString().padLeft(2, '0'),
-      'title': 'Song $_songIndex',
-      'album': 'SoundHelix',
-      'url':
-          'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-$_songIndex.mp3',
+      'title': chapter.chapterTitle,
+      'album': chapter.bookTitle,
+      'url': chapter.fileUrl,
     };
   }
 }

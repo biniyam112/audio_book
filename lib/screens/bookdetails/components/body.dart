@@ -21,12 +21,15 @@ class _BodyState extends State<Body> {
     return Container(
       height: SizeConfig.screenHeight,
       width: SizeConfig.screenWidth,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            DetailsTopSection(book: widget.book),
-            DetailsBottomPart(book: widget.book),
-          ],
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 12),
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              DetailsTopSection(book: widget.book),
+              DetailsBottomPart(book: widget.book),
+            ],
+          ),
         ),
       ),
     );

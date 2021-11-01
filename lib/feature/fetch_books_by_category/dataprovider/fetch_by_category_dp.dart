@@ -8,15 +8,17 @@ class FetchBooksByCateDP {
 
   FetchBooksByCateDP({required this.client});
 
-  Future<List<Book>> fetchByCategory({required String category, token}) async {
+  Future<List<Book>> fetchByCategory(
+      {required String categoryId, token}) async {
+    print(categoryId);
     var response = await client.get(
-      Uri.parse('http://www.marakigebeya.com.et/api/Books'),
+      Uri.parse(
+          'http://www.marakigebeya.com.et/api/BooksByCategories?categoryId=$categoryId'),
       headers: {
         'Authorization': token,
       },
     );
     if (response.statusCode == 200) {
-      print(response.body);
       var books = jsonDecode(response.body)['items'] as List;
       return books.map((book) => Book.fromMap(book)).toList();
     } else {

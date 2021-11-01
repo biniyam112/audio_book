@@ -1,3 +1,4 @@
+import 'package:audio_books/models/chapter.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/services/audio/page_manager.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
@@ -9,8 +10,10 @@ import 'package:provider/provider.dart';
 import 'components/body.dart';
 
 class AudioPlayerScreen extends StatefulWidget {
-  const AudioPlayerScreen({Key? key, required this.book}) : super(key: key);
+  const AudioPlayerScreen({Key? key, required this.book, required this.chapter})
+      : super(key: key);
   final Book book;
+  final Chapter chapter;
 
   @override
   _AudioPlayerScreenState createState() => _AudioPlayerScreenState();
@@ -19,7 +22,7 @@ class AudioPlayerScreen extends StatefulWidget {
 class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   @override
   void initState() {
-    getIt<PageManager>().init();
+    getIt<PageManager>().init([widget.chapter]);
     super.initState();
   }
 
@@ -44,7 +47,10 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
           style: Theme.of(context).textTheme.headline4,
         ),
       ),
-      body: Body(book: widget.book),
+      body: Body(
+        book: widget.book,
+        chapter: widget.chapter,
+      ),
     );
   }
 }

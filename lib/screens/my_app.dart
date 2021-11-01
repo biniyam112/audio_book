@@ -1,18 +1,25 @@
 import 'package:audio_books/feature/authorize_user/bloc/authorize_user_bloc.dart';
 import 'package:audio_books/feature/authorize_user/repository/authorize_user_repo.dart';
+import 'package:audio_books/feature/categories/bloc/category_bloc.dart';
+import 'package:audio_books/feature/categories/repository/category_repo.dart';
 import 'package:audio_books/feature/check_first_time/check_first_time.dart';
+import 'package:audio_books/feature/featured_books/bloc/featured_books_bloc.dart';
+import 'package:audio_books/feature/featured_books/repository/featured_books_repository.dart';
 import 'package:audio_books/feature/fetch_books/bloc/fetch_books_bloc.dart';
 import 'package:audio_books/feature/fetch_books/repository/fetch_books_repo.dart';
 import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_bloc.dart';
 import 'package:audio_books/feature/fetch_books_by_category/repository/fetch_by_category_repo.dart';
-import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_book_bloc.dart';
-import 'package:audio_books/feature/fetch_downloaded_book/data/repository/fetch_books_repository.dart';
+import 'package:audio_books/feature/fetch_chapters/bloc/fetch_chapters_bloc.dart';
+import 'package:audio_books/feature/fetch_chapters/repository/fetch_chapters_repo.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_down_book_bloc.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/data/repository/fetch_down_books_repository.dart';
 import 'package:audio_books/feature/initialize_database/bloc/initializa_database.dart';
 import 'package:audio_books/feature/initialize_database/bloc/initialize_db_event.dart';
 import 'package:audio_books/feature/initialize_database/repository/init_db_repository.dart';
 import 'package:audio_books/feature/otp/otp.dart';
 import 'package:audio_books/feature/podcast/bloc/bloc.dart';
 import 'package:audio_books/feature/podcast/bloc/podcast_bloc.dart';
+import 'package:audio_books/feature/ping_site/bloc/ping_site_bloc.dart';
 import 'package:audio_books/feature/register_user/bloc/register_user_bloc.dart';
 import 'package:audio_books/feature/register_user/repository/register_user_repository.dart';
 import 'package:audio_books/feature/set_theme_data/set_theme_data.dart';
@@ -45,8 +52,10 @@ class MyApp extends StatefulWidget {
   final InitDBRepo initDBRepo;
   final AuthorizeUserRepo authorizeUserRepo;
   final FetchBooksByCateRepo fetchBooksByCateRepo;
-
+  final FetchChaptersRepo fetchChaptersRepo;
   final FetchBooksRepo fetchBooksRepo;
+  final CategoryRepo categoryRepo;
+  final FeaturedBooksRepo featuredBooksRepo;
 
   const MyApp({
     Key? key,
@@ -59,6 +68,9 @@ class MyApp extends StatefulWidget {
     required this.authorizeUserRepo,
     required this.fetchBooksRepo,
     required this.fetchBooksByCateRepo,
+    required this.fetchChaptersRepo,
+    required this.categoryRepo,
+    required this.featuredBooksRepo,
   }) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
@@ -145,7 +157,23 @@ class _MyAppState extends State<MyApp> {
                 BlocProvider(create: (context) => OtpBloc()),
                 BlocProvider(
                     create: (context) =>
-                        PodcastBloc()..add(FetchPodcasts(page: 1)))
+                        PodcastBloc()..add(FetchPodcasts(page: 1))),
+                BlocProvider(
+                  create: (context) => FetchChaptersBloc(
+                    fetchChaptersRepo: widget.fetchChaptersRepo,
+                  ),
+                ),
+                BlocProvider(create: (context) => PingSiteBloc()),
+                BlocProvider(
+                  create: (context) => CategoryBloc(
+                    categoryRepo: widget.categoryRepo,
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) => FeaturedBooksBloc(
+                    featuredBooksRepo: widget.featuredBooksRepo,
+                  ),
+                ),
               ],
               child: MaterialApp(
                 title: 'Audio Book',
@@ -188,6 +216,20 @@ class LoadingTransition extends StatelessWidget {
             );
           } else {
             if (HiveBoxes.hasUserSigned()) {
+              var user = getIt.get<User>();
+              var userBox = HiveBoxes.getUserBox();
+              var storedUser = userBox.get(HiveBoxes.userKey)!;
+              user.firstName = storedUser.firstName;
+              user.lastName = storedUser.lastName;
+              user.phoneNumber = storedUser.phoneNumber;
+              user.token = storedUser.token;
+              user.email = storedUser.email;
+              user.id = storedUser.id;
+              BlocProvider.of<PingSiteBloc>(context).add(
+                PingSiteEvent(
+                    address:
+                        'http://www.marakigebeya.com.et/swagger/v1/swagger.json'),
+              );
               Navigator.push(
                 context,
                 MaterialPageRoute(

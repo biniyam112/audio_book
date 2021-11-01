@@ -15,8 +15,6 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
       : _otpRepository = getIt<OtpRepository>(),
         super(OtpInit());
 
-
-
   @override
   Stream<OtpState> mapEventToState(event) async* {
     print("********************MAP EVENT TO STATE");

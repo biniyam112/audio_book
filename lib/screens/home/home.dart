@@ -7,6 +7,11 @@ import 'package:audio_books/screens/login/login.dart';
 import 'package:audio_books/screens/phone_registration/phone_registration.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
 import 'package:audio_books/services/hiveConfig/hive_config.dart';
+import 'package:audio_books/feature/categories/bloc/category_bloc.dart';
+import 'package:audio_books/feature/categories/bloc/category_event.dart';
+import 'package:audio_books/feature/featured_books/bloc/featured_books_bloc.dart';
+import 'package:audio_books/feature/featured_books/bloc/featured_books_event.dart';
+import 'package:audio_books/feature/ping_site/bloc/ping_site_bloc.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme_colors.dart';
 import 'package:audio_books/theme/theme_provider.dart';
@@ -17,6 +22,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'components/books_body.dart';
+import 'components/custom_drawer.dart';
 import 'components/podcast_body.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -33,9 +39,9 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void initState() {
-    BlocProvider.of<FetchBooksBloc>(context).add(FetchBooksEvent());
-    BlocProvider.of<FetchBooksByCategoryBloc>(context)
-        .add(FetchBooksByCategoryEvent(category: 'romance'));
+    BlocProvider.of<PingSiteBloc>(context).add(PingSiteEvent());
+    BlocProvider.of<CategoryBloc>(context).add(FetchCategoryEvent());
+    BlocProvider.of<FeaturedBooksBloc>(context).add(FetchFeaturedBooks());
     super.initState();
   }
 

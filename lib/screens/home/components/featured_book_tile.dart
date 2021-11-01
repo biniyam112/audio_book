@@ -10,8 +10,8 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import '../../../sizeConfig.dart';
 import '../../screens.dart';
 
-class PopularBooksTile extends StatelessWidget {
-  const PopularBooksTile({
+class FeaturedBooksTile extends StatelessWidget {
+  const FeaturedBooksTile({
     Key? key,
     required this.book,
   }) : super(key: key);
@@ -71,19 +71,19 @@ class PopularBooksTile extends StatelessWidget {
                   borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
                   child: CachedNetworkImage(
                     imageUrl: '${book.coverArt}',
-                    progressIndicatorBuilder:
-                        (context, url, downloadProgress) => Center(
-                      child: Container(
-                        height: 30,
-                        width: 30,
-                        child: Center(
-                          child: CircularProgressIndicator(
-                              value: downloadProgress.progress),
+                    alignment: Alignment.center,
+                    placeholder: (context, message) => Container(
+                      height: 62,
+                      width: 62,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 3,
+                          color: Darktheme.primaryColor,
                         ),
                       ),
                     ),
                     errorWidget: (context, url, error) => Icon(Icons.error),
-                    fit: BoxFit.fill,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),

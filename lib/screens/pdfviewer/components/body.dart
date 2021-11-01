@@ -1,6 +1,6 @@
 import 'package:audio_books/constants.dart';
-import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_book_bloc.dart';
-import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_book_state.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_down_book_bloc.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_down_book_state.dart';
 import 'package:audio_books/feature/store_book/bloc/store_book_bloc.dart';
 import 'package:audio_books/feature/store_book/bloc/store_book_event.dart';
 import 'package:audio_books/models/downloaded_book.dart';
@@ -159,8 +159,6 @@ class _PdfReaderState extends State<PdfReader> {
       },
       onDocumentLoadFailed:
           (PdfDocumentLoadFailedDetails pdfDocumentLoadFailedDetails) {
-        print('pdf level error ${pdfDocumentLoadFailedDetails.description}');
-        print('pdf level error ${pdfDocumentLoadFailedDetails.error}');
         Navigator.pop(context);
       },
       onPageChanged: (pagechaged) {
@@ -185,10 +183,6 @@ class _PdfReaderState extends State<PdfReader> {
     int totalPages = pdfViewerController.pageCount;
     int currentPage = pdfViewerController.pageNumber;
     double percentCompleted = currentPage / totalPages;
-    print('\n\n\n store progress called');
-    print(totalPages);
-    print(currentPage);
-    print(percentCompleted);
     widget.downloadedBook.setPercentCompleted = percentCompleted;
     BlocProvider.of<StoreBookBloc>(context).add(
       StoreBookProgressEvent(downloadedBook: widget.downloadedBook),

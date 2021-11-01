@@ -195,7 +195,7 @@ class TopDetailsImageSection extends StatelessWidget {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: CachedNetworkImage(
-            imageUrl: '${book.coverArt}',
+            imageUrl: book.coverArt,
             progressIndicatorBuilder: (context, url, downloadProgress) =>
                 Center(
                     child: Container(
