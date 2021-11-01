@@ -1,18 +1,17 @@
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/podcast_details/podcast_details.dart';
+import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
-import '../../../sizeConfig.dart';
 
 class PodcastCard extends StatelessWidget {
   const PodcastCard({
     Key? key,
     required this.podcast,
   }) : super(key: key);
-  final Podcast podcast;
+  final APIPodcast podcast;
 
   @override
   Widget build(BuildContext context) {
@@ -40,27 +39,23 @@ class PodcastCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Expanded(
-                child: CachedNetworkImage(
+                child: FadeInImage(
                   width: double.infinity,
-                  imageUrl: podcast.podcastImage,
                   fit: BoxFit.cover,
-                  placeholder: (_, __) => Center(
-                    child: CircularProgressIndicator(
-                      color: Darktheme.primaryColor,
-                    ),
-                  ),
-                  errorWidget: (context, errorMessage, _) => Column(
-                    children: [
-                      SvgPicture.asset('assets/icons/Error.svg'),
-                      verticalSpacing(6),
-                      Text('$errorMessage'),
-                    ],
-                  ),
+                  placeholder: AssetImage('assets/images/placeholder.png'),
+                  imageErrorBuilder: (context, error, stacktrace) {
+                    return Image.asset(
+                      'assets/images/placeholder.png',
+                      fit: BoxFit.cover,
+                    );
+                  },
+                  image: NetworkImage(
+                      podcast.imagePath != null ? podcast.imagePath! : ''),
                 ),
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: EdgeInsets.all(getProportionateScreenHeight(2)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -72,7 +67,7 @@ class PodcastCard extends StatelessWidget {
                       Opacity(
                         opacity: .9,
                         child: Text(
-                          '${podcast.creators}',
+                          '${podcast.creator}',
                           style: Theme.of(context).textTheme.headline5,
                         ),
                       ),

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:audio_books/models/models.dart';
 import 'package:audio_books/models/podcast.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
@@ -10,7 +11,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class Body extends StatelessWidget {
   const Body({Key? key, required this.podcast}) : super(key: key);
-  final Podcast podcast;
+  final APIPodcast podcast;
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -26,16 +27,20 @@ class Body extends StatelessWidget {
                 Container(
                   height: SizeConfig.screenHeight! * .2,
                   width: SizeConfig.screenWidth,
-                  child: CachedNetworkImage(
-                    imageUrl: '${podcast.podcastImage}',
+                  margin:
+                      EdgeInsets.only(top: getProportionateScreenHeight(20)),
+                  child: FadeInImage(
+                    width: double.infinity,
                     fit: BoxFit.cover,
-                    errorWidget: (context, errorMessage, _) => Column(
-                      children: [
-                        SvgPicture.asset('assets/icons/Error.svg'),
-                        verticalSpacing(6),
-                        Text('$errorMessage')
-                      ],
-                    ),
+                    placeholder: AssetImage('assets/images/placeholder.png'),
+                    imageErrorBuilder: (context, error, stacktrace) {
+                      return Image.asset(
+                        'assets/images/placeholder.png',
+                        fit: BoxFit.cover,
+                      );
+                    },
+                    image: NetworkImage(
+                        podcast.imagePath != null ? podcast.imagePath! : ''),
                   ),
                 ),
                 Column(
@@ -66,7 +71,7 @@ class Body extends StatelessWidget {
                           image: DecorationImage(
                             fit: BoxFit.cover,
                             image: CachedNetworkImageProvider(
-                              '${podcast.podcastImage}',
+                              '${podcast.imagePath}',
                             ),
                           ),
                           color: Darktheme.primaryColor,
@@ -86,23 +91,35 @@ class Body extends StatelessWidget {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Container(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${podcast.title}'.toUpperCase(),
-                    style: Theme.of(context).textTheme.headline2,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${podcast.title}'.toUpperCase(),
+                        style: Theme.of(context).textTheme.headline2,
+                      ),
+                      Text(
+                        '${podcast.creator}',
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                    ],
                   ),
-                  Text(
-                    '${podcast.creators}',
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
-                ],
+                ),
               ),
-            ),
+              Padding(
+                padding: EdgeInsets.only(
+                    right: getProportionateScreenWidth(15),
+                    top: getProportionateScreenHeight(25)),
+                child:
+                    ElevatedButton(onPressed: () {}, child: Text('Subscribe')),
+              )
+            ],
           ),
           verticalSpacing(40),
           Column(

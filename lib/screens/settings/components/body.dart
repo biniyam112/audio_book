@@ -1,5 +1,7 @@
 import 'package:audio_books/models/profile_model.dart';
 import 'package:audio_books/screens/screens.dart';
+import 'package:audio_books/services/hiveConfig/hive_config.dart';
+
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme_colors.dart';
 import 'package:audio_books/theme/theme_provider.dart';
@@ -16,6 +18,7 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final user = HiveBoxes.getUserBox().get(HiveBoxes.userKey);
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -45,11 +48,11 @@ class Body extends StatelessWidget {
                 ),
                 verticalSpacing(8),
                 Text(
-                  'user name',
+                  '${user!.firstName} ${user.lastName}',
                   style: Theme.of(context).textTheme.headline4,
                 ),
                 Text(
-                  'user email',
+                  '${user.email}',
                   style: Theme.of(context).textTheme.headline5,
                 ),
                 verticalSpacing(20),

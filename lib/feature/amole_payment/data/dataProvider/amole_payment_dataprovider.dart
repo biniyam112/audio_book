@@ -1,11 +1,13 @@
 import 'package:http/http.dart' as http;
 
 class AmolePaymentDP {
+
   final http.Client client;
 
   AmolePaymentDP({required this.client});
-
+  
   Future<void> commitPurchase() async {
+    
     var response = await client.post(
       Uri.parse('http://api.marakigebeya.com.et/api/amole/recieve/SendOTP'),
       body: {

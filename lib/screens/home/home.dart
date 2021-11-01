@@ -3,7 +3,10 @@ import 'package:audio_books/feature/fetch_books/bloc/fetch_books_event.dart';
 import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_bloc.dart';
 import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_event.dart';
 import 'package:audio_books/models/user.dart';
+import 'package:audio_books/screens/login/login.dart';
+import 'package:audio_books/screens/phone_registration/phone_registration.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
+import 'package:audio_books/services/hiveConfig/hive_config.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme_colors.dart';
 import 'package:audio_books/theme/theme_provider.dart';
@@ -127,7 +130,7 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
-    User user = getIt.get<User>();
+    User? user = HiveBoxes.getUserBox().get(HiveBoxes.userKey);
     return Container(
       height: SizeConfig.screenHeight,
       width: SizeConfig.screenWidth! * .66,
@@ -139,7 +142,7 @@ class CustomDrawer extends StatelessWidget {
           verticalSpacing(SizeConfig.screenHeight! * .06),
           Expanded(
             flex: 3,
-            child: UserInfoArea(user: user),
+            child: UserInfoArea(user: user!),
           ),
           verticalSpacing(20),
           Expanded(
@@ -162,7 +165,17 @@ class CustomDrawer extends StatelessWidget {
                 DrawerTile(
                   title: 'Log out',
                   icon: CupertinoIcons.square_arrow_left,
-                  onPress: () {},
+                  onPress: () {
+                    HiveBoxes.deleteUser();
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return LoginScreen();
+                        },
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

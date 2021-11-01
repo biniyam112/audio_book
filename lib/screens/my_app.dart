@@ -11,6 +11,8 @@ import 'package:audio_books/feature/initialize_database/bloc/initializa_database
 import 'package:audio_books/feature/initialize_database/bloc/initialize_db_event.dart';
 import 'package:audio_books/feature/initialize_database/repository/init_db_repository.dart';
 import 'package:audio_books/feature/otp/otp.dart';
+import 'package:audio_books/feature/podcast/bloc/bloc.dart';
+import 'package:audio_books/feature/podcast/bloc/podcast_bloc.dart';
 import 'package:audio_books/feature/register_user/bloc/register_user_bloc.dart';
 import 'package:audio_books/feature/register_user/repository/register_user_repository.dart';
 import 'package:audio_books/feature/set_theme_data/set_theme_data.dart';
@@ -140,7 +142,10 @@ class _MyAppState extends State<MyApp> {
                     fetchBooksByCateRepo: widget.fetchBooksByCateRepo,
                   ),
                 ),
-                BlocProvider(create: (context) => OtpBloc())
+                BlocProvider(create: (context) => OtpBloc()),
+                BlocProvider(
+                    create: (context) =>
+                        PodcastBloc()..add(FetchPodcasts(page: 1)))
               ],
               child: MaterialApp(
                 title: 'Audio Book',
