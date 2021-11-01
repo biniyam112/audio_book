@@ -129,16 +129,19 @@ class _DetailsBottomPartState extends State<DetailsBottomPart> {
     required Book book,
   }) {
     if (index == 0) {
-      return Opacity(
-        opacity: .8,
-        child: Text(
-          book.description,
-          maxLines: 20,
-          overflow: TextOverflow.ellipsis,
-          style: Theme.of(context).textTheme.headline4!.copyWith(
-                fontFamily: GoogleFonts.montserrat().fontFamily,
-                height: 1.5,
-              ),
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 20),
+        child: Opacity(
+          opacity: .8,
+          child: Text(
+            book.description,
+            maxLines: 20,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.headline4!.copyWith(
+                  fontFamily: GoogleFonts.montserrat().fontFamily,
+                  height: 1.5,
+                ),
+          ),
         ),
       );
     }

@@ -5,6 +5,7 @@ class Book {
       category,
       coverArt,
       narattor,
+      edition,
       bookPath,
       description,
       publishmentYear,
@@ -17,6 +18,7 @@ class Book {
     required this.coverArt,
     required this.category,
     required this.title,
+    required this.edition,
     required this.author,
     required this.publishmentYear,
     required this.description,
@@ -27,6 +29,7 @@ class Book {
         id: json['id'],
         title: json['bookName'],
         author: json['author'] ?? 'no author available',
+        edition: json['edition'] ?? '1',
         category: json['category'] ?? 'unknown',
         bookPath: json['bookFile'] ?? '',
         coverArt: json['imagePath'] != null

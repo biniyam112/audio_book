@@ -34,5 +34,7 @@ enum PingSiteState {
 class PingSiteEvent {
   final String address;
 
-  PingSiteEvent({required this.address});
+  PingSiteEvent({
+    this.address = 'http://www.marakigebeya.com.et/swagger/v1/swagger.json',
+  });
 }

@@ -25,7 +25,8 @@ class InputFieldContainer extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
               )
-            : Row(
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
@@ -33,6 +34,7 @@ class InputFieldContainer extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                   ),
+                  verticalSpacing(4),
                   Opacity(
                     opacity: .7,
                     child: Text(
@@ -42,7 +44,7 @@ class InputFieldContainer extends StatelessWidget {
                   ),
                 ],
               ),
-        verticalSpacing(4),
+        verticalSpacing(22),
         Container(
           padding: EdgeInsets.symmetric(
             vertical: getProportionateScreenHeight(4),

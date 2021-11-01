@@ -7,6 +7,8 @@ import 'package:audio_books/feature/featured_books/bloc/featured_books_state.dar
 import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_bloc.dart';
 import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_event.dart';
 import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_state.dart';
+import 'package:audio_books/feature/fetch_books_by_category/dataprovider/fetch_by_category_dp.dart';
+import 'package:audio_books/feature/fetch_books_by_category/repository/fetch_by_category_repo.dart';
 import 'package:audio_books/feature/ping_site/bloc/ping_site_bloc.dart';
 import 'package:audio_books/screens/categoryallbooks/category_all_books.dart';
 import 'package:audio_books/screens/components/no_connection_widget.dart';
@@ -15,6 +17,7 @@ import 'package:audio_books/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 
 import 'book_category.dart';
 import 'book_shelf.dart';
@@ -30,6 +33,7 @@ class BooksBody extends StatelessWidget {
       width: SizeConfig.screenWidth,
       child: SafeArea(
         child: RefreshIndicator(
+          color: Darktheme.primaryColor,
           onRefresh: () async {
             BlocProvider.of<PingSiteBloc>(context).add(
               PingSiteEvent(
@@ -48,9 +52,13 @@ class BooksBody extends StatelessWidget {
             child: BlocBuilder<PingSiteBloc, PingSiteState>(
                 builder: (blocContext, pingState) {
               if (pingState == PingSiteState.inProcess) {
-                return Center(
-                  child: CircularProgressIndicator(
-                    color: Darktheme.primaryColor,
+                return SizedBox(
+                  height: SizeConfig.screenHeight! * .8,
+                  width: SizeConfig.screenWidth,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      color: Darktheme.primaryColor,
+                    ),
                   ),
                 );
               }
@@ -109,9 +117,13 @@ class BooksBody extends StatelessWidget {
                           );
                         }
                         if (state is FeaturedBooksFetching) {
-                          return Center(
-                            child: CircularProgressIndicator(
-                              color: Darktheme.primaryColor,
+                          return SizedBox(
+                            height: SizeConfig.screenHeight! * .2,
+                            width: SizeConfig.screenWidth,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: Darktheme.primaryColor,
+                              ),
                             ),
                           );
                         }
@@ -119,7 +131,12 @@ class BooksBody extends StatelessWidget {
                           return Text('${state.errorMessage}');
                         }
                         return Container(
-                          child: Text('Idle state is here'),
+                          height: 32,
+                          width: 32,
+                          child: CircularProgressIndicator(
+                            color: Darktheme.primaryColor,
+                            strokeWidth: 3,
+                          ),
                         );
                       },
                     ),
@@ -128,70 +145,93 @@ class BooksBody extends StatelessWidget {
                       builder: (blocContext, categoryState) {
                         if (categoryState is CategoriesFetchedState) {
                           var categories = categoryState.categories;
-
-                          BlocProvider.of<FetchBooksByCategoryBloc>(context)
-                              .add(
-                            FetchBooksByCategoryEvent(
-                              category: categories[0],
-                            ),
-                          );
-                          List.generate(
-                            categories.length,
-                            (index) {
-                              return BlocBuilder<FetchBooksByCategoryBloc,
-                                  FetchBooksByCategoryState>(
-                                builder: (context, booksState) {
-                                  if (booksState is CategoryBooksFetchedState) {
-                                    var books = booksState.books;
-                                    print(books);
-                                    return BookShelf(
-                                      categoryName: '${categories[0].name}',
-                                      books: books,
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                CategoryAllBooks(
-                                              category: categories[0].name,
+                          return Column(
+                            children: [
+                              ...List.generate(
+                                categories.length,
+                                (index) {
+                                  return BlocProvider(
+                                    create: (context) =>
+                                        FetchBooksByCategoryBloc(
+                                      fetchBooksByCateRepo:
+                                          FetchBooksByCateRepo(
+                                        fetchBooksByCateDP: FetchBooksByCateDP(
+                                          client: http.Client(),
+                                        ),
+                                      ),
+                                    )..add(
+                                            FetchBooksByCategoryEvent(
+                                              category: categories[index],
                                             ),
+                                          ),
+                                    child: BlocBuilder<FetchBooksByCategoryBloc,
+                                        FetchBooksByCategoryState>(
+                                      builder: (context, booksState) {
+                                        if (booksState
+                                            is CategoryBooksFetchedState) {
+                                          var books = booksState.books;
+                                          return BookShelf(
+                                            categoryName:
+                                                '${categories[index].name}',
+                                            books: books,
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      CategoryAllBooks(
+                                                    category:
+                                                        categories[index].name,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        }
+                                        if (booksState
+                                            is CategoryBooksFetchingState) {
+                                          return SizedBox(
+                                              height:
+                                                  SizeConfig.screenHeight! * .2,
+                                              width: 40,
+                                              child: Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  color: Darktheme.primaryColor,
+                                                ),
+                                              ));
+                                        }
+                                        if (booksState
+                                            is CategoryBooksFetchFailedState) {
+                                          return Text(
+                                              '${booksState.errorMessage}');
+                                        }
+                                        return Container(
+                                          height: SizeConfig.screenHeight! * .2,
+                                          width: 32,
+                                          child: CircularProgressIndicator(
+                                            color: Darktheme.primaryColor,
+                                            strokeWidth: 3,
                                           ),
                                         );
                                       },
-                                    );
-                                  }
-                                  if (booksState
-                                      is CategoryBooksFetchingState) {
-                                    return SizedBox(
-                                        height: 40,
-                                        width: 40,
-                                        child: Center(
-                                          child: CircularProgressIndicator(
-                                            color: Darktheme.primaryColor,
-                                          ),
-                                        ));
-                                  }
-                                  if (booksState
-                                      is CategoryBooksFetchFailedState) {
-                                    return Text('${booksState.errorMessage}');
-                                  }
-                                  return Container(
-                                    child: Text('idle satte bookstate'),
+                                    ),
                                   );
                                 },
-                              );
-                            },
+                              ),
+                            ],
                           );
                         }
                         if (categoryState is CategoriesFetchingState) {
                           return SizedBox(
-                              height: 40,
-                              width: 40,
-                              child: Center(
-                                child: CircularProgressIndicator(
-                                  color: Darktheme.primaryColor,
-                                ),
-                              ));
+                            height: SizeConfig.screenHeight! * .2,
+                            width: SizeConfig.screenWidth,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: Darktheme.primaryColor,
+                              ),
+                            ),
+                          );
                         }
                         if (categoryState is CategoriesFetchingFailedState) {
                           return Text('${categoryState.errorMessage}');
@@ -205,7 +245,9 @@ class BooksBody extends StatelessWidget {
                   ],
                 );
               }
-              return Container();
+              return Container(
+                child: Text('idle ping state'),
+              );
             }),
           ),
         ),

@@ -18,37 +18,42 @@ class BookShelf extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
-          child: BookCategory(
-            categoryName: '$categoryName',
-            onPressed: onPressed,
+    if (books.isNotEmpty) {
+      return Column(
+        children: [
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+            child: BookCategory(
+              categoryName: '$categoryName',
+              onPressed: onPressed,
+            ),
           ),
-        ),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              ...List.generate(
-                books.length,
-                (index) {
-                  return Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: getProportionateScreenWidth(8),
-                      vertical: 6,
-                    ),
-                    child: BookTile(
-                      book: books[index],
-                    ),
-                  );
-                },
+          if (books.isNotEmpty)
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  ...List.generate(
+                    books.length,
+                    (index) {
+                      return Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: getProportionateScreenWidth(8),
+                          vertical: 6,
+                        ),
+                        child: BookTile(
+                          book: books[index],
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
-      ],
-    );
+            ),
+        ],
+      );
+    } else {
+      return Container();
+    }
   }
 }

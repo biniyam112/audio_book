@@ -5,7 +5,7 @@ part 'user.g.dart';
 @HiveType(typeId: 1)
 class User {
   @HiveField(0)
-  int? id;
+  String? id;
 
   @HiveField(1)
   String? token;

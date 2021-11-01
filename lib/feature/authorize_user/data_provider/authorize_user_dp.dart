@@ -8,7 +8,7 @@ class AuthorizeUserDataProvider {
 
   AuthorizeUserDataProvider({required this.client});
 
-  Future<String> authorizeUser(User user) async {
+  Future<User> authorizeUser(User user) async {
     var response = await client.post(
       Uri.parse(
         'http://www.marakigebeya.com.et/api/Subscribers/authenticate',
@@ -21,7 +21,16 @@ class AuthorizeUserDataProvider {
       },
     );
     if (response.statusCode == 200) {
-      return jsonDecode(response.body)['jwtToken'];
+      var userJson = jsonDecode(response.body);
+
+      return User(
+        id: userJson['id'],
+        firstName: userJson['fullName'].toString().split(' ')[0],
+        lastName: userJson['fullName'].toString().split(' ').length > 1
+            ? userJson['fullName'].toString().split(' ')[1]
+            : '',
+        token: userJson['jwtToken'],
+      );
     } else {
       print(response.headers);
       print(response.body);

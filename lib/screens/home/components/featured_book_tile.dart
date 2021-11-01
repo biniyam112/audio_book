@@ -71,14 +71,14 @@ class FeaturedBooksTile extends StatelessWidget {
                   borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
                   child: CachedNetworkImage(
                     imageUrl: '${book.coverArt}',
-                    progressIndicatorBuilder:
-                        (context, url, downloadProgress) => Center(
-                      child: Container(
-                        height: 30,
-                        width: 30,
-                        child: Center(
-                          child: CircularProgressIndicator(
-                              value: downloadProgress.progress),
+                    alignment: Alignment.center,
+                    placeholder: (context, message) => Container(
+                      height: 62,
+                      width: 62,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 3,
+                          color: Darktheme.primaryColor,
                         ),
                       ),
                     ),

@@ -2,6 +2,7 @@ import 'package:audio_books/feature/categories/bloc/category_bloc.dart';
 import 'package:audio_books/feature/categories/bloc/category_event.dart';
 import 'package:audio_books/feature/featured_books/bloc/featured_books_bloc.dart';
 import 'package:audio_books/feature/featured_books/bloc/featured_books_event.dart';
+import 'package:audio_books/feature/ping_site/bloc/ping_site_bloc.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme_colors.dart';
 import 'package:audio_books/theme/theme_provider.dart';
@@ -28,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen>
 
   @override
   void initState() {
+    BlocProvider.of<PingSiteBloc>(context).add(PingSiteEvent());
     BlocProvider.of<CategoryBloc>(context).add(FetchCategoryEvent());
     BlocProvider.of<FeaturedBooksBloc>(context).add(FetchFeaturedBooks());
     super.initState();

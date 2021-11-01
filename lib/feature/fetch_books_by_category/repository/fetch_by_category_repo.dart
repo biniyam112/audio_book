@@ -7,10 +7,8 @@ class FetchBooksByCateRepo {
 
   FetchBooksByCateRepo({required this.fetchBooksByCateDP});
 
-  Future<List<Book>> fetchByCategory({
-    required String categoryId,
-    required User user,
-  }) async {
+  Future<List<Book>> fetchByCategory(
+      {required String categoryId, required User user}) async {
     return await fetchBooksByCateDP.fetchByCategory(
       categoryId: categoryId,
       token: user.token,

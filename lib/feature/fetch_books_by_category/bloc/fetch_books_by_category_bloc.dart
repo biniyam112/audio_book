@@ -23,6 +23,7 @@ class FetchBooksByCategoryBloc
           categoryId: event.category.id,
           user: user,
         );
+        print(books);
         yield CategoryBooksFetchedState(books: books);
       }
     } catch (e) {

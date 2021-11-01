@@ -158,9 +158,7 @@ class _MyAppState extends State<MyApp> {
                     fetchChaptersRepo: widget.fetchChaptersRepo,
                   ),
                 ),
-                BlocProvider(
-                  create: (context) => PingSiteBloc(),
-                ),
+                BlocProvider(create: (context) => PingSiteBloc()),
                 BlocProvider(
                   create: (context) => CategoryBloc(
                     categoryRepo: widget.categoryRepo,

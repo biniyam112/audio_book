@@ -14,8 +14,11 @@ class AuthorizeUserBloc extends Bloc<AuthoriseUserEvent, AuthoriseUserState> {
       yield AuthoriseUserState.userAuthorizingState;
       try {
         var user = getIt.get<User>();
-        var token = await authorizeUserRepo.authorizeUser(user);
-        user.token = token;
+        var authUser = await authorizeUserRepo.authorizeUser(user);
+        user.id = authUser.id;
+        user.token = authUser.token;
+        user.firstName = authUser.firstName;
+        user.lastName = authUser.lastName;
         final userBox = HiveBoxes.getUserBox();
         userBox.put(HiveBoxes.userKey, user);
         yield AuthoriseUserState.userAuthorizedState;

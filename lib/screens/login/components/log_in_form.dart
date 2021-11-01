@@ -25,8 +25,6 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   final List<String> errors = [];
-  String firstName = '';
-  String lastName = '';
   String phoneNumber = '';
   String countryCode = '';
   bool rememberMe = false;
@@ -70,15 +68,6 @@ class _LoginFormState extends State<LoginForm> {
             key: _formKey,
             child: Column(
               children: [
-                InputFieldContainer(
-                  child: buildFirstNameField(),
-                  title: 'First name',
-                ),
-                SizedBox(height: getProportionateScreenHeight(20)),
-                InputFieldContainer(
-                  child: buildLastNameField(),
-                  title: 'Last name',
-                ),
                 SizedBox(height: getProportionateScreenHeight(20)),
                 InputFieldContainer(
                   title: 'Phone number',
@@ -134,8 +123,6 @@ class _LoginFormState extends State<LoginForm> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         var user = getIt.get<User>();
-                        user.setFirstName = firstName;
-                        user.setLastName = lastName;
                         user.phoneNumber = phoneNumber;
                         user.countryCode = countryCode;
                         _formKey.currentState!.save();
@@ -149,102 +136,6 @@ class _LoginFormState extends State<LoginForm> {
           );
         });
       },
-    );
-  }
-
-// ? firstName form field
-  TextFormField buildFirstNameField() {
-    return TextFormField(
-      onSaved: (newValue) {
-        setState(() {
-          firstName = newValue!;
-        });
-      },
-      onChanged: (value) {
-        if (value.isNotEmpty && errors.contains(kFirstNameNullError)) {
-          setState(() {
-            errors.remove(kFirstNameNullError);
-          });
-        }
-        setState(() {
-          firstName = value;
-        });
-      },
-      keyboardType: TextInputType.name,
-      validator: (value) {
-        if (value!.isEmpty && !errors.contains(kFirstNameNullError)) {
-          setState(() {
-            errors.add(kFirstNameNullError);
-          });
-          return '';
-        } else if (value.isEmpty && errors.contains(kFirstNameNullError)) {
-          return '';
-        }
-
-        return null;
-      },
-      decoration: InputDecoration(
-        hintText: 'First name',
-        contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: Padding(
-          padding: EdgeInsets.fromLTRB(
-            0,
-            getProportionateScreenWidth(20),
-            getProportionateScreenWidth(20),
-            getProportionateScreenWidth(20),
-          ),
-          child: SvgPicture.asset('assets/icons/User.svg'),
-        ),
-      ),
-    );
-  }
-
-  // ? lastname form field
-  TextFormField buildLastNameField() {
-    return TextFormField(
-      onSaved: (newValue) {
-        setState(() {
-          lastName = newValue!;
-        });
-      },
-      onChanged: (value) {
-        if (value.isNotEmpty && errors.contains(kLastNameNullError)) {
-          setState(() {
-            errors.remove(kLastNameNullError);
-          });
-        }
-        setState(() {
-          lastName = value;
-        });
-      },
-      keyboardType: TextInputType.name,
-      validator: (value) {
-        if (value!.isEmpty && !errors.contains(kLastNameNullError)) {
-          setState(() {
-            errors.add(kLastNameNullError);
-          });
-          return '';
-        } else if (value.isEmpty && errors.contains(kLastNameNullError)) {
-          return '';
-        }
-
-        return null;
-      },
-      decoration: InputDecoration(
-        hintText: 'Last name',
-        contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-        floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: Padding(
-          padding: EdgeInsets.fromLTRB(
-            0,
-            getProportionateScreenWidth(20),
-            getProportionateScreenWidth(20),
-            getProportionateScreenWidth(20),
-          ),
-          child: SvgPicture.asset('assets/icons/User.svg'),
-        ),
-      ),
     );
   }
 
