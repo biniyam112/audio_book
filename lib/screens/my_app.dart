@@ -1,3 +1,5 @@
+import 'package:audio_books/feature/author/bloc/author_bloc.dart';
+import 'package:audio_books/feature/author/repository/author_repository.dart';
 import 'package:audio_books/feature/authorize_user/bloc/authorize_user_bloc.dart';
 import 'package:audio_books/feature/authorize_user/repository/authorize_user_repo.dart';
 import 'package:audio_books/feature/categories/bloc/category_bloc.dart';
@@ -17,12 +19,16 @@ import 'package:audio_books/feature/initialize_database/bloc/initializa_database
 import 'package:audio_books/feature/initialize_database/bloc/initialize_db_event.dart';
 import 'package:audio_books/feature/initialize_database/repository/init_db_repository.dart';
 import 'package:audio_books/feature/otp/otp.dart';
+import 'package:audio_books/feature/payment/bloc/payment_bloc.dart';
+import 'package:audio_books/feature/payment/repository/amole_payment_repository.dart';
 import 'package:audio_books/feature/ping_site/bloc/ping_site_bloc.dart';
 import 'package:audio_books/feature/register_user/bloc/register_user_bloc.dart';
 import 'package:audio_books/feature/register_user/repository/register_user_repository.dart';
+import 'package:audio_books/feature/request_hard_copy/bloc/request_hard_copy_bloc.dart';
+import 'package:audio_books/feature/request_hard_copy/repository/request_hard_copy_repository.dart';
 import 'package:audio_books/feature/set_theme_data/set_theme_data.dart';
 import 'package:audio_books/feature/store_book/bloc/store_book_bloc.dart';
-import 'package:audio_books/feature/store_book/data/repository/store_book_repository.dart';
+import 'package:audio_books/feature/store_book/repository/store_book_repository.dart';
 import 'package:audio_books/models/user.dart';
 import 'package:audio_books/screens/components/tab_view.dart';
 import 'package:audio_books/screens/phone_registration/phone_registration.dart';
@@ -54,6 +60,9 @@ class MyApp extends StatefulWidget {
   final FetchBooksRepo fetchBooksRepo;
   final CategoryRepo categoryRepo;
   final FeaturedBooksRepo featuredBooksRepo;
+  final AuthorRepo authorRepo;
+  final RequestHardCopyRepo requestHardCopyRepo;
+  final AmolePaymentRepo amolePaymentRepo;
 
   const MyApp({
     Key? key,
@@ -69,6 +78,9 @@ class MyApp extends StatefulWidget {
     required this.fetchChaptersRepo,
     required this.categoryRepo,
     required this.featuredBooksRepo,
+    required this.authorRepo,
+    required this.requestHardCopyRepo,
+    required this.amolePaymentRepo,
   }) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
@@ -167,6 +179,20 @@ class _MyAppState extends State<MyApp> {
                 BlocProvider(
                   create: (context) => FeaturedBooksBloc(
                     featuredBooksRepo: widget.featuredBooksRepo,
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) =>
+                      AuthorBloc(authorRepo: widget.authorRepo),
+                ),
+                BlocProvider(
+                  create: (context) => RequestHardBookBloc(
+                    widget.requestHardCopyRepo,
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) => PaymentBloc(
+                    amolePaymentRepo: widget.amolePaymentRepo,
                   ),
                 ),
               ],

@@ -7,6 +7,8 @@ import 'package:audio_books/screens/otp/otp.dart';
 import 'package:audio_books/screens/phone_registration/phone_registration.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
 import 'package:audio_books/theme/theme.dart';
+import 'package:country_calling_code_picker/picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -141,50 +143,149 @@ class _LoginFormState extends State<LoginForm> {
 
 // ?phone formfield
   TextFormField buildPhoneField() {
+    TextEditingController _controller = TextEditingController();
+    Country _selectedCountry = Country.fromJson(
+      {
+        "country_code": "ET",
+        "name": "Ethiopia",
+        "calling_code": "+251",
+        "flag": "flags/eth.png"
+      },
+    );
+    List<String> errors = [];
+
+    String modifyText() {
+      String text = _controller.text.replaceAll(' ', '');
+      List textList = text.split("");
+      for (var i = 0; i < textList.length; i++) {
+        if (i % 4 == 0) textList.insert(i, ' ');
+      }
+      return textList.join();
+    }
+
+    void _showCountryPicker() async {
+      final country = await showCountryPickerSheet(
+        context,
+        title: Text(
+          'Select Country',
+          style: Theme.of(context).textTheme.headline4,
+        ),
+        heightFactor: .8,
+        cancelWidget: TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: Text(
+              'Cancel',
+              style: Theme.of(context).textTheme.headline5!.copyWith(
+                    color: Darktheme.primaryColor,
+                  ),
+            ),
+          ),
+        ),
+      );
+      if (country != null) {
+        setState(() {
+          _selectedCountry = country;
+          if (errors.contains(kCountryCodeNullError)) {
+            errors.remove(kCountryCodeNullError);
+          }
+          var user = getIt.get<User>();
+          user.setCountryCode = country.callingCode;
+        });
+      }
+    }
+
     return TextFormField(
-      onSaved: (newValue) {
-        setState(() {
-          phoneNumber = newValue!;
-        });
-      },
-      onChanged: (value) {
-        if (value.isNotEmpty && errors.contains(kPhoneNullError)) {
-          setState(() {
-            errors.remove(kPhoneNullError);
-          });
-        }
-        setState(() {
-          phoneNumber = value;
-        });
-      },
-      keyboardType: TextInputType.phone,
+      controller: _controller,
+      style: Theme.of(context).textTheme.headline5!.copyWith(
+            color: Colors.black,
+            fontWeight: FontWeight.w500,
+          ),
       validator: (value) {
         if (value!.isEmpty && !errors.contains(kPhoneNullError)) {
           setState(() {
             errors.add(kPhoneNullError);
           });
           return '';
-        } else if (value.isEmpty && errors.contains(kPhoneNullError)) {
+        }
+        if (value.isEmpty && errors.contains(kPhoneNullError)) {
           return '';
         }
-
-        return null;
       },
-      inputFormatters: [
-        FilteringTextInputFormatter.allow(RegExp('[0-9+]+')),
-      ],
+      onChanged: (value) {
+        _controller.text = modifyText();
+        _controller.selection = TextSelection.fromPosition(
+            TextPosition(offset: _controller.text.length));
+        if (value.isNotEmpty && errors.contains(kPhoneNullError)) {
+          setState(() {
+            errors.remove(kPhoneNullError);
+          });
+        }
+        phoneNumber = value.replaceAll(' ', '');
+        var user = getIt.get<User>();
+        user.setPhoneNumber = value;
+      },
+      keyboardType: TextInputType.phone,
+      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       decoration: InputDecoration(
-        hintText: 'Phone number',
-        contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-        floatingLabelBehavior: FloatingLabelBehavior.always,
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: getProportionateScreenWidth(10),
+          vertical: getProportionateScreenHeight(10),
+        ),
+        hintText: 'phone',
         suffixIcon: Padding(
           padding: EdgeInsets.fromLTRB(
             0,
+            getProportionateScreenWidth(10),
             getProportionateScreenWidth(20),
-            getProportionateScreenWidth(20),
-            getProportionateScreenWidth(20),
+            getProportionateScreenWidth(10),
           ),
           child: SvgPicture.asset('assets/icons/Phone.svg'),
+        ),
+        hintStyle: Theme.of(context)
+            .textTheme
+            .headline5!
+            .copyWith(color: Colors.black45),
+        prefix: GestureDetector(
+          onTap: () {
+            _showCountryPicker();
+          },
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                height: getProportionateScreenWidth(30),
+                width: getProportionateScreenWidth(30),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(
+                    getProportionateScreenWidth(10),
+                  ),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(
+                    getProportionateScreenWidth(10),
+                  ),
+                  child: Image.asset(
+                    _selectedCountry.flag,
+                    package: countryCodePackageName,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 6, right: 18),
+                child: Text(
+                  _selectedCountry.callingCode,
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

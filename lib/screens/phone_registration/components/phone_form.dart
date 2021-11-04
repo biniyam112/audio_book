@@ -126,6 +126,10 @@ class _PhoneFormState extends State<PhoneForm> {
                       setState(() {
                         errors.add(kPhoneNullError);
                       });
+                      return '';
+                    }
+                    if (value.isEmpty && errors.contains(kPhoneNullError)) {
+                      return '';
                     }
                   },
                   onChanged: (value) {

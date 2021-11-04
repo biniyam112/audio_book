@@ -19,6 +19,7 @@ const String kCountryCodeNullError = "Please select country code";
 const String kInvalidPhoneNumberError = "Please enter valid phone number";
 const String kInvalidEmailError = "Please Enter Valid Email";
 const String kPassNullError = "Please Enter your password";
+const String kCodeNullError = "Enter your otp code";
 const String kShortPassError = "Password is too short";
 const String kMatchPassError = "Passwords don't match";
 const String kAddressNullError = "Please Enter your address";

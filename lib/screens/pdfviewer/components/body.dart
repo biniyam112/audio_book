@@ -92,7 +92,7 @@ class _NativePdfViewerState extends State<NativePdfViewer> {
     double percentCompleted = currentPage / totalPages;
     widget.downloadedBook.setPercentCompleted = percentCompleted;
     BlocProvider.of<StoreBookBloc>(context).add(
-      StoreBookProgressEvent(downloadedBook: widget.downloadedBook),
+      StoreEBookProgressEvent(downloadedBook: widget.downloadedBook),
     );
   }
 
@@ -185,7 +185,7 @@ class _PdfReaderState extends State<PdfReader> {
     double percentCompleted = currentPage / totalPages;
     widget.downloadedBook.setPercentCompleted = percentCompleted;
     BlocProvider.of<StoreBookBloc>(context).add(
-      StoreBookProgressEvent(downloadedBook: widget.downloadedBook),
+      StoreEBookProgressEvent(downloadedBook: widget.downloadedBook),
     );
   }
 

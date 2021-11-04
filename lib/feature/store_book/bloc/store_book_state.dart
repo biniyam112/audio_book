@@ -8,22 +8,22 @@ class StoreBookState extends Equatable {
 
 class IdleState extends StoreBookState {}
 
-class StoringBookState extends StoreBookState {
+class StoringEBookState extends StoreBookState {
   final int downloadProgress;
 
-  StoringBookState({required this.downloadProgress});
+  StoringEBookState({required this.downloadProgress});
 }
 
-class BookStoredState extends StoreBookState {
+class EBookStoredState extends StoreBookState {
   final DownloadedBook downloadedBook;
 
-  BookStoredState({required this.downloadedBook});
+  EBookStoredState({required this.downloadedBook});
 }
 
-class StoringBookFailedState extends StoreBookState {
+class StoringEBookFailedState extends StoreBookState {
   final String errorMessage;
 
-  StoringBookFailedState({required this.errorMessage});
+  StoringEBookFailedState({required this.errorMessage});
 }
 
 class BookProgressStoredState extends StoreBookState {}

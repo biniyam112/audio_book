@@ -1,4 +1,4 @@
-import 'package:audio_books/screens/onboarding/components/page_count_indicator.dart';
+import 'package:audio_books/screens/components/page_count_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -16,7 +16,7 @@ class _BodyState extends State<Body> {
   late String splashImage1;
   late String splashImage2;
   late String splashImage3;
-  
+
   @override
   void initState() {
     super.initState();

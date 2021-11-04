@@ -1,15 +1,21 @@
 import 'package:audio_books/models/models.dart';
 
-class StoreEvent {}
+class StoreBookEvent {}
 
-class StoreBookEvent extends StoreEvent {
+class StoreEBookEvent extends StoreBookEvent {
   final Book book;
 
-  StoreBookEvent(this.book);
+  StoreEBookEvent({required this.book});
 }
 
-class StoreBookProgressEvent extends StoreEvent {
+class StoreAudioBookEvent extends StoreBookEvent {
+  final Book book;
+
+  StoreAudioBookEvent({required this.book});
+}
+
+class StoreEBookProgressEvent extends StoreBookEvent {
   final DownloadedBook downloadedBook;
 
-  StoreBookProgressEvent({required this.downloadedBook});
+  StoreEBookProgressEvent({required this.downloadedBook});
 }
