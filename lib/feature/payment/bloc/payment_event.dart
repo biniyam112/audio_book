@@ -27,3 +27,5 @@ class CheckSubscription extends PaymentEvent {
 
   CheckSubscription({required this.isEbook});
 }
+
+class FetchPlans extends PaymentEvent {}

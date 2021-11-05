@@ -64,10 +64,20 @@ class DetailsTopSection extends StatelessWidget {
                   if (subscribtionState.subscribtions.isEmpty)
                     showModalBottomSheet(
                       context: context,
+                      isScrollControlled: true,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
                       builder: (context) {
                         return PaymentModalCard();
                       },
                     );
+                  // Navigator.push(context,
+                  //     MaterialPageRoute(builder: (context) {
+                  //   return Scaffold(
+                  //     body: PaymentModalCard(),
+                  //   );
+                  // }));
                   if (subscribtionState.subscribtions.isNotEmpty &&
                       subscribtionState.isEbook)
                     BlocProvider.of<StoreBookBloc>(context)
@@ -111,23 +121,35 @@ class DetailsTopSection extends StatelessWidget {
                           : null,
                     ),
                   ),
-                  PurchaseButton(
-                    text: (book.resourceType == 'AudioBook')
-                        ? 'Get Audio book'
-                        : 'Audio book unavailable',
-                    onPress: (book.resourceType == 'AudioBook')
-                        ? () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (builder) => Scaffold(
-                                          body: SafeArea(
-                                              child: PaymentModalCard()),
-                                        )));
-                            // BlocProvider.of<PaymentBloc>(context)
-                            //     .add(CheckSubscription(isEbook: false));
-                          }
-                        : null,
+                  BlocListener<StoreBookBloc, StoreBookState>(
+                    listener: (context, state) {
+                      if (state is StoringEBookState) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          buildSnackBar(context, text: 'Downloading... '),
+                        );
+                      }
+                      if (state is EBookStoredState) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          buildSnackBar(context, text: 'Book added to library'),
+                        );
+                      }
+                      if (state is StoringEBookFailedState) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          buildSnackBar(context, text: 'Failed to fetch item'),
+                        );
+                      }
+                    },
+                    child: PurchaseButton(
+                      text: (book.resourceType == 'AudioBook')
+                          ? 'Get Audio book'
+                          : 'Audio book unavailable',
+                      onPress: (book.resourceType == 'AudioBook')
+                          ? () {
+                              BlocProvider.of<PaymentBloc>(context)
+                                  .add(CheckSubscription(isEbook: false));
+                            }
+                          : null,
+                    ),
                   ),
                 ],
               ),

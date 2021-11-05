@@ -73,7 +73,6 @@ class _LoginFormState extends State<LoginForm> {
                 SizedBox(height: getProportionateScreenHeight(20)),
                 InputFieldContainer(
                   title: 'Phone number',
-                  subtitle: 'Include country code',
                   child: buildPhoneField(),
                 ),
                 SizedBox(height: getProportionateScreenHeight(20)),
@@ -123,7 +122,13 @@ class _LoginFormState extends State<LoginForm> {
                       child: Text('Login'),
                     ),
                     onPressed: () {
-                      if (_formKey.currentState!.validate()) {
+                      if (countryCode.isEmpty &&
+                          !errors.contains(kCountryCodeNullError)) {
+                        setState(() {
+                          errors.add(kCountryCodeNullError);
+                        });
+                      } else if (_formKey.currentState!.validate() &&
+                          !errors.contains(kCountryCodeNullError)) {
                         var user = getIt.get<User>();
                         user.phoneNumber = phoneNumber;
                         user.countryCode = countryCode;

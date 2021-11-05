@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:audio_books/feature/author/dataprovider/author_dataprovider.dart';
 import 'package:audio_books/feature/author/repository/author_repository.dart';
 import 'package:audio_books/feature/authorize_user/data_provider/authorize_user_dp.dart';
@@ -43,6 +45,7 @@ import 'services/encryption/encryption_handler.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  HttpOverrides.global = MyHttpOverrides();
   await Hive.initFlutter();
   Hive.registerAdapter(UserAdapter());
   await Hive.openBox<User>('user');
@@ -145,4 +148,13 @@ void main() async {
       ),
     ),
   );
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
 }

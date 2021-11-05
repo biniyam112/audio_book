@@ -9,21 +9,21 @@ class AmolePaymentDP {
 
   AmolePaymentDP({required this.client});
 
-  Future<void> sendOtp(
-      {required String phoneNumber, required String token}) async {
-    print(phoneNumber);
-    print(token);
+  Future<void> sendOtp({required String phoneNumber}) async {
     var response = await client.post(
-      Uri.parse('http://api.marakigebeya.com.et/api/amole/recieve/SendOTP'),
-      headers: {
-        'Authentication': token,
-      },
-      body: {
+      Uri.parse('https://api.marakigebeya.com.et/api/amole/recieve/SendOTP'),
+      body: jsonEncode(<String, String>{
         "phoneNumber": "$phoneNumber",
+      }),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
       },
     );
     if (response.statusCode == 200) {
+      print(response.body);
     } else {
+      print(response.headers);
+
       throw Exception(response.reasonPhrase);
     }
   }
@@ -32,21 +32,24 @@ class AmolePaymentDP {
     required String pin,
     required String phoneNumber,
     required int amount,
-    required String token,
   }) async {
     var response = await client.post(
-      Uri.parse('http://api.marakigebeya.com.et/api/amole/recieve/Deposit'),
-      headers: {
-        'Authentication': token,
-      },
-      body: {
+      Uri.parse('https://api.marakigebeya.com.et/api/amole/recieve/Deposit'),
+      body: jsonEncode(<String, dynamic>{
         "pin": "$pin",
         "phoneNumber": "$phoneNumber",
         "amount": amount,
+      }),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
       },
     );
     if (response.statusCode == 200) {
     } else {
+      print(response.headers);
+      print(response.body);
+      print(response.statusCode);
+      print(response.reasonPhrase);
       throw Exception(response.reasonPhrase);
     }
   }
@@ -55,10 +58,10 @@ class AmolePaymentDP {
       {required String userId, required String token}) async {
     var response = await client.get(
       Uri.parse(
-        'http://www.marakigebeya.com.et/api/MySubscriptions?subscriberId=$userId',
+        'http://www.marakigebeya.com.et/api/AppSubscriptions?userId=$userId',
       ),
       headers: {
-        'Authentication': token,
+        'Authorization': token,
       },
     );
     if (response.statusCode == 200) {
@@ -68,6 +71,23 @@ class AmolePaymentDP {
           .toList();
     } else {
       throw SocketException('Unable to complete process');
+    }
+  }
+
+  Future<List<Subscribtion>> getAvailableSubscribtions(
+      {required String token}) async {
+    var response = await client.get(
+        Uri.parse('http://www.marakigebeya.com.et/api/SubscriptionPlan'),
+        headers: {
+          'Authorization': token,
+        });
+    if (response.statusCode == 200) {
+      var subscribtions = jsonDecode(response.body)['items'] as List;
+      return subscribtions
+          .map((subscribtion) => Subscribtion.fromMap(subscribtion))
+          .toList();
+    } else {
+      throw Exception('Unable to fetch subscribtions');
     }
   }
 }

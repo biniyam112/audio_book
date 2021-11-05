@@ -197,7 +197,7 @@ class _MyAppState extends State<MyApp> {
                 ),
               ],
               child: MaterialApp(
-                title: 'Audio Book',
+                title: 'Maraki',
                 // animationDuration: fastDuration,
                 // animationType: AnimationType.CIRCULAR_ANIMATED_THEME,
                 debugShowCheckedModeBanner: false,

@@ -1,14 +1,13 @@
-import 'package:audio_books/models/models.dart';
-import 'package:audio_books/screens/profile/components/profile_edit_body.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme_colors.dart';
 import 'package:audio_books/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ProfileEditScreen extends StatelessWidget {
-  final Profile profile;
-  const ProfileEditScreen({required this.profile, Key? key}) : super(key: key);
+import 'components/edit_user_body.dart';
+
+class EditUserScreen extends StatelessWidget {
+  const EditUserScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +22,7 @@ class ProfileEditScreen extends StatelessWidget {
           style: Theme.of(context).textTheme.headline4,
         ),
       ),
-      body: ProfileBody(
-        profile: profile,
-      ),
+      body: EditUserBody(),
     );
   }
 }

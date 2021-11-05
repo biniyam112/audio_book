@@ -1,22 +1,21 @@
+import 'package:audio_books/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../../sizeConfig.dart';
 
 class SubscribtionPlanCard extends StatelessWidget {
   const SubscribtionPlanCard({
     Key? key,
-    required this.color,
     required this.title,
+    required this.description,
     required this.amount,
     required this.duration,
     required this.isselected,
     required this.onPress,
   }) : super(key: key);
-  final Color color;
-  final String title, amount, duration;
+  final String title, amount, duration, description;
   final bool isselected;
   final GestureTapCallback onPress;
+  final Color color = Darktheme.primaryColor;
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +26,7 @@ class SubscribtionPlanCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         onTap: onPress,
         child: Container(
-          height: 90,
-          width: 200,
+          height: 100,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: isselected ? color : color.withOpacity(.8),
@@ -49,35 +47,34 @@ class SubscribtionPlanCard extends StatelessWidget {
                 ),
               ),
               Spacer(),
+              Text(
+                '$description',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 14,
+                ),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Amount',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ),
-                          horizontalSpacing(3),
-                          Text(
-                            '$amount Br.',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ],
+                      Text(
+                        '- $amount Br.',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                       Text(
-                        '$duration',
-                        style: TextStyle(color: Colors.white),
+                        '- $duration days',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ],
                   ),

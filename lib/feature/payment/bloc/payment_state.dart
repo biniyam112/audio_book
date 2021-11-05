@@ -6,6 +6,7 @@ class PaymentState extends Equatable {
   List<Object?> get props => [];
 }
 
+// ?Payment progress state
 class IdleState extends PaymentState {}
 
 class PaymentOnprocess extends PaymentState {}
@@ -18,6 +19,7 @@ class PaymentFailed extends PaymentState {
   PaymentFailed({required this.errorMessage});
 }
 
+// ?OTP states
 class OtpOnprocess extends PaymentState {}
 
 class OtpCompleted extends PaymentState {}
@@ -28,6 +30,7 @@ class OtpFailed extends PaymentState {
   OtpFailed({required this.errorMessage});
 }
 
+// ?Check subscription state
 class CheckSubOnprocess extends PaymentState {}
 
 class CheckSubCompleted extends PaymentState {
@@ -41,4 +44,20 @@ class CheckSubFailed extends PaymentState {
   final String errorMessage;
 
   CheckSubFailed({required this.errorMessage});
+}
+
+// ?Available subscription plans state
+
+class PlansFetched extends PaymentState {
+  final List<Subscribtion> plans;
+
+  PlansFetched({required this.plans});
+}
+
+class PlansFetching extends PaymentState {}
+
+class PlansFetchingFailed extends PaymentState {
+  final String errorMessage;
+
+  PlansFetchingFailed({required this.errorMessage});
 }

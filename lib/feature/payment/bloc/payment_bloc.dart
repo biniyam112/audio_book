@@ -16,10 +16,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     if (event is SendOtp) {
       yield OtpOnprocess();
       try {
-        await amolePaymentRepo.sendOtp(
-          phoneNumber: event.phoneNumber,
-          token: user.token!,
-        );
+        await amolePaymentRepo.sendOtp(phoneNumber: event.phoneNumber);
         yield OtpCompleted();
       } catch (e) {
         yield OtpFailed(errorMessage: e.toString());
@@ -27,13 +24,15 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     }
 
     if (event is CommitPayment) {
+      print(event.phoneNumber);
+      print(event.amount);
+      print(event.pin);
       yield PaymentOnprocess();
       try {
         await amolePaymentRepo.commitPayment(
           pin: event.pin,
           amount: event.amount,
           phoneNumber: event.phoneNumber,
-          token: user.token!,
         );
         yield PaymentCompleted();
       } catch (e) {
@@ -53,6 +52,18 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         );
       } catch (e) {
         yield CheckSubFailed(errorMessage: e.toString());
+      }
+    }
+    if (event is FetchPlans) {
+      yield PlansFetching();
+      try {
+        var user = getIt.get<User>();
+        var plans = await amolePaymentRepo.getAvailableSubscribtions(
+          token: user.token!,
+        );
+        yield PlansFetched(plans: plans);
+      } catch (e) {
+        yield PlansFetchingFailed(errorMessage: e.toString());
       }
     }
   }
