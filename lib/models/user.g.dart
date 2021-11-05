@@ -18,12 +18,12 @@ class UserAdapter extends TypeAdapter<User> {
     };
     return User(
       id: fields[0] as String?,
-      token: fields[1] as String?,
-      email: fields[2] as String?,
       firstName: fields[3] as String?,
       lastName: fields[4] as String?,
       phoneNumber: fields[5] as String?,
       countryCode: fields[6] as String?,
+      token: fields[1] as String?,
+      email: fields[2] as String?,
     );
   }
 

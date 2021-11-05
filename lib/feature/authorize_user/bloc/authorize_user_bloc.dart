@@ -16,6 +16,7 @@ class AuthorizeUserBloc extends Bloc<AuthoriseUserEvent, AuthoriseUserState> {
         var user = getIt.get<User>();
         var authUser = await authorizeUserRepo.authorizeUser(user);
         user.id = authUser.id;
+        print("USER_ID******************************** ${user.id}");
         user.token = authUser.token;
         user.firstName = authUser.firstName;
         user.lastName = authUser.lastName;

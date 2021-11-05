@@ -2,6 +2,7 @@ import 'package:audio_books/feature/fetch_books/bloc/fetch_books_bloc.dart';
 import 'package:audio_books/feature/fetch_books/bloc/fetch_books_event.dart';
 import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_bloc.dart';
 import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_event.dart';
+import 'package:audio_books/feature/podcast/bloc/bloc.dart';
 import 'package:audio_books/models/user.dart';
 import 'package:audio_books/screens/login/login.dart';
 import 'package:audio_books/screens/phone_registration/phone_registration.dart';
@@ -83,6 +84,9 @@ class _HomeScreenState extends State<HomeScreen>
                   onTap: (index) {
                     setState(() {
                       _activeIndex = index;
+                      if (index == 1)
+                        BlocProvider.of<PodcastBloc>(context)
+                            .add(FetchSubscribedPodcasts(page: 1));
                     });
                   },
                   isScrollable: true,
@@ -173,14 +177,14 @@ class CustomDrawer extends StatelessWidget {
                   icon: CupertinoIcons.square_arrow_left,
                   onPress: () {
                     HiveBoxes.deleteUser();
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) {
-                          return LoginScreen();
-                        },
-                      ),
-                    );
+                    // Navigator.pushReplacement(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) {
+                    //       return LoginScreen();
+                    //     },
+                    //   ),
+                    // );
                   },
                 ),
               ],

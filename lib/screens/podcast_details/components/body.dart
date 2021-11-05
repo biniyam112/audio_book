@@ -1,11 +1,14 @@
 import 'dart:math';
 
+import 'package:audio_books/apptheme.dart';
+import 'package:audio_books/feature/podcast/bloc/bloc.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/models/podcast.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 // import 'dart:math' as math;
 
@@ -112,12 +115,27 @@ class Body extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                    right: getProportionateScreenWidth(15),
-                    top: getProportionateScreenHeight(25)),
-                child:
-                    ElevatedButton(onPressed: () {}, child: Text('Subscribe')),
+              BlocBuilder<PodcastBloc, PodcastState>(
+                builder: (context, state) {
+                  return Padding(
+                    padding: EdgeInsets.only(
+                        right: getProportionateScreenWidth(15),
+                        top: getProportionateScreenHeight(25)),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          print("USER ID*******************${podcast.id}");
+                          BlocProvider.of<PodcastBloc>(context)
+                              .add(SubscribePodcast(podcastId: podcast.id));
+                        },
+                        child: state is PodcastSucess
+                            ? Icon(Icons.done)
+                            : state is PodcastInProgress
+                                ? Center(
+                                    child: CircularProgressIndicator(color:Colors.white,),
+                                  )
+                                : Text('Subscribe')),
+                  );
+                },
               )
             ],
           ),

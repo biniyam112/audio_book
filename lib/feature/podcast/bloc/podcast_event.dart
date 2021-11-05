@@ -15,10 +15,19 @@ class FetchPodcasts extends PodcastEvent {
 }
 
 class SubscribePodcast extends PodcastEvent {
-  final String id;
+  final String podcastId;
 
-  SubscribePodcast({required this.id});
+  SubscribePodcast({required this.podcastId});
 
   @override
-  List<Object?> get props => [this.id];
+  List<Object?> get props => [this.podcastId];
+}
+
+class FetchSubscribedPodcasts extends PodcastEvent {
+  final int page;
+
+  FetchSubscribedPodcasts({required this.page});
+
+  @override
+  List<Object?> get props => [this.page];
 }

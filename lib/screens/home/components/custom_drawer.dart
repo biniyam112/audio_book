@@ -23,7 +23,7 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
-    User user = getIt.get<User>();
+    User? user = HiveBoxes.getUserBox().get(HiveBoxes.userKey);
     return Container(
       height: SizeConfig.screenHeight,
       width: SizeConfig.screenWidth! * .66,
@@ -35,7 +35,7 @@ class CustomDrawer extends StatelessWidget {
           verticalSpacing(SizeConfig.screenHeight! * .06),
           Expanded(
             flex: 3,
-            child: UserInfoArea(user: user),
+            child: UserInfoArea(user: user!),
           ),
           verticalSpacing(20),
           Expanded(
@@ -60,6 +60,7 @@ class CustomDrawer extends StatelessWidget {
                   icon: CupertinoIcons.square_arrow_left,
                   onPress: () async {
                     var userBox = HiveBoxes.getUserBox();
+                    HiveBoxes.deleteUser();
                     await userBox.clear();
                     pushNewScreen(
                       context,

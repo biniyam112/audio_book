@@ -13,4 +13,17 @@ class PodcastRepository {
 
     return apiPagedData;
   }
+
+  Future<APIPagedData> getMySubscription(int page) async {
+    final apiPagedData = await _podcastDataProvider.getMySubscriptions(page);
+
+    return apiPagedData;
+  }
+
+  Future<APIPodcastSubscribe> subsribeForPodcast(String podcastId) async {
+    final apiSubscribePodcast =
+        await _podcastDataProvider.subsribeForPodcast(podcastId);
+
+    return apiSubscribePodcast;
+  }
 }
