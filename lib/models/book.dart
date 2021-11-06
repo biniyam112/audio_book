@@ -11,6 +11,7 @@ class Book {
       description,
       publishmentYear,
       resourceType;
+  final int? price;
 
   Book({
     required this.id,
@@ -25,6 +26,7 @@ class Book {
     required this.publishmentYear,
     required this.description,
     required this.resourceType,
+    required this.price,
   });
 
   factory Book.fromMap(Map<String, dynamic> json) => Book(
@@ -42,5 +44,6 @@ class Book {
         publishmentYear: json['publicationYear'] ?? '?',
         description: json['description'] ?? 'No description yet',
         resourceType: json['resourceType'] ?? 'not specified',
+        price: null,
       );
 }

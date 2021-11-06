@@ -10,6 +10,7 @@ import 'package:country_calling_code_picker/picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -28,6 +29,14 @@ class _PhoneFormState extends State<PhoneForm> {
   @override
   void initState() {
     super.initState();
+    _selectedCountry = Country.fromJson(
+      {
+        "country_code": "ET",
+        "name": "Ethiopia",
+        "calling_code": "+251",
+        "flag": "flags/eth.png"
+      },
+    );
   }
 
   TextEditingController _controller = TextEditingController();
@@ -81,17 +90,11 @@ class _PhoneFormState extends State<PhoneForm> {
     }
   }
 
-// BC:3C:1A:88:8E:D6:EC:24:BA:7A:7F:60:C4:89:99:02:A4:0E:4D:25
-// 5A:E8:7B:41:EE:7F:7F:1E:72:D5:89:42:40:1D:24:E0:22:A1:55:66
-
   @override
   Widget build(BuildContext context) {
-    final country = _selectedCountry;
     return BlocConsumer<OtpBloc, OtpState>(
       listener: (context, state) {
-        print("CURRENT STATE******************************* $state");
         if (state is OtpInProgress) {
-          print("OTP_IN_PROGRESS*********************");
           errors.remove(kOtpError);
         } else if (state is OtpSent) {
           errors.remove(kOtpError);
@@ -105,7 +108,6 @@ class _PhoneFormState extends State<PhoneForm> {
           );
         } else if (state is OtpFailure) {
           errors.add(kOtpError);
-          print("OTP_FAILURE*******************");
         }
       },
       builder: (context, state) {
@@ -152,19 +154,28 @@ class _PhoneFormState extends State<PhoneForm> {
                       horizontal: getProportionateScreenWidth(10),
                       vertical: getProportionateScreenHeight(10),
                     ),
+                    suffixIcon: Padding(
+                      padding: EdgeInsets.fromLTRB(
+                        0,
+                        getProportionateScreenWidth(10),
+                        getProportionateScreenWidth(20),
+                        getProportionateScreenWidth(10),
+                      ),
+                      child: SvgPicture.asset('assets/icons/Phone.svg'),
+                    ),
                     hintText: 'phone',
                     hintStyle: Theme.of(context)
                         .textTheme
                         .headline5!
                         .copyWith(color: Colors.black45),
-                    prefix: GestureDetector(
+                    prefixIcon: GestureDetector(
                       onTap: () {
                         _showCountryPicker();
                       },
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          country == null
+                          _selectedCountry == null
                               ? Padding(
                                   padding: EdgeInsets.only(
                                     right: getProportionateScreenWidth(10),
@@ -185,17 +196,17 @@ class _PhoneFormState extends State<PhoneForm> {
                                       getProportionateScreenWidth(10),
                                     ),
                                     child: Image.asset(
-                                      country.flag,
+                                      _selectedCountry!.flag,
                                       package: countryCodePackageName,
                                       fit: BoxFit.cover,
                                     ),
                                   ),
                                 ),
-                          if (country != null)
+                          if (_selectedCountry != null)
                             Padding(
                               padding: EdgeInsets.only(left: 6, right: 18),
                               child: Text(
-                                country.callingCode,
+                                _selectedCountry!.callingCode,
                                 style: TextStyle(
                                   color: Colors.black,
                                 ),
@@ -212,8 +223,8 @@ class _PhoneFormState extends State<PhoneForm> {
               verticalSpacing(24),
               Center(
                 child: Container(
-                  height: getProportionateScreenHeight(40),
-                  width: getProportionateScreenWidth(100),
+                  height: getProportionateScreenHeight(42),
+                  width: double.infinity,
                   child: state is OtpInProgress
                       ? Center(
                           child: CircularProgressIndicator(
@@ -262,10 +273,11 @@ class _PhoneFormState extends State<PhoneForm> {
                                         fontWeight: FontWeight.bold,
                                       ),
                                 ),
-                                horizontalSpacing(8),
+                                horizontalSpacing(4),
                                 Icon(
                                   CupertinoIcons.chevron_right,
                                   color: Colors.white,
+                                  size: 20,
                                 ),
                               ],
                             ),

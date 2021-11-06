@@ -197,13 +197,17 @@ class _OtpPageState extends State<OtpPage> {
         BlocListener<PaymentBloc, PaymentState>(
           listener: (context, paymentstate) {
             if (paymentstate is PaymentCompleted) {
-              errors.remove(kwrongCodeError);
-              widget.onPress();
+              if (paymentstate.errorCode == "00001") {
+                errors.remove(kwrongCodeError);
+                widget.onPress();
+              } else {
+                if (!errors.contains(kwrongCodeError))
+                  errors.add(kwrongCodeError);
+              }
             }
             if (paymentstate is PaymentFailed) {
               setState(() {
-                if (!errors.contains(kwrongCodeError))
-                  errors.add(kwrongCodeError);
+                if (!errors.contains(kOtpError)) errors.add(kOtpError);
               });
             }
           },

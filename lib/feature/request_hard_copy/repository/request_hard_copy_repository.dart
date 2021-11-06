@@ -5,9 +5,17 @@ class RequestHardCopyRepo {
 
   RequestHardCopyRepo({required this.requestHardCopyDP});
 
-  Future<void> requestHardCopy(
-      String userId, String bookId, int numberOfCopies) async {
+  Future<void> requestHardCopy({
+    required String userId,
+    required String bookId,
+    required int numberOfCopies,
+    required String token,
+  }) async {
     return await requestHardCopyDP.requestHardCopy(
-        userId, bookId, numberOfCopies);
+      userId: userId,
+      bookId: bookId,
+      numberOfCopies: numberOfCopies,
+      token: token,
+    );
   }
 }

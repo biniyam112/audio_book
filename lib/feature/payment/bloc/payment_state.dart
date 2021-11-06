@@ -11,7 +11,11 @@ class IdleState extends PaymentState {}
 
 class PaymentOnprocess extends PaymentState {}
 
-class PaymentCompleted extends PaymentState {}
+class PaymentCompleted extends PaymentState {
+  final String errorCode;
+
+  PaymentCompleted({required this.errorCode});
+}
 
 class PaymentFailed extends PaymentState {
   final String errorMessage;

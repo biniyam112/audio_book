@@ -15,7 +15,7 @@ class PhoneRegistrationScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: customAppBar(context: context, title: 'Register Phone'),
-      body: SingleChildScrollView(child: Body()),
+      body: Body(),
     );
   }
 }

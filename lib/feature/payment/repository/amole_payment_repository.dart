@@ -9,7 +9,7 @@ class AmolePaymentRepo {
     return await amolePaymentDP.sendOtp(phoneNumber: phoneNumber);
   }
 
-  Future<void> commitPayment({
+  Future<String> commitPayment({
     required String pin,
     required String phoneNumber,
     required int amount,

@@ -18,9 +18,10 @@ class RequestHardBookBloc
       try {
         var user = getIt.get<User>();
         await requestHardCopyRepo.requestHardCopy(
-          user.id!,
-          event.book.id,
-          event.numberOfCopies,
+          userId: user.id!,
+          token: user.token!,
+          bookId: event.book.id,
+          numberOfCopies: event.numberOfCopies,
         );
         yield RequestHardCopyState.requestHardcopySubmitted;
       } catch (e) {

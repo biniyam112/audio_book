@@ -102,122 +102,186 @@ class CustomTabViewChildren extends StatelessWidget {
         create: (context) => CounterCubit(CounterState(counter: 1)),
         child: BlocBuilder<CounterCubit, CounterState>(
           builder: (context, counterState) {
-            return Container(
-              height: SizeConfig.screenHeight! * .4,
-              width: SizeConfig.screenWidth,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  verticalSpacing(12),
-                  Text(
-                    'Number of copies',
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
-                  verticalSpacing(10),
-                  Row(
+            return BlocBuilder<RequestHardBookBloc, RequestHardCopyState>(
+              builder: (context, copystate) {
+                return Container(
+                  height: SizeConfig.screenHeight! * .4,
+                  width: SizeConfig.screenWidth,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Darktheme.primaryColor.withOpacity(.85),
-                        ),
-                        child: InkWell(
-                          splashColor: Darktheme.primaryColor,
-                          borderRadius: BorderRadius.circular(10),
-                          onTap: () {
-                            context.read<CounterCubit>().increment();
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Icon(
-                              CupertinoIcons.add,
-                              size: 24,
-                              color: Colors.white,
+                      verticalSpacing(8),
+                      Row(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Number of copies',
+                                  style: Theme.of(context).textTheme.headline4,
+                                ),
+                                verticalSpacing(10),
+                                Row(
+                                  children: [
+                                    PlusButton(),
+                                    horizontalSpacing(18),
+                                    Container(
+                                      height: 40,
+                                      constraints: BoxConstraints(
+                                          maxWidth: 50, minWidth: 42),
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        '${counterState.counter}',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline3,
+                                      ),
+                                    ),
+                                    horizontalSpacing(18),
+                                    MinusButton(),
+                                  ],
+                                ),
+                                verticalSpacing(20),
+                                if (copystate == RequestHardCopyState.idleState)
+                                  Center(
+                                    child: Opacity(
+                                      opacity: .8,
+                                      child: Text(
+                                        'You will be contacted soon to get the requested hard copy.',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline4,
+                                      ),
+                                    ),
+                                  ),
+                                if (copystate ==
+                                    RequestHardCopyState
+                                        .requestHardcopySubmiting)
+                                  SizedBox(
+                                    height: 32,
+                                    width: 32,
+                                    child: Center(
+                                      child: CircularProgressIndicator(
+                                        color: Darktheme.primaryColor,
+                                      ),
+                                    ),
+                                  ),
+                                if (copystate ==
+                                    RequestHardCopyState
+                                        .requestHardcopySubmissionFailed)
+                                  Center(
+                                    child: Opacity(
+                                      opacity: .8,
+                                      child: Text(
+                                        'Request failed try again',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline4,
+                                      ),
+                                    ),
+                                  ),
+                                if (copystate ==
+                                    RequestHardCopyState
+                                        .requestHardcopySubmitted)
+                                  Center(
+                                    child: Opacity(
+                                      opacity: 1,
+                                      child: Text(
+                                        'Your request have been succesfuly submitted',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headline4!
+                                            .copyWith(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                              ],
                             ),
                           ),
-                        ),
+                          Expanded(
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Price',
+                                  style: Theme.of(context).textTheme.headline4,
+                                ),
+                                verticalSpacing(30),
+                                book.price != null
+                                    ? Column(
+                                        children: [
+                                          Text(
+                                            '1 Book',
+                                            textAlign: TextAlign.center,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline5,
+                                          ),
+                                        ],
+                                      )
+                                    : Opacity(
+                                        opacity: .8,
+                                        child: Text(
+                                          'Book price is not available',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline4,
+                                        ),
+                                      ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      horizontalSpacing(18),
-                      Container(
-                        height: 40,
-                        constraints: BoxConstraints(maxWidth: 50, minWidth: 42),
-                        alignment: Alignment.center,
-                        child: Text(
-                          '${counterState.counter}',
-                          style: Theme.of(context).textTheme.headline3,
-                        ),
-                      ),
-                      horizontalSpacing(18),
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Darktheme.primaryColor.withOpacity(.85),
-                        ),
-                        child: InkWell(
-                          splashColor: Darktheme.primaryColor,
-                          borderRadius: BorderRadius.circular(10),
-                          onTap: () {
-                            context.read<CounterCubit>().decrement();
-                          },
+                      Spacer(),
+                      SizedBox(
+                        height: 50,
+                        width: SizeConfig.screenWidth! - 30,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
+                          ),
+                          onPressed: counterState.submitted
+                              ? null
+                              : () {
+                                  context.read<CounterCubit>().submit();
+                                  BlocProvider.of<RequestHardBookBloc>(context)
+                                      .add(
+                                    RequestHardCopyEvent(
+                                      book: book,
+                                      numberOfCopies: counterState.counter,
+                                    ),
+                                  );
+                                },
                           child: Padding(
-                            padding: const EdgeInsets.all(8),
-                            child: Icon(
-                              CupertinoIcons.minus,
-                              size: 24,
-                              color: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 6, horizontal: 8),
+                            child: Text(
+                              'Request ${counterState.counter} hard cop${(counterState.counter == 1) ? 'y' : 'ies'}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline4!
+                                  .copyWith(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                             ),
                           ),
                         ),
                       ),
                     ],
                   ),
-                  verticalSpacing(12),
-                  Opacity(
-                    opacity: .8,
-                    child: Text(
-                      'You will be contacted soon to get the requested hard copy.',
-                      style: Theme.of(context).textTheme.headline4,
-                    ),
-                  ),
-                  Spacer(),
-                  SizedBox(
-                    height: 50,
-                    width: SizeConfig.screenWidth! - 30,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                      onPressed: counterState.submitted
-                          ? null
-                          : () {
-                              context.read<CounterCubit>().submit();
-                              BlocProvider.of<RequestHardBookBloc>(context).add(
-                                RequestHardCopyEvent(
-                                  book: book,
-                                  numberOfCopies: counterState.counter,
-                                ),
-                              );
-                            },
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 6, horizontal: 8),
-                        child: Text(
-                          'Request ${counterState.counter} hard cop${(counterState.counter == 1) ? 'y' : 'ies'}',
-                          style:
-                              Theme.of(context).textTheme.headline4!.copyWith(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                );
+              },
             );
           },
         ),
@@ -225,6 +289,68 @@ class CustomTabViewChildren extends StatelessWidget {
     } else {
       return Container();
     }
+  }
+}
+
+class PlusButton extends StatelessWidget {
+  const PlusButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Darktheme.primaryColor.withOpacity(.85),
+      ),
+      child: InkWell(
+        splashColor: Darktheme.primaryColor,
+        borderRadius: BorderRadius.circular(10),
+        onTap: () {
+          context.read<CounterCubit>().increment();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Icon(
+            CupertinoIcons.add,
+            size: 24,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class MinusButton extends StatelessWidget {
+  const MinusButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Darktheme.primaryColor.withOpacity(.85),
+      ),
+      child: InkWell(
+        splashColor: Darktheme.primaryColor,
+        borderRadius: BorderRadius.circular(10),
+        onTap: () {
+          context.read<CounterCubit>().decrement();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Icon(
+            CupertinoIcons.minus,
+            size: 24,
+            color: Colors.white,
+          ),
+        ),
+      ),
+    );
   }
 }
 

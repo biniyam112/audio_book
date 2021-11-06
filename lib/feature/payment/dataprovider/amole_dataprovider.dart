@@ -28,7 +28,7 @@ class AmolePaymentDP {
     }
   }
 
-  Future<void> commitPayment({
+  Future<String> commitPayment({
     required String pin,
     required String phoneNumber,
     required int amount,
@@ -45,6 +45,7 @@ class AmolePaymentDP {
       },
     );
     if (response.statusCode == 200) {
+      return jsonDecode(response.body)['msG_ErrorCode'];
     } else {
       print(response.headers);
       print(response.body);

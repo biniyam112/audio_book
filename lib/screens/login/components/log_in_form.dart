@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get_it/get_it.dart';
 
 import '../../../constants.dart';
 import '../../../sizeConfig.dart';
@@ -25,11 +26,71 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  @override
+  void initState() {
+    super.initState();
+    _selectedCountry = Country.fromJson(
+      {
+        "country_code": "ET",
+        "name": "Ethiopia",
+        "calling_code": "+251",
+        "flag": "flags/eth.png"
+      },
+    );
+  }
+
+  String modifyText() {
+    String text = _controller.text.replaceAll(' ', '');
+    List textList = text.split("");
+    for (var i = 0; i < textList.length; i++) {
+      if (i % 4 == 0) textList.insert(i, ' ');
+    }
+    return textList.join();
+  }
+
+  void _showCountryPicker() async {
+    final country = await showCountryPickerSheet(
+      context,
+      title: Text(
+        'Select Country',
+        style: Theme.of(context).textTheme.headline4,
+      ),
+      heightFactor: .8,
+      cancelWidget: TextButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Text(
+            'Cancel',
+            style: Theme.of(context).textTheme.headline5!.copyWith(
+                  color: Darktheme.primaryColor,
+                ),
+          ),
+        ),
+      ),
+    );
+    if (country != null) {
+      setState(() {
+        _selectedCountry = country;
+        if (errors.contains(kCountryCodeNullError)) {
+          errors.remove(kCountryCodeNullError);
+        }
+        GetIt.instance;
+        var user = getIt.get<User>();
+        user.setCountryCode = country.callingCode;
+      });
+    }
+  }
+
+  TextEditingController _controller = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final List<String> errors = [];
   String phoneNumber = '';
-  String countryCode = '';
+  late Country _selectedCountry;
   bool rememberMe = false;
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthorizeUserBloc, AuthoriseUserState>(
@@ -45,8 +106,11 @@ class _LoginFormState extends State<LoginForm> {
           });
         }
         if (authstate == AuthoriseUserState.userAuthorizedState) {
-          BlocProvider.of<OtpBloc>(context)
-              .add(SendOtp(phoneNumber: phoneNumber));
+          BlocProvider.of<OtpBloc>(context).add(
+            SendOtp(
+              phoneNumber: '${_selectedCountry.callingCode}$phoneNumber',
+            ),
+          );
           if (errors.contains(kOtpError)) errors.remove(kOtpError);
         }
       },
@@ -77,7 +141,8 @@ class _LoginFormState extends State<LoginForm> {
                 ),
                 SizedBox(height: getProportionateScreenHeight(20)),
                 FormError(errors: errors),
-                SizedBox(height: getProportionateScreenHeight(10)),
+                if (errors.isNotEmpty)
+                  SizedBox(height: getProportionateScreenHeight(10)),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -103,7 +168,7 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                   ],
                 ),
-                SizedBox(height: getProportionateScreenHeight(20)),
+                SizedBox(height: getProportionateScreenHeight(40)),
                 if (authstate == AuthoriseUserState.userAuthorizingState ||
                     otpstate is OtpInProgress)
                   Center(
@@ -116,27 +181,37 @@ class _LoginFormState extends State<LoginForm> {
                         AuthoriseUserState.userAuthorizationFailedState ||
                     (authstate == AuthoriseUserState.userAuthorizedState &&
                         !(otpstate is OtpInProgress)))
-                  ElevatedButton(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('Login'),
+                  SizedBox(
+                    height: getProportionateScreenHeight(42),
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Login',
+                          style:
+                              Theme.of(context).textTheme.headline4!.copyWith(
+                                    color: Colors.white,
+                                  ),
+                        ),
+                      ),
+                      onPressed: () {
+                        if (_selectedCountry.callingCode.isEmpty &&
+                            !errors.contains(kCountryCodeNullError)) {
+                          setState(() {
+                            errors.add(kCountryCodeNullError);
+                          });
+                        } else if (_formKey.currentState!.validate() &&
+                            !errors.contains(kCountryCodeNullError)) {
+                          var user = getIt.get<User>();
+                          user.phoneNumber = phoneNumber;
+                          user.countryCode = _selectedCountry.callingCode;
+                          _formKey.currentState!.save();
+                          BlocProvider.of<AuthorizeUserBloc>(context)
+                              .add(AuthoriseUserEvent.authorizeUser);
+                        }
+                      },
                     ),
-                    onPressed: () {
-                      if (countryCode.isEmpty &&
-                          !errors.contains(kCountryCodeNullError)) {
-                        setState(() {
-                          errors.add(kCountryCodeNullError);
-                        });
-                      } else if (_formKey.currentState!.validate() &&
-                          !errors.contains(kCountryCodeNullError)) {
-                        var user = getIt.get<User>();
-                        user.phoneNumber = phoneNumber;
-                        user.countryCode = countryCode;
-                        _formKey.currentState!.save();
-                        BlocProvider.of<AuthorizeUserBloc>(context)
-                            .add(AuthoriseUserEvent.authorizeUser);
-                      }
-                    },
                   ),
               ],
             ),
@@ -148,61 +223,6 @@ class _LoginFormState extends State<LoginForm> {
 
 // ?phone formfield
   TextFormField buildPhoneField() {
-    TextEditingController _controller = TextEditingController();
-    Country _selectedCountry = Country.fromJson(
-      {
-        "country_code": "ET",
-        "name": "Ethiopia",
-        "calling_code": "+251",
-        "flag": "flags/eth.png"
-      },
-    );
-    List<String> errors = [];
-
-    String modifyText() {
-      String text = _controller.text.replaceAll(' ', '');
-      List textList = text.split("");
-      for (var i = 0; i < textList.length; i++) {
-        if (i % 4 == 0) textList.insert(i, ' ');
-      }
-      return textList.join();
-    }
-
-    void _showCountryPicker() async {
-      final country = await showCountryPickerSheet(
-        context,
-        title: Text(
-          'Select Country',
-          style: Theme.of(context).textTheme.headline4,
-        ),
-        heightFactor: .8,
-        cancelWidget: TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: Text(
-              'Cancel',
-              style: Theme.of(context).textTheme.headline5!.copyWith(
-                    color: Darktheme.primaryColor,
-                  ),
-            ),
-          ),
-        ),
-      );
-      if (country != null) {
-        setState(() {
-          _selectedCountry = country;
-          if (errors.contains(kCountryCodeNullError)) {
-            errors.remove(kCountryCodeNullError);
-          }
-          var user = getIt.get<User>();
-          user.setCountryCode = country.callingCode;
-        });
-      }
-    }
-
     return TextFormField(
       controller: _controller,
       style: Theme.of(context).textTheme.headline5!.copyWith(
@@ -240,7 +260,6 @@ class _LoginFormState extends State<LoginForm> {
           horizontal: getProportionateScreenWidth(10),
           vertical: getProportionateScreenHeight(10),
         ),
-        hintText: 'phone',
         suffixIcon: Padding(
           padding: EdgeInsets.fromLTRB(
             0,
@@ -250,11 +269,12 @@ class _LoginFormState extends State<LoginForm> {
           ),
           child: SvgPicture.asset('assets/icons/Phone.svg'),
         ),
+        hintText: 'phone',
         hintStyle: Theme.of(context)
             .textTheme
             .headline5!
             .copyWith(color: Colors.black45),
-        prefix: GestureDetector(
+        prefixIcon: GestureDetector(
           onTap: () {
             _showCountryPicker();
           },

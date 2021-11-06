@@ -29,12 +29,12 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       print(event.pin);
       yield PaymentOnprocess();
       try {
-        await amolePaymentRepo.commitPayment(
+        var errorCode = await amolePaymentRepo.commitPayment(
           pin: event.pin,
           amount: event.amount,
           phoneNumber: event.phoneNumber,
         );
-        yield PaymentCompleted();
+        yield PaymentCompleted(errorCode: errorCode);
       } catch (e) {
         yield PaymentFailed(errorMessage: e.toString());
       }

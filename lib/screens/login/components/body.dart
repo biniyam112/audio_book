@@ -24,7 +24,7 @@ class _BodyState extends State<Body> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: SizeConfig.screenHeight! * .04),
+                SizedBox(height: SizeConfig.screenHeight! * .08),
                 Text(
                   'Already\na member',
                   style: Theme.of(context)
@@ -32,7 +32,7 @@ class _BodyState extends State<Body> {
                       .headline3!
                       .copyWith(fontSize: 30),
                 ),
-                SizedBox(height: SizeConfig.screenHeight! * .04),
+                SizedBox(height: SizeConfig.screenHeight! * .06),
                 LoginForm(),
                 SizedBox(height: SizeConfig.screenHeight! * .08),
               ],
