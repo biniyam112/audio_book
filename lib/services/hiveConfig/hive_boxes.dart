@@ -9,4 +9,9 @@ class HiveBoxes {
     final userBox = HiveBoxes.getUserBox();
     return userBox.containsKey(HiveBoxes.userKey);
   }
+
+  static void deleteUser() {
+    final userBox = HiveBoxes.getUserBox();
+    userBox.delete(userKey);
+  }
 }

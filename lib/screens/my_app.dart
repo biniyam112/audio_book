@@ -21,6 +21,8 @@ import 'package:audio_books/feature/initialize_database/repository/init_db_repos
 import 'package:audio_books/feature/otp/otp.dart';
 import 'package:audio_books/feature/payment/bloc/payment_bloc.dart';
 import 'package:audio_books/feature/payment/repository/amole_payment_repository.dart';
+import 'package:audio_books/feature/podcast/bloc/bloc.dart';
+import 'package:audio_books/feature/podcast/bloc/podcast_bloc.dart';
 import 'package:audio_books/feature/ping_site/bloc/ping_site_bloc.dart';
 import 'package:audio_books/feature/register_user/bloc/register_user_bloc.dart';
 import 'package:audio_books/feature/register_user/repository/register_user_repository.dart';
@@ -165,6 +167,9 @@ class _MyAppState extends State<MyApp> {
                   ),
                 ),
                 BlocProvider(create: (context) => OtpBloc()),
+                BlocProvider(
+                    create: (context) =>
+                        PodcastBloc()..add(FetchPodcasts(page: 1))),
                 BlocProvider(
                   create: (context) => FetchChaptersBloc(
                     fetchChaptersRepo: widget.fetchChaptersRepo,

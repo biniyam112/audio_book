@@ -29,7 +29,7 @@ class Body extends StatelessWidget {
           );
         }
       },
-      builder: (context, state) {
+      builder: (context, state) { 
         if (state is OtpSent) phoneNumber = state.phoneNumber;
         return SafeArea(
           child: Padding(

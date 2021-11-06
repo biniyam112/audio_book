@@ -5,6 +5,7 @@ import 'package:audio_books/screens/components/input_field_container.dart';
 import 'package:audio_books/screens/otp/otp.dart';
 import 'package:audio_books/screens/screens.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
+import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme_colors.dart';
 import 'package:country_calling_code_picker/picker.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,7 +15,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../sizeConfig.dart';
 
 class PhoneForm extends StatefulWidget {
   const PhoneForm({
