@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'dart:typed_data';
 import 'package:encrypt/encrypt.dart';
 
 class EncryptionHandler {
@@ -5,7 +7,7 @@ class EncryptionHandler {
   late Key key;
   late IV iv;
 
-  String encryptData(String fileToEncrypt) {
+  String encryptData(Uint8List fileToEncrypt) {
     key = Key.fromUtf8(encryptionKeyString);
     iv = IV.fromUtf8(encryptionKeyString);
     final encrypter = Encrypter(
@@ -14,14 +16,14 @@ class EncryptionHandler {
         padding: null,
       ),
     );
-    Encrypted encrypted = encrypter.encrypt(
+    Encrypted encrypted = encrypter.encryptBytes(
       fileToEncrypt,
       iv: iv,
     );
     return encrypted.base64;
   }
 
-  String decryptData(String filetoDecrypt) {
+  Uint8List decryptData(Uint8List filetoDecrypt) {
     key = Key.fromUtf8(encryptionKeyString);
     iv = IV.fromUtf8(encryptionKeyString);
     final encrypter = Encrypter(
@@ -30,10 +32,15 @@ class EncryptionHandler {
         padding: null,
       ),
     );
-    String decrypted = encrypter.decrypt(
-      Encrypted.fromBase64(filetoDecrypt),
+    var decrypted = encrypter.decryptBytes(
+      Encrypted.fromBase64(
+        base64.encode(filetoDecrypt),
+      ),
       iv: iv,
     );
-    return decrypted;
+    print('decrypted length is ${decrypted.length}');
+
+    return Uint8List.sublistView(
+        Uint8List.fromList(decrypted), 0, decrypted.length);
   }
 }

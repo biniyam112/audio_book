@@ -3,7 +3,6 @@ import 'package:audio_books/feature/fetch_books/bloc/fetch_books_event.dart';
 import 'package:audio_books/models/user.dart';
 import 'package:audio_books/screens/home/components/user_info_area.dart';
 import 'package:audio_books/screens/login/login.dart';
-import 'package:audio_books/services/audio/service_locator.dart';
 import 'package:audio_books/services/hiveConfig/hive_boxes.dart';
 import 'package:audio_books/theme/theme.dart';
 import 'package:flutter/cupertino.dart';

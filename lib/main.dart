@@ -8,6 +8,7 @@ import 'package:audio_books/feature/categories/dataprovider/category_dataprovide
 import 'package:audio_books/feature/categories/repository/category_repo.dart';
 import 'package:audio_books/feature/featured_books/dataprovider/featured_books_dataprovider.dart';
 import 'package:audio_books/feature/featured_books/repository/featured_books_repository.dart';
+import 'package:audio_books/feature/fetch_advertisement/repository/advertisement_repo.dart';
 import 'package:audio_books/feature/fetch_books/data_provider/fetch_books_dataprovider.dart';
 import 'package:audio_books/feature/fetch_books/repository/fetch_books_repo.dart';
 import 'package:audio_books/feature/fetch_books_by_category/dataprovider/fetch_by_category_dp.dart';
@@ -37,6 +38,7 @@ import 'package:http/http.dart' as http;
 
 import 'bloc_observer.dart';
 
+import 'feature/fetch_advertisement/data_provider/advertisement_data_provider.dart';
 import 'feature/store_book/dataprovider/store_book_data_provider.dart';
 import 'feature/store_book/repository/store_book_repository.dart';
 import 'screens/my_app.dart';
@@ -126,6 +128,11 @@ void main() async {
       client: http.Client(),
     ),
   );
+  final AdvertisementRepo advertisementRepo = AdvertisementRepo(
+    advertisementDP: AdvertisementDP(
+      client: http.Client(),
+    ),
+  );
   await setupServiceLocator();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
     (value) => runApp(
@@ -145,6 +152,7 @@ void main() async {
         authorRepo: authorRepo,
         requestHardCopyRepo: requestHardCopyRepo,
         amolePaymentRepo: amolePaymentRepo,
+        advertisementRepo: advertisementRepo,
       ),
     ),
   );

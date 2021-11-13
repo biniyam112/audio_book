@@ -72,12 +72,6 @@ class DetailsTopSection extends StatelessWidget {
                         return PaymentModalCard();
                       },
                     );
-                  // Navigator.push(context,
-                  //     MaterialPageRoute(builder: (context) {
-                  //   return Scaffold(
-                  //     body: PaymentModalCard(),
-                  //   );
-                  // }));
                   if (subscribtionState.subscribtions.isNotEmpty &&
                       subscribtionState.isEbook)
                     BlocProvider.of<StoreBookBloc>(context)
@@ -110,13 +104,13 @@ class DetailsTopSection extends StatelessWidget {
                       }
                     },
                     child: PurchaseButton(
-                      text: (book.resourceType == 'Ebook')
-                          ? 'Get E-book'
-                          : 'E-book unavailable',
+                      text: 'Get E-book',
                       onPress: (book.resourceType == 'Ebook')
                           ? () {
-                              BlocProvider.of<PaymentBloc>(context)
-                                  .add(CheckSubscription(isEbook: true));
+                              // BlocProvider.of<PaymentBloc>(context)
+                              //     .add(CheckSubscription(isEbook: true));
+                              BlocProvider.of<StoreBookBloc>(context)
+                                  .add(StoreEBookEvent(book: book));
                             }
                           : null,
                     ),
@@ -140,9 +134,7 @@ class DetailsTopSection extends StatelessWidget {
                       }
                     },
                     child: PurchaseButton(
-                      text: (book.resourceType == 'AudioBook')
-                          ? 'Get Audio book'
-                          : 'Audio book unavailable',
+                      text: 'Get Audio book',
                       onPress: (book.resourceType == 'AudioBook')
                           ? () {
                               BlocProvider.of<PaymentBloc>(context)

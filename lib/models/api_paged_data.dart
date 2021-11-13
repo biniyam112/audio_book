@@ -1,6 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import 'package:audio_books/models/models.dart';
 part 'api_paged_data.g.dart';
 
 @JsonSerializable()

@@ -139,36 +139,10 @@ class _LoginFormState extends State<LoginForm> {
                   title: 'Phone number',
                   child: buildPhoneField(),
                 ),
-                SizedBox(height: getProportionateScreenHeight(20)),
+                SizedBox(height: getProportionateScreenHeight(40)),
                 FormError(errors: errors),
                 if (errors.isNotEmpty)
-                  SizedBox(height: getProportionateScreenHeight(10)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Don\'t have an account?'),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return PhoneRegistrationScreen();
-                            },
-                          ),
-                        );
-                      },
-                      child: Text(
-                        'Sign up',
-                        style: Theme.of(context).textTheme.headline5!.copyWith(
-                              color: Colors.blue[900],
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: getProportionateScreenHeight(40)),
+                  SizedBox(height: getProportionateScreenHeight(20)),
                 if (authstate == AuthoriseUserState.userAuthorizingState ||
                     otpstate is OtpInProgress)
                   Center(
@@ -213,6 +187,32 @@ class _LoginFormState extends State<LoginForm> {
                       },
                     ),
                   ),
+                SizedBox(height: getProportionateScreenHeight(100)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('Don\'t have an account?'),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return PhoneRegistrationScreen();
+                            },
+                          ),
+                        );
+                      },
+                      child: Text(
+                        'Sign up',
+                        style: Theme.of(context).textTheme.headline5!.copyWith(
+                              color: Colors.blue[900],
+                              fontWeight: FontWeight.bold,
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           );
@@ -258,7 +258,7 @@ class _LoginFormState extends State<LoginForm> {
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(
           horizontal: getProportionateScreenWidth(10),
-          vertical: getProportionateScreenHeight(10),
+          vertical: 16,
         ),
         suffixIcon: Padding(
           padding: EdgeInsets.fromLTRB(

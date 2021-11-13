@@ -7,6 +7,8 @@ import 'package:audio_books/feature/categories/repository/category_repo.dart';
 import 'package:audio_books/feature/check_first_time/check_first_time.dart';
 import 'package:audio_books/feature/featured_books/bloc/featured_books_bloc.dart';
 import 'package:audio_books/feature/featured_books/repository/featured_books_repository.dart';
+import 'package:audio_books/feature/fetch_advertisement/bloc/advertisement_bloc.dart';
+import 'package:audio_books/feature/fetch_advertisement/repository/advertisement_repo.dart';
 import 'package:audio_books/feature/fetch_books/bloc/fetch_books_bloc.dart';
 import 'package:audio_books/feature/fetch_books/repository/fetch_books_repo.dart';
 import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_bloc.dart';
@@ -65,6 +67,7 @@ class MyApp extends StatefulWidget {
   final AuthorRepo authorRepo;
   final RequestHardCopyRepo requestHardCopyRepo;
   final AmolePaymentRepo amolePaymentRepo;
+  final AdvertisementRepo advertisementRepo;
 
   const MyApp({
     Key? key,
@@ -83,6 +86,7 @@ class MyApp extends StatefulWidget {
     required this.authorRepo,
     required this.requestHardCopyRepo,
     required this.amolePaymentRepo,
+    required this.advertisementRepo,
   }) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
@@ -198,6 +202,11 @@ class _MyAppState extends State<MyApp> {
                 BlocProvider(
                   create: (context) => PaymentBloc(
                     amolePaymentRepo: widget.amolePaymentRepo,
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) => AdvertisementBloc(
+                    advertisementRepo: widget.advertisementRepo,
                   ),
                 ),
               ],

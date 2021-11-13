@@ -2,9 +2,7 @@ import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/podcast_details/podcast_details.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class PodcastCard extends StatelessWidget {
   const PodcastCard({

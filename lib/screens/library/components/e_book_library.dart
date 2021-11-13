@@ -38,7 +38,8 @@ class EBookLibrary extends StatelessWidget {
                 ),
                 itemBuilder: (context, index) {
                   return EBookLibraryItem(
-                      downloadedBook: state.downloadedBooks[index]);
+                    downloadedBook: state.downloadedBooks[index],
+                  );
                 },
               ),
             ),

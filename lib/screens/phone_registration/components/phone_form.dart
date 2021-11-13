@@ -12,7 +12,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get_it/get_it.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -37,6 +36,8 @@ class _PhoneFormState extends State<PhoneForm> {
         "flag": "flags/eth.png"
       },
     );
+    var user = getIt.get<User>();
+    user.countryCode = _selectedCountry!.callingCode;
   }
 
   TextEditingController _controller = TextEditingController();
@@ -83,7 +84,6 @@ class _PhoneFormState extends State<PhoneForm> {
         if (errors.contains(kCountryCodeNullError)) {
           errors.remove(kCountryCodeNullError);
         }
-        GetIt.instance;
         var user = getIt.get<User>();
         user.setCountryCode = country.callingCode;
       });
@@ -152,7 +152,7 @@ class _PhoneFormState extends State<PhoneForm> {
                   decoration: InputDecoration(
                     contentPadding: EdgeInsets.symmetric(
                       horizontal: getProportionateScreenWidth(10),
-                      vertical: getProportionateScreenHeight(10),
+                      vertical: 16,
                     ),
                     suffixIcon: Padding(
                       padding: EdgeInsets.fromLTRB(

@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_down_book_event.dart';
 import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_down_book_state.dart';
 import 'package:audio_books/feature/fetch_downloaded_book/data/repository/fetch_down_books_repository.dart';
@@ -33,9 +31,10 @@ class FetchBookFileBloc extends Bloc<FetchBookFileEvent, FetchBookFileState> {
   Stream<FetchBookFileState> mapEventToState(FetchBookFileEvent event) async* {
     yield BookDataFetchingState();
     try {
-      final bookFile = await fetchStoredBookFileRepo
+      final bookFile = fetchStoredBookFileRepo
           .decryptStoredPdf(event.downloadedBook.bookFilePath);
-      event.downloadedBook.setBookFile = Uint8List.fromList(bookFile.codeUnits);
+      event.downloadedBook.setBookFile = bookFile;
+      print('length after decription is ${bookFile.length}');
       yield BookDataFetchedState(downloadedBook: event.downloadedBook);
     } catch (e) {
       yield FetchingBookDataFailedState(errorMessage: e.toString());
