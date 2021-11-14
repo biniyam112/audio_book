@@ -6,6 +6,7 @@ import 'package:audio_books/models/models.dart';
 import 'package:audio_books/services/hiveConfig/hive_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:audio_books/services/audio/service_locator.dart';
+import 'package:uuid/uuid.dart';
 
 class PodcastDataProvider {
   final http.Client _httpClient;
@@ -24,7 +25,7 @@ class PodcastDataProvider {
         'Authorization': token!,
       });
 
-      print('response body ***********${response.body}');
+      // print('response body ***********${response.body}');
       if (response.statusCode == 200) {
         return APIPagedData.fromJson(jsonDecode(response.body));
       }
@@ -44,11 +45,13 @@ class PodcastDataProvider {
       final user = HiveBoxes.getUserBox().get(HiveBoxes.userKey);
       final token = user!.token;
       final subscriberId = user.id;
-
+      var uuid = Uuid();
+      var id = uuid.v4();
       final response = await _httpClient.post(
         subscirbePodcastUrl,
         body: jsonEncode(
           <String, String>{
+            'id': id,
             'podcastId': '$podcastId',
             'subscriberId': '$subscriberId'
           },
@@ -87,4 +90,8 @@ class PodcastDataProvider {
           currentPage: 0, items: null, totalItems: 0, totalPages: 0);
     }
   }
+
+  // Future<APIPagedData> getEpisodes() async{
+
+  // }
 }

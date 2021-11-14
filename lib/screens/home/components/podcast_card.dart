@@ -7,11 +7,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class PodcastCard extends StatelessWidget {
-  const PodcastCard({
-    Key? key,
-    required this.podcast,
-  }) : super(key: key);
+  PodcastCard({Key? key, required this.podcast, this.isSubscribed = false})
+      : super(key: key);
   final APIPodcast podcast;
+  bool isSubscribed;
 
   @override
   Widget build(BuildContext context) {
