@@ -4,12 +4,24 @@ import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-class PodcastCard extends StatelessWidget {
-  const PodcastCard({
-    Key? key,
-    required this.podcast,
-  }) : super(key: key);
+class PodcastCard extends StatefulWidget {
+  PodcastCard({Key? key, required this.podcast, this.isSubscribed = false})
+      : super(key: key);
   final APIPodcast podcast;
+  final bool isSubscribed;
+
+  @override
+  _PodcastCardState createState() => _PodcastCardState();
+}
+
+class _PodcastCardState extends State<PodcastCard> {
+  late bool isSubscribed;
+
+  @override
+  void initState() {
+    super.initState();
+    isSubscribed = widget.isSubscribed;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +31,7 @@ class PodcastCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return PodcastDetails(podcast: podcast);
+              return PodcastDetails(podcast: widget.podcast);
             },
           ),
         );
@@ -47,8 +59,9 @@ class PodcastCard extends StatelessWidget {
                       fit: BoxFit.cover,
                     );
                   },
-                  image: NetworkImage(
-                      podcast.imagePath != null ? podcast.imagePath! : ''),
+                  image: NetworkImage(widget.podcast.imagePath != null
+                      ? widget.podcast.imagePath!
+                      : ''),
                 ),
               ),
               Expanded(
@@ -58,14 +71,14 @@ class PodcastCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${podcast.title}',
+                        '${widget.podcast.title}',
                         style: Theme.of(context).textTheme.headline4,
                       ),
                       Spacer(),
                       Opacity(
                         opacity: .9,
                         child: Text(
-                          '${podcast.creator}',
+                          '${widget.podcast.creator}',
                           style: Theme.of(context).textTheme.headline5,
                         ),
                       ),
@@ -78,7 +91,7 @@ class PodcastCard extends StatelessWidget {
                         ),
                         child: Center(
                           child: Text(
-                            '${podcast.category}',
+                            '${widget.podcast.category}',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style:

@@ -40,7 +40,9 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
         // APIPodcast pod=APIPodcast()
         final podcasts =
             items.map((podcast) => APIPodcast.fromJson(podcast)).toList();
-        allPodcasts.addAll(podcasts);
+
+        allPodcasts.addAll(podcasts.where(
+            (podcast) => allPodcasts.every((pdcst) => pdcst.id != podcast.id)));
         yield PodcastLoadSuccess(podcasts: podcasts);
       }
     } catch (e) {
@@ -59,7 +61,7 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
       if (apiSubscribePodcast.message != null) {
         yield PodcastFailure();
       } else {
-        yield PodcastSucess();
+        yield PodcastSuccess();
       }
     } catch (e) {
       yield PodcastFailure();
@@ -84,7 +86,8 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
         // APIPodcast pod=APIPodcast()
         final podcasts =
             items.map((podcast) => APIPodcast.fromJson(podcast)).toList();
-        subscribedPodcasats.addAll(podcasts);
+        subscribedPodcasats.addAll(podcasts.where((podcast) =>
+            subscribedPodcasats.every((pdcst) => pdcst.id != podcast.id)));
         yield PodcastLoadSuccess(podcasts: podcasts);
       }
     } catch (e) {

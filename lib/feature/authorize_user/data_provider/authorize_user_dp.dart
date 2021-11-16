@@ -9,6 +9,7 @@ class AuthorizeUserDataProvider {
 
   AuthorizeUserDataProvider({required this.client});
 
+
   Future<User> authorizeUser(User user) async {
     var response = await client.post(
       Uri.parse(

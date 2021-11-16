@@ -1,4 +1,9 @@
 import 'package:audio_books/feature/podcast/bloc/bloc.dart';
+<<<<<<< HEAD
+=======
+import 'package:audio_books/models/podcast.dart';
+import 'package:audio_books/screens/components/no_connection_widget.dart';
+>>>>>>> 6223f14563b8d8ed3237d8e81be5764d8fcb6a0b
 import 'package:audio_books/screens/home/components/podcast_card.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
@@ -10,25 +15,26 @@ class PodcastBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<PodcastBloc, PodcastState>(
-      builder: (context, state) {
-        if (state is PodcastInProgress || state is PodcastInitState)
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        else if (state is PodcastLoadSuccess) {
-          return Container(
-            height: SizeConfig.screenHeight,
-            width: SizeConfig.screenWidth,
-            child: SafeArea(
-              child: RefreshIndicator(
-                color: Darktheme.primaryColor,
-                onRefresh: () async {
-                  BlocProvider.of<PodcastBloc>(context)
-                      .add(FetchPodcasts(page: PodcastBloc.podcastPage));
-                },
-                child: SingleChildScrollView(
-                  child: Column(
+    return Container(
+      height: SizeConfig.screenHeight,
+      width: SizeConfig.screenWidth,
+      child: SafeArea(
+        child: RefreshIndicator(
+          color: Darktheme.primaryColor,
+          onRefresh: () async {
+            BlocProvider.of<PodcastBloc>(context)
+                .add(FetchPodcasts(page: PodcastBloc.podcastPage));
+            BlocProvider.of<PodcastBloc>(context)
+                .add(FetchSubscribedPodcasts(page: 1));
+          },
+          child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics(),
+              ),
+              child: BlocBuilder<PodcastBloc, PodcastState>(
+                  builder: (context, state) {
+                if (state is PodcastLoadSuccess) {
+                  return Column(
                     children: [
                       Container(
                         width: SizeConfig.screenWidth,
@@ -129,16 +135,15 @@ class PodcastBody extends StatelessWidget {
                         ),
                       ),
                     ],
-                  ),
-                ),
-              ),
-            ),
-          );
-        } else
-          return Center(
-            child: Text('Failed to fetch podcasts'),
-          );
-      },
+                  );
+                } else if (state is PodcastInProgress ||
+                    state is PodcastInitState)
+                  return Center(child: CircularProgressIndicator());
+                else
+                  return NoConnectionWidget();
+              })),
+        ),
+      ),
     );
   }
 }

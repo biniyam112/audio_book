@@ -12,7 +12,7 @@ class PodcastInProgress extends PodcastState {}
 
 class PodcastFailure extends PodcastState {}
 
-class PodcastSucess extends PodcastState {} 
+class PodcastSuccess extends PodcastState {} 
 
 class PodcastLoadSuccess extends PodcastState {
   final List<APIPodcast> podcasts;

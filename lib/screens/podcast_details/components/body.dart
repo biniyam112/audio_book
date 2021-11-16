@@ -113,26 +113,32 @@ class Body extends StatelessWidget {
               ),
               BlocBuilder<PodcastBloc, PodcastState>(
                 builder: (context, state) {
-                  return Padding(
-                    padding: EdgeInsets.only(
-                        right: getProportionateScreenWidth(15),
-                        top: getProportionateScreenHeight(25)),
-                    child: ElevatedButton(
-                        onPressed: () {
-                          print("USER ID*******************${podcast.id}");
-                          BlocProvider.of<PodcastBloc>(context)
-                              .add(SubscribePodcast(podcastId: podcast.id));
-                        },
-                        child: state is PodcastSucess
-                            ? Icon(Icons.done)
-                            : state is PodcastInProgress
-                                ? Center(
-                                    child: CircularProgressIndicator(
-                                      color: Colors.white,
-                                    ),
-                                  )
-                                : Text('Subscribe')),
-                  );
+                  return state is PodcastSuccess
+                      ? Center(
+                          child: Icon(Icons.done),
+                        )
+                      : state is PodcastInProgress
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                color: Colors.orange,
+                              ),
+                            )
+                          : Padding(
+                              padding: EdgeInsets.only(
+                                  right: getProportionateScreenWidth(15),
+                                  top: getProportionateScreenHeight(25)),
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  print(
+                                      "USER ID*******************${podcast.id}");
+                                  BlocProvider.of<PodcastBloc>(context).add(
+                                      SubscribePodcast(podcastId: podcast.id));
+                                  BlocProvider.of<PodcastBloc>(context)
+                                      .add(FetchSubscribedPodcasts(page: 1));
+                                },
+                                child: Text('Subscirbe'),
+                              ),
+                            );
                 },
               )
             ],

@@ -57,6 +57,7 @@ dependencies:
   hive_flutter: ^1.1.0
   json_annotation: ^4.0.1
   carousel_slider: ^4.0.0
+  uuid: ^3.0.5
 
 dev_dependencies:
   flutter_test:

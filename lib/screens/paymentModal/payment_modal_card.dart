@@ -1,7 +1,6 @@
 import 'package:audio_books/constants.dart';
 import 'package:audio_books/screens/components/page_count_indicator.dart';
 import 'package:audio_books/screens/paymentModal/submit_phone_page.dart';
-import 'package:audio_books/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
