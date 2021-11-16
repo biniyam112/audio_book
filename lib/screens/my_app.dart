@@ -15,8 +15,8 @@ import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_
 import 'package:audio_books/feature/fetch_books_by_category/repository/fetch_by_category_repo.dart';
 import 'package:audio_books/feature/fetch_chapters/bloc/fetch_chapters_bloc.dart';
 import 'package:audio_books/feature/fetch_chapters/repository/fetch_chapters_repo.dart';
-import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_down_book_bloc.dart';
-import 'package:audio_books/feature/fetch_downloaded_book/data/repository/fetch_down_books_repository.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/bloc/fetch_down_book_bloc.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/repository/fetch_down_books_repository.dart';
 import 'package:audio_books/feature/initialize_database/bloc/initializa_database.dart';
 import 'package:audio_books/feature/initialize_database/bloc/initialize_db_event.dart';
 import 'package:audio_books/feature/initialize_database/repository/init_db_repository.dart';
@@ -34,6 +34,7 @@ import 'package:audio_books/feature/set_theme_data/set_theme_data.dart';
 import 'package:audio_books/feature/store_book/bloc/store_book_bloc.dart';
 import 'package:audio_books/feature/store_book/repository/store_book_repository.dart';
 import 'package:audio_books/models/user.dart';
+import 'package:audio_books/route.dart';
 import 'package:audio_books/screens/components/tab_view.dart';
 import 'package:audio_books/screens/phone_registration/phone_registration.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
@@ -68,6 +69,8 @@ class MyApp extends StatefulWidget {
   final RequestHardCopyRepo requestHardCopyRepo;
   final AmolePaymentRepo amolePaymentRepo;
   final AdvertisementRepo advertisementRepo;
+  final FetchStoredEpisodesRepo fetchStoredEpisodesRepo;
+  final FetchStoredEpisodeFileRepo fetchStoredEpisodeFileRepo;
 
   const MyApp({
     Key? key,
@@ -87,6 +90,8 @@ class MyApp extends StatefulWidget {
     required this.requestHardCopyRepo,
     required this.amolePaymentRepo,
     required this.advertisementRepo,
+    required this.fetchStoredEpisodeFileRepo,
+    required this.fetchStoredEpisodesRepo,
   }) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
@@ -115,7 +120,12 @@ class _MyAppState extends State<MyApp> {
                       StoreBookBloc(storeBookRepo: widget.storeBookRepo),
                 ),
                 BlocProvider(
-                  create: (context) => FetchDownBooksBloc(
+                  create: (context) => FetchDownEBooksBloc(
+                    fetchStoredBooksRepo: widget.fetchStoredBooksRepo,
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) => FetchDownAudioBooksBloc(
                     fetchStoredBooksRepo: widget.fetchStoredBooksRepo,
                   ),
                 ),
@@ -209,6 +219,22 @@ class _MyAppState extends State<MyApp> {
                     advertisementRepo: widget.advertisementRepo,
                   ),
                 ),
+                BlocProvider(
+                  create: (context) => FetchDownAudioBooksBloc(
+                    fetchStoredBooksRepo: widget.fetchStoredBooksRepo,
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) => FetchBookEpisodesBloc(
+                    fetchStoredEpisodesRepo: widget.fetchStoredEpisodesRepo,
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) => FetchDownloadedEpisodeFileBloc(
+                    fetchStoredEpisodeFileRepo:
+                        widget.fetchStoredEpisodeFileRepo,
+                  ),
+                ),
               ],
               child: MaterialApp(
                 title: 'Maraki',
@@ -218,7 +244,8 @@ class _MyAppState extends State<MyApp> {
                 themeMode: themeProvider.themeMode,
                 theme: lightTheme,
                 darkTheme: darkTheme,
-                home: LoadingTransition(),
+                initialRoute: LoadingTransition.pageRoute,
+                routes: routes(),
               ),
             );
           },
@@ -230,6 +257,7 @@ class _MyAppState extends State<MyApp> {
 
 class LoadingTransition extends StatelessWidget {
   const LoadingTransition({Key? key}) : super(key: key);
+  static final String pageRoute = '/initilalLoading';
 
   @override
   Widget build(BuildContext context) {
@@ -241,14 +269,7 @@ class LoadingTransition extends StatelessWidget {
       child: BlocConsumer<CheckFirstTimeBloc, bool>(
         listener: (context, ftState) {
           if (ftState == true) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return OnboardingScreen();
-                },
-              ),
-            );
+            Navigator.popAndPushNamed(context, OnboardingScreen.pageRoute);
           } else {
             if (HiveBoxes.hasUserSigned()) {
               var user = getIt.get<User>();
@@ -262,26 +283,14 @@ class LoadingTransition extends StatelessWidget {
               user.id = storedUser.id;
               BlocProvider.of<PingSiteBloc>(context).add(
                 PingSiteEvent(
-                    address:
-                        'http://www.marakigebeya.com.et/swagger/v1/swagger.json'),
-              );
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return TabViewPage();
-                  },
+                  address:
+                      'http://www.marakigebeya.com.et/swagger/v1/swagger.json',
                 ),
               );
+              Navigator.popAndPushNamed(context, TabViewPage.pageRoute);
             } else {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return PhoneRegistrationScreen();
-                  },
-                ),
-              );
+              Navigator.popAndPushNamed(
+                  context, PhoneRegistrationScreen.pageRoute);
             }
           }
         },

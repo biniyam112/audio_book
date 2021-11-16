@@ -9,23 +9,31 @@ class StoreBookBloc extends Bloc<StoreBookEvent, StoreBookState> {
 
   @override
   Stream<StoreBookState> mapEventToState(StoreBookEvent event) async* {
-    yield StoringEBookState(downloadProgress: 0);
+    yield BookStoringState(downloadProgress: 0);
     if (event is StoreEBookEvent) {
       try {
-        final storedBook = await storeBookRepo.storeBook(event.book);
+        await storeBookRepo.storeEBook(event.book);
         await Future.delayed(Duration.zero);
-        yield EBookStoredState(downloadedBook: storedBook);
+        yield BookStoredState();
       } catch (e) {
-        yield StoringEBookFailedState(errorMessage: e.toString());
+        yield BookStoringFailedState(errorMessage: e.toString());
       }
     }
     if (event is StoreEBookProgressEvent) {
       try {
         await storeBookRepo.storeBookProgress(event.downloadedBook);
-        await Future.delayed(Duration.zero);
         yield BookProgressStoredState();
       } catch (e) {
-        yield StoringEBookFailedState(errorMessage: e.toString());
+        yield BookStoringFailedState(errorMessage: e.toString());
+      }
+    }
+    if (event is StoreAudioBookEvent) {
+      yield StoringEpisode();
+      try {
+        await storeBookRepo.storeBookEpisode(event.book, event.episode);
+        yield EpisodeStored();
+      } catch (e) {
+        yield StoringEpisodeFailed(errorMessage: e.toString());
       }
     }
   }

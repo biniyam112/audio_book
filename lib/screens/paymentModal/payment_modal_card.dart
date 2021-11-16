@@ -108,6 +108,7 @@ class _PaymentModalCardState extends State<PaymentModalCard> {
                             },
                           ),
                           OtpPage(
+                            phoneNumber: phoneNumber,
                             onPress: () {
                               _pageController.animateToPage(
                                 2,
@@ -115,7 +116,6 @@ class _PaymentModalCardState extends State<PaymentModalCard> {
                                 curve: Curves.linear,
                               );
                             },
-                            phoneNumber: phoneNumber,
                           ),
                           PaymentCompletedPage(),
                         ],
@@ -159,27 +159,28 @@ class PaymentCompletedPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
-          'Payment Completed',
+          'Payment Completed!',
           style: Theme.of(context).textTheme.headline4!.copyWith(
-                color: Darktheme.primaryColor,
+                color: Colors.black,
                 fontWeight: FontWeight.bold,
               ),
         ),
         Text(
           'Proceed with your download now!',
           style: Theme.of(context).textTheme.headline4!.copyWith(
-                color: Darktheme.primaryColor,
+                color: Colors.black,
               ),
         ),
+        verticalSpacing(22),
         TextButton(
           onPressed: () {
             Navigator.pop(context);
           },
           child: Text(
-            'Proceed',
+            'CONTINUE',
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Darktheme.primaryColor,
+              // color: Darktheme.primaryColor,
             ),
           ),
         ),

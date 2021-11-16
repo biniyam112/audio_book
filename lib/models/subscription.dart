@@ -1,5 +1,6 @@
 class Subscribtion {
-  final String id, name, description;
+  final String id, name;
+  final String? description;
   final Duration duration;
   final int fee;
 

@@ -95,17 +95,26 @@ class _LoginFormState extends State<LoginForm> {
   Widget build(BuildContext context) {
     return BlocConsumer<AuthorizeUserBloc, AuthoriseUserState>(
       listener: (context, authstate) {
-        if (authstate == AuthoriseUserState.userAuthorizationFailedState) {
+        if (authstate is UserAuthorizationFailedState) {
           setState(() {
-            errors.add(kUserAuthorizationError);
+            print(authstate.errorMessage);
+            if (authstate.errorMessage.contains(kPhoneNotRegisteredError)) {
+              if (!errors.contains(kPhoneNotRegisteredError)) {
+                errors.add(kPhoneNotRegisteredError);
+              }
+            } else {
+              if (!errors.contains(kUserAuthorizationError))
+                errors.add(kUserAuthorizationError);
+            }
           });
         }
-        if (authstate == AuthoriseUserState.userAuthorizingState) {
+        if (authstate is UserAuthorizingState) {
           setState(() {
             errors.remove(kUserAuthorizationError);
+            errors.remove(kPhoneNotRegisteredError);
           });
         }
-        if (authstate == AuthoriseUserState.userAuthorizedState) {
+        if (authstate is UserAuthorizedState) {
           BlocProvider.of<OtpBloc>(context).add(
             SendOtp(
               phoneNumber: '${_selectedCountry.callingCode}$phoneNumber',
@@ -115,108 +124,105 @@ class _LoginFormState extends State<LoginForm> {
         }
       },
       builder: (context, authstate) {
-        return BlocConsumer<OtpBloc, OtpState>(listener: (context, otpstate) {
-          if (otpstate is OtpSent) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return OTPScreen(fromLogin: true);
-                },
-              ),
-            );
-          }
-          if (otpstate is OtpFailure) {
-            errors.add(kOtpError);
-          }
-        }, builder: (context, otpstate) {
-          return Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                SizedBox(height: getProportionateScreenHeight(20)),
-                InputFieldContainer(
-                  title: 'Phone number',
-                  child: buildPhoneField(),
-                ),
-                SizedBox(height: getProportionateScreenHeight(40)),
-                FormError(errors: errors),
-                if (errors.isNotEmpty)
+        return BlocConsumer<OtpBloc, OtpState>(
+          listener: (context, otpstate) {
+            if (otpstate is OtpSent) {
+              Navigator.popAndPushNamed(
+                context,
+                OTPScreen.pageRoute,
+                arguments: true,
+              );
+            }
+            if (otpstate is OtpFailure) {
+              errors.add(kOtpError);
+            }
+          },
+          builder: (context, otpstate) {
+            return Form(
+              key: _formKey,
+              child: Column(
+                children: [
                   SizedBox(height: getProportionateScreenHeight(20)),
-                if (authstate == AuthoriseUserState.userAuthorizingState ||
-                    otpstate is OtpInProgress)
-                  Center(
-                    child: CircularProgressIndicator(
-                      color: Darktheme.primaryColor,
-                    ),
+                  InputFieldContainer(
+                    title: 'Phone number',
+                    child: buildPhoneField(),
                   ),
-                if (authstate == AuthoriseUserState.idleState ||
-                    authstate ==
-                        AuthoriseUserState.userAuthorizationFailedState ||
-                    (authstate == AuthoriseUserState.userAuthorizedState &&
-                        !(otpstate is OtpInProgress)))
-                  SizedBox(
-                    height: getProportionateScreenHeight(42),
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                  SizedBox(height: getProportionateScreenHeight(20)),
+                  FormError(errors: errors),
+                  if (errors.isNotEmpty)
+                    SizedBox(height: getProportionateScreenHeight(40)),
+                  if (authstate is UserAuthorizingState ||
+                      otpstate is OtpInProgress)
+                    Center(
+                      child: CircularProgressIndicator(
+                        color: Darktheme.primaryColor,
+                      ),
+                    ),
+                  if (authstate is IdleState ||
+                      authstate is UserAuthorizationFailedState ||
+                      (authstate is UserAuthorizedState &&
+                          !(otpstate is OtpInProgress)))
+                    SizedBox(
+                      height: getProportionateScreenHeight(42),
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Login',
+                            style:
+                                Theme.of(context).textTheme.headline4!.copyWith(
+                                      color: Colors.white,
+                                    ),
+                          ),
+                        ),
+                        onPressed: () {
+                          if (_selectedCountry.callingCode.isEmpty &&
+                              !errors.contains(kCountryCodeNullError)) {
+                            setState(() {
+                              errors.add(kCountryCodeNullError);
+                            });
+                          } else if (_formKey.currentState!.validate() &&
+                              !errors.contains(kCountryCodeNullError)) {
+                            var user = getIt.get<User>();
+                            user.phoneNumber = phoneNumber;
+                            user.countryCode = _selectedCountry.callingCode;
+                            _formKey.currentState!.save();
+                            BlocProvider.of<AuthorizeUserBloc>(context)
+                                .add(AuthoriseUserEvent.authorizeUser);
+                          }
+                        },
+                      ),
+                    ),
+                  SizedBox(height: getProportionateScreenHeight(100)),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('Don\'t have an account?'),
+                      TextButton(
+                        onPressed: (otpstate is OtpInProgress ||
+                                authstate is UserAuthorizingState)
+                            ? null
+                            : () {
+                                Navigator.popAndPushNamed(
+                                    context, PhoneRegistrationScreen.pageRoute);
+                              },
                         child: Text(
-                          'Login',
+                          'Sign up',
                           style:
-                              Theme.of(context).textTheme.headline4!.copyWith(
-                                    color: Colors.white,
+                              Theme.of(context).textTheme.headline5!.copyWith(
+                                    color: Colors.blue[900],
+                                    fontWeight: FontWeight.bold,
                                   ),
                         ),
                       ),
-                      onPressed: () {
-                        if (_selectedCountry.callingCode.isEmpty &&
-                            !errors.contains(kCountryCodeNullError)) {
-                          setState(() {
-                            errors.add(kCountryCodeNullError);
-                          });
-                        } else if (_formKey.currentState!.validate() &&
-                            !errors.contains(kCountryCodeNullError)) {
-                          var user = getIt.get<User>();
-                          user.phoneNumber = phoneNumber;
-                          user.countryCode = _selectedCountry.callingCode;
-                          _formKey.currentState!.save();
-                          BlocProvider.of<AuthorizeUserBloc>(context)
-                              .add(AuthoriseUserEvent.authorizeUser);
-                        }
-                      },
-                    ),
+                    ],
                   ),
-                SizedBox(height: getProportionateScreenHeight(100)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Don\'t have an account?'),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return PhoneRegistrationScreen();
-                            },
-                          ),
-                        );
-                      },
-                      child: Text(
-                        'Sign up',
-                        style: Theme.of(context).textTheme.headline5!.copyWith(
-                              color: Colors.blue[900],
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        });
+                ],
+              ),
+            );
+          },
+        );
       },
     );
   }

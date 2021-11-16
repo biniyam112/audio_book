@@ -184,7 +184,7 @@ class PodcastListCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Chapter $chapterCount',
+                  'Episode $chapterCount',
                   style: Theme.of(context).textTheme.headline4,
                 ),
                 verticalSpacing(4),

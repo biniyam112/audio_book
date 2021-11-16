@@ -62,9 +62,9 @@ class CustomTabViewChildren extends StatelessWidget {
                 children: [
                   ...List.generate(
                     state.chapters.length,
-                    (index) => ChapterTile(
+                    (index) => EpisodeTile(
                       book: book,
-                      chapter: state.chapters[index],
+                      episode: state.chapters[index],
                       chapterNumber: index + 1,
                     ),
                   ),
@@ -110,135 +110,93 @@ class CustomTabViewChildren extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      verticalSpacing(8),
+                      verticalSpacing(10),
+                      Text(
+                        'Number of copies',
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                      verticalSpacing(12),
                       Row(
                         mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Number of copies',
-                                  style: Theme.of(context).textTheme.headline4,
-                                ),
-                                verticalSpacing(10),
-                                Row(
-                                  children: [
-                                    PlusButton(),
-                                    horizontalSpacing(18),
-                                    Container(
-                                      height: 40,
-                                      constraints: BoxConstraints(
-                                          maxWidth: 50, minWidth: 42),
-                                      alignment: Alignment.center,
-                                      child: Text(
-                                        '${counterState.counter}',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline3,
-                                      ),
-                                    ),
-                                    horizontalSpacing(18),
-                                    MinusButton(),
-                                  ],
-                                ),
-                                verticalSpacing(20),
-                                if (copystate == RequestHardCopyState.idleState)
-                                  Center(
-                                    child: Opacity(
-                                      opacity: .8,
-                                      child: Text(
-                                        'You will be contacted soon to get the requested hard copy.',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline4,
-                                      ),
-                                    ),
-                                  ),
-                                if (copystate ==
-                                    RequestHardCopyState
-                                        .requestHardcopySubmiting)
-                                  SizedBox(
-                                    height: 32,
-                                    width: 32,
-                                    child: Center(
-                                      child: CircularProgressIndicator(
-                                        color: Darktheme.primaryColor,
-                                      ),
-                                    ),
-                                  ),
-                                if (copystate ==
-                                    RequestHardCopyState
-                                        .requestHardcopySubmissionFailed)
-                                  Center(
-                                    child: Opacity(
-                                      opacity: .8,
-                                      child: Text(
-                                        'Request failed try again',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline4,
-                                      ),
-                                    ),
-                                  ),
-                                if (copystate ==
-                                    RequestHardCopyState
-                                        .requestHardcopySubmitted)
-                                  Center(
-                                    child: Opacity(
-                                      opacity: 1,
-                                      child: Text(
-                                        'Your request have been succesfuly submitted',
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .headline4!
-                                            .copyWith(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                      ),
-                                    ),
-                                  ),
-                              ],
+                          PlusButton(),
+                          Container(
+                            height: 40,
+                            constraints:
+                                BoxConstraints(maxWidth: 50, minWidth: 42),
+                            alignment: Alignment.center,
+                            child: Text(
+                              '${counterState.counter}',
+                              style: Theme.of(context).textTheme.headline3,
                             ),
                           ),
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Text(
-                                  'Price',
-                                  style: Theme.of(context).textTheme.headline4,
-                                ),
-                                verticalSpacing(30),
-                                book.price != null
-                                    ? Column(
-                                        children: [
-                                          Text(
-                                            '1 Book',
-                                            textAlign: TextAlign.center,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline5,
-                                          ),
-                                        ],
-                                      )
-                                    : Opacity(
-                                        opacity: .8,
-                                        child: Text(
-                                          'Book price is not available',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline4,
-                                        ),
-                                      ),
-                              ],
-                            ),
-                          ),
+                          MinusButton(),
                         ],
                       ),
                       Spacer(),
+                      if (copystate == RequestHardCopyState.idleState)
+                        Center(
+                          child: Opacity(
+                            opacity: .8,
+                            child: SizedBox(
+                              width: SizeConfig.screenWidth! / 1.5,
+                              child: Text(
+                                'Request the book\'s hard copy.',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.headline4,
+                              ),
+                            ),
+                          ),
+                        ),
+                      if (copystate ==
+                          RequestHardCopyState.requestHardcopySubmiting)
+                        Center(
+                          child: SizedBox(
+                            height: 32,
+                            width: 32,
+                            child: Center(
+                              child: CircularProgressIndicator(
+                                color: Darktheme.primaryColor,
+                              ),
+                            ),
+                          ),
+                        ),
+                      if (copystate ==
+                          RequestHardCopyState.requestHardcopySubmissionFailed)
+                        Center(
+                          child: Opacity(
+                            opacity: .8,
+                            child: Text(
+                              'Request failed try again',
+                              textAlign: TextAlign.center,
+                              style: Theme.of(context).textTheme.headline4,
+                            ),
+                          ),
+                        ),
+                      if (copystate ==
+                          RequestHardCopyState.requestHardcopySubmitted)
+                        Center(
+                          child: Opacity(
+                            opacity: .8,
+                            child: SizedBox(
+                              width: SizeConfig.screenWidth! / 1.5,
+                              child: Text(
+                                'Your request have been succesfuly submitted',
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline4!
+                                    .copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      Spacer(flex: 2),
                       SizedBox(
                         height: 50,
                         width: SizeConfig.screenWidth! - 30,

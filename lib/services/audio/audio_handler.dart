@@ -1,3 +1,4 @@
+import 'package:audio_books/services/audio/service_locator.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:just_audio/just_audio.dart';
 
@@ -129,11 +130,18 @@ class MyAudioHandler extends BaseAudioHandler {
     queue.add(newQueue);
   }
 
-  UriAudioSource _createAudioSource(MediaItem mediaItem) {
-    return AudioSource.uri(
-      Uri.parse(mediaItem.extras!['url']),
-      tag: mediaItem,
-    );
+  AudioSource _createAudioSource(MediaItem mediaItem) {
+    print('the file item is ${mediaItem.extras!['url']}');
+    bool isFile = getIt.get<bool>(instanceName: 'isFile');
+
+    return isFile
+        ? AudioSource.uri(
+            Uri.parse(mediaItem.extras!['url']),
+            tag: mediaItem,
+          )
+        : AudioSource.uri(
+            Uri.file(mediaItem.extras!['url']),
+          );
   }
 
   @override

@@ -66,7 +66,7 @@ class _SubmitPhonePageState extends State<SubmitPhonePage> {
               style: Theme.of(context).textTheme.headline5,
             ),
             Text(
-              '${user.phoneNumber}',
+              '${user.countryCode}${user.phoneNumber} ?',
               style: Theme.of(context)
                   .textTheme
                   .headline5!

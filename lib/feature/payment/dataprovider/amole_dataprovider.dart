@@ -55,6 +55,21 @@ class AmolePaymentDP {
     }
   }
 
+  Future<void> finishPaymentAndRegisteruser(
+      String token, String userId, String subscriptionTypeId) async {
+    var response = await client.post(
+      Uri.parse(
+        'http://www.marakigebeya.com.et/api/AppSubscriptions?userId=$userId&subscriptionTypeId=$subscriptionTypeId',
+      ),
+      headers: {
+        'Authorization': token,
+      },
+    );
+    if (response.statusCode != 200) {
+      throw Exception('user reg failed');
+    }
+  }
+
   Future<List<Subscribtion>> checkPaymentSubscribtion(
       {required String userId, required String token}) async {
     var response = await client.get(

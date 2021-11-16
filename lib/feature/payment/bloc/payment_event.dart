@@ -22,6 +22,12 @@ class CommitPayment extends PaymentEvent {
   });
 }
 
+class FinishPaymentAndRegister extends PaymentEvent {
+  final String subscriptionTypeId;
+
+  FinishPaymentAndRegister({required this.subscriptionTypeId});
+}
+
 class CheckSubscription extends PaymentEvent {
   final bool isEbook;
 

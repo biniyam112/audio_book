@@ -1,5 +1,5 @@
-import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_down_book_bloc.dart';
-import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_down_book_event.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/bloc/fetch_down_book_bloc.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/bloc/fetch_down_book_event.dart';
 import 'package:audio_books/models/downloaded_book.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';

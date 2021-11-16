@@ -17,7 +17,6 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
 
   @override
   Stream<OtpState> mapEventToState(event) async* {
-    print("********************MAP EVENT TO STATE");
     if (event is VerifyOtp) yield* _mapVerifyOtpToState(event);
     if (event is SendOtp) yield* _mapSendOtpToState(event);
     if (event is OtpSendEvent) yield OtpSent(phoneNumber: event.phoneNumber);
@@ -40,12 +39,10 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
       }
     } catch (e) {
       yield OtpValidationError();
-      print("CATCH_VERIFY_OTP_ERROR********************************$e");
     }
   }
 
   Stream<OtpState> _mapSendOtpToState(SendOtp event) async* {
-    print("SEND OTP ****************");
     yield OtpInProgress();
     subscription = _sendOtp(event.phoneNumber).listen((event) {
       add(event);
@@ -62,24 +59,17 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
           Duration(seconds: 1),
           (error) async {
             otpEventStream.add(OtpExceptionEvent(error: error.toString()));
-            print("ERROR********************************$error");
           },
           (phoneAuthCredential) {},
           (verificationId, forceResendingToken) async {
-            print("OTPSENT IN BLOC******************");
-
             this.verificationId = verificationId;
-            print("VERIFICATION ID ****************${this.verificationId}");
             otpEventStream.add(OtpSendEvent(phoneNumber: phoneNum));
           },
           (verificationId) {});
 
       yield* otpEventStream.stream;
-
-      // }
     } catch (e) {
       yield OtpExceptionEvent(error: e.toString());
-      print("CATCH_SEND_OTP_ERROR********************************$e");
     }
   }
 }

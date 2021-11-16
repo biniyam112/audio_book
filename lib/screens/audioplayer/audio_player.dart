@@ -1,6 +1,7 @@
 import 'package:audio_books/feature/fetch_advertisement/bloc/advertisement_bloc.dart';
 import 'package:audio_books/feature/fetch_advertisement/bloc/advertisement_event.dart';
-import 'package:audio_books/models/chapter.dart';
+import 'package:audio_books/models/downloaded_episode.dart';
+import 'package:audio_books/models/episode.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/services/audio/page_manager.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
@@ -13,10 +14,18 @@ import 'package:provider/provider.dart';
 import 'components/body.dart';
 
 class AudioPlayerScreen extends StatefulWidget {
-  const AudioPlayerScreen({Key? key, required this.book, required this.chapter})
-      : super(key: key);
-  final Book book;
-  final Chapter chapter;
+  const AudioPlayerScreen({
+    Key? key,
+    this.book,
+    this.episode,
+    this.downloadedBook,
+    this.downloadedEpisode,
+  }) : super(key: key);
+  final Book? book;
+  // ?has to be make List<Episode> in future
+  final Episode? episode;
+  final DownloadedBook? downloadedBook;
+  final DownloadedEpisode? downloadedEpisode;
 
   @override
   _AudioPlayerScreenState createState() => _AudioPlayerScreenState();
@@ -25,7 +34,8 @@ class AudioPlayerScreen extends StatefulWidget {
 class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   @override
   void initState() {
-    getIt<PageManager>().init([widget.chapter]);
+    var playList = widget.episode == null ? null : [widget.episode!];
+    getIt<PageManager>().init(playList, widget.downloadedEpisode);
     BlocProvider.of<AdvertisementBloc>(context).add(FetchAdvertEvent());
     super.initState();
   }
@@ -53,7 +63,9 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
       ),
       body: Body(
         book: widget.book,
-        chapter: widget.chapter,
+        episode: widget.episode,
+        downloadedBook: widget.downloadedBook,
+        downloadedEpisode: widget.downloadedEpisode,
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:audio_books/models/advertisement.dart';
+import 'package:audio_books/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -16,13 +17,14 @@ class AdvertisementCard extends StatelessWidget {
     return Container(
       child: CachedNetworkImage(
         imageUrl: advertisement.imagePath,
-        progressIndicatorBuilder: (context, url, downloadProgress) =>
-            CircularProgressIndicator(
-          value: downloadProgress.progress,
+        progressIndicatorBuilder: (context, url, downloadProgress) => Center(
+          child: CircularProgressIndicator(
+            color: Darktheme.primaryColor,
+          ),
         ),
         errorWidget: (context, url, error) => Icon(Icons.error),
         height: SizeConfig.screenHeight! * .3,
-        fit: BoxFit.cover,
+        fit: BoxFit.fitWidth,
       ),
     );
   }

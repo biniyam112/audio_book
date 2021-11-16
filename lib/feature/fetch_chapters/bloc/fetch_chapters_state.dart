@@ -1,4 +1,4 @@
-import 'package:audio_books/models/chapter.dart';
+import 'package:audio_books/models/episode.dart';
 import 'package:equatable/equatable.dart';
 
 class FetchChaptersState extends Equatable {
@@ -11,7 +11,7 @@ class IdleState extends FetchChaptersState {}
 class ChaptersFetchingState extends FetchChaptersState {}
 
 class ChaptersFetchedState extends FetchChaptersState {
-  final List<Chapter> chapters;
+  final List<Episode> chapters;
 
   ChaptersFetchedState({required this.chapters});
 }

@@ -1,7 +1,11 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:audio_books/constants.dart';
 import 'package:audio_books/feature/fetch_advertisement/bloc/advertisement_bloc.dart';
 import 'package:audio_books/feature/fetch_advertisement/bloc/advertisement_stata.dart';
-import 'package:audio_books/models/chapter.dart';
+import 'package:audio_books/models/downloaded_episode.dart';
+import 'package:audio_books/models/episode.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/audioplayer/components/play_pause_button.dart';
 import 'package:audio_books/screens/audioplayer/components/prev_song_button.dart';
@@ -28,25 +32,33 @@ import 'next_song_button.dart';
 class Body extends StatefulWidget {
   const Body({
     Key? key,
-    required this.book,
-    required this.chapter,
+    this.book,
+    this.episode,
+    this.downloadedBook,
+    this.downloadedEpisode,
   }) : super(key: key);
-  final Book book;
-  final Chapter chapter;
+  final Book? book;
+  final Episode? episode;
+  final DownloadedBook? downloadedBook;
+  final DownloadedEpisode? downloadedEpisode;
 
   @override
-  _BodyState createState() => _BodyState(book, chapter);
+  _BodyState createState() =>
+      _BodyState(book, episode, downloadedBook, downloadedEpisode);
 }
 
 class _BodyState extends State<Body> {
-  final Book book;
-  final Chapter chapter;
+  final Book? bookWeb;
+  final Episode? episode;
+  final DownloadedBook? downloadedBook;
+  final DownloadedEpisode? downloadedEpisode;
   late PageManager _pageManager;
   late PageController _pageController;
 
   bool isFavorite = false;
-
-  _BodyState(this.book, this.chapter);
+  late bool isFile;
+  _BodyState(
+      this.bookWeb, this.episode, this.downloadedBook, this.downloadedEpisode);
 
   @override
   void initState() {
@@ -54,6 +66,14 @@ class _BodyState extends State<Body> {
     _pageManager = getIt<PageManager>();
     _pageManager.play();
     _pageController = PageController();
+    isFile = getIt.get<bool>(instanceName: 'isFile');
+    isFile = bookWeb == null;
+  }
+
+  Future<Uint8List> fetchCoverImage({required String imagePath}) async {
+    File file = File(imagePath);
+    final byteImage = file.readAsBytes();
+    return byteImage;
   }
 
   @override
@@ -135,22 +155,58 @@ class _BodyState extends State<Body> {
                                       Container(
                                         height: SizeConfig.screenWidth,
                                         width: SizeConfig.screenWidth,
-                                        child: CachedNetworkImage(
-                                          imageUrl: book.coverArt,
-                                          progressIndicatorBuilder: (context,
-                                                  url, downloadProgress) =>
-                                              CircularProgressIndicator(
-                                            value: downloadProgress.progress,
-                                          ),
-                                          errorWidget: (context, url, error) =>
-                                              Icon(Icons.error),
-                                          fit: BoxFit.cover,
-                                        ),
+                                        child: isFile
+                                            ? FutureBuilder<Uint8List>(
+                                                future: fetchCoverImage(
+                                                  imagePath: downloadedBook!
+                                                      .coverArtPath!,
+                                                ),
+                                                builder: (context, snapshot) {
+                                                  if (!snapshot.hasData ||
+                                                      snapshot.data == null) {
+                                                    return Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        SizedBox(
+                                                          height: 30,
+                                                          width: 30,
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            color: Darktheme
+                                                                .primaryColor,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  } else {
+                                                    return Image.memory(
+                                                      snapshot.data!,
+                                                      fit: BoxFit.cover,
+                                                      width: double.infinity,
+                                                      height: double.infinity,
+                                                    );
+                                                  }
+                                                })
+                                            : CachedNetworkImage(
+                                                imageUrl: bookWeb!.coverArt,
+                                                progressIndicatorBuilder:
+                                                    (context, url,
+                                                            downloadProgress) =>
+                                                        CircularProgressIndicator(
+                                                  value:
+                                                      downloadProgress.progress,
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Icon(Icons.error),
+                                                fit: BoxFit.cover,
+                                              ),
                                       ),
-                                      ListView.builder(
-                                        itemCount: state.ads.length,
-                                        itemBuilder: (context, index) =>
-                                            AdvertisementCard(
+                                      ...List.generate(
+                                        state.ads.length,
+                                        (index) => AdvertisementCard(
                                           advertisement: state.ads[index],
                                         ),
                                       ),
@@ -170,17 +226,54 @@ class _BodyState extends State<Body> {
                                     child: SizedBox(
                                       height: SizeConfig.screenWidth! - 100,
                                       width: SizeConfig.screenWidth! - 100,
-                                      child: CachedNetworkImage(
-                                        imageUrl: book.coverArt,
-                                        progressIndicatorBuilder:
-                                            (context, url, downloadProgress) =>
-                                                CircularProgressIndicator(
-                                          value: downloadProgress.progress,
-                                        ),
-                                        errorWidget: (context, url, error) =>
-                                            Icon(Icons.error),
-                                        fit: BoxFit.cover,
-                                      ),
+                                      child: isFile
+                                          ? FutureBuilder<Uint8List>(
+                                              future: fetchCoverImage(
+                                                imagePath: downloadedBook!
+                                                    .coverArtPath!,
+                                              ),
+                                              builder: (context, snapshot) {
+                                                if (!snapshot.hasData ||
+                                                    snapshot.data == null) {
+                                                  return Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      SizedBox(
+                                                        height: 30,
+                                                        width: 30,
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          color: Darktheme
+                                                              .primaryColor,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                } else {
+                                                  return Image.memory(
+                                                    snapshot.data!,
+                                                    fit: BoxFit.cover,
+                                                    width: double.infinity,
+                                                    height: double.infinity,
+                                                  );
+                                                }
+                                              })
+                                          : CachedNetworkImage(
+                                              imageUrl: bookWeb!.coverArt,
+                                              progressIndicatorBuilder:
+                                                  (context, url,
+                                                          downloadProgress) =>
+                                                      CircularProgressIndicator(
+                                                value:
+                                                    downloadProgress.progress,
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Icon(Icons.error),
+                                              fit: BoxFit.cover,
+                                            ),
                                     ),
                                   );
                                 }
@@ -196,10 +289,15 @@ class _BodyState extends State<Body> {
                   });
             }),
         Spacer(),
-        Text(
-          '${book.title}',
-          style: Theme.of(context).textTheme.headline4,
-        ),
+        isFile
+            ? Text(
+                '${downloadedBook!.title}',
+                style: Theme.of(context).textTheme.headline4,
+              )
+            : Text(
+                '${bookWeb!.title}',
+                style: Theme.of(context).textTheme.headline4,
+              ),
         verticalSpacing(10),
         ValueListenableBuilder<String>(
             valueListenable: _pageManager.currentSongTitleNotifier,

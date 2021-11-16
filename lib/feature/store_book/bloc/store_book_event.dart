@@ -1,3 +1,4 @@
+import 'package:audio_books/models/episode.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:equatable/equatable.dart';
 
@@ -14,8 +15,9 @@ class StoreEBookEvent extends StoreBookEvent {
 
 class StoreAudioBookEvent extends StoreBookEvent {
   final Book book;
+  final Episode episode;
 
-  StoreAudioBookEvent({required this.book});
+  StoreAudioBookEvent({required this.book, required this.episode});
 }
 
 class StoreEBookProgressEvent extends StoreBookEvent {

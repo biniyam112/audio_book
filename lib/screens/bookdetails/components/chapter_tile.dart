@@ -1,4 +1,4 @@
-import 'package:audio_books/models/chapter.dart';
+import 'package:audio_books/models/episode.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/audioplayer/audio_player.dart';
 import 'package:audio_books/theme/theme.dart';
@@ -8,15 +8,15 @@ import 'package:provider/provider.dart';
 
 import '../../../sizeConfig.dart';
 
-class ChapterTile extends StatelessWidget {
-  const ChapterTile({
+class EpisodeTile extends StatelessWidget {
+  const EpisodeTile({
     Key? key,
     required this.chapterNumber,
-    required this.chapter,
+    required this.episode,
     required this.book,
   }) : super(key: key);
   final Book book;
-  final Chapter chapter;
+  final Episode episode;
   final int chapterNumber;
 
   @override
@@ -33,7 +33,7 @@ class ChapterTile extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return AudioPlayerScreen(book: book, chapter: chapter);
+                return AudioPlayerScreen(book: book, episode: episode);
               },
             ),
           );
@@ -73,14 +73,14 @@ class ChapterTile extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Chapter $chapterNumber',
+                      'Episode $chapterNumber',
                       style: Theme.of(context).textTheme.headline6!.copyWith(
                             fontWeight: FontWeight.w600,
                           ),
                     ),
                     SizedBox(height: getProportionateScreenHeight(4)),
                     Text(
-                      chapter.chapterTitle,
+                      episode.chapterTitle,
                       style: Theme.of(context).textTheme.headline6,
                     ),
                   ],
@@ -88,7 +88,7 @@ class ChapterTile extends StatelessWidget {
               ),
               Spacer(flex: 2),
               Text(
-                chapter.length,
+                episode.length,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                 ),
@@ -100,7 +100,7 @@ class ChapterTile extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return AudioPlayerScreen(book: book, chapter: chapter);
+                        return AudioPlayerScreen(book: book, episode: episode);
                       },
                     ),
                   );

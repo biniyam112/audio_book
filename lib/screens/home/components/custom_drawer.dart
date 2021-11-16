@@ -61,10 +61,11 @@ class CustomDrawer extends StatelessWidget {
                     var userBox = HiveBoxes.getUserBox();
                     HiveBoxes.deleteUser();
                     await userBox.clear();
-                    pushNewScreen(
+                    pushNewScreenWithRouteSettings(
                       context,
                       screen: LoginScreen(),
                       withNavBar: false,
+                      settings: RouteSettings(),
                     );
                   },
                 ),

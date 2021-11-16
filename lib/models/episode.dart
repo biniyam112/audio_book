@@ -1,16 +1,16 @@
-class Chapter {
-  String bookId, chapterTitle, bookTitle, fileUrl, length;
+class Episode {
+  String id, chapterTitle, bookTitle, fileUrl, length;
 
-  Chapter({
-    required this.bookId,
+  Episode({
+    required this.id,
     required this.chapterTitle,
     required this.bookTitle,
     required this.fileUrl,
     required this.length,
   });
 
-  factory Chapter.fromMap(Map<String, dynamic> json) => Chapter(
-        bookId: json['id'],
+  factory Episode.fromMap(Map<String, dynamic> json) => Episode(
+        id: json['id'],
         chapterTitle: json['title'],
         bookTitle: json['book'],
         fileUrl: Uri.http('www.marakigebeya.com.et', json['path']).toString(),

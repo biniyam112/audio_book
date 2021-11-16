@@ -5,6 +5,7 @@ import 'package:audio_books/feature/store_book/bloc/store_book_bloc.dart';
 import 'package:audio_books/feature/store_book/bloc/store_book_event.dart';
 import 'package:audio_books/feature/store_book/bloc/store_book_state.dart';
 import 'package:audio_books/models/book.dart';
+import 'package:audio_books/models/episode.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/bookdetails/components/purchase_button.dart';
 import 'package:audio_books/screens/bookdetails/components/author_display.dart';
@@ -58,10 +59,58 @@ class DetailsTopSection extends StatelessWidget {
               ),
             ),
             verticalSpacing(10),
-            BlocListener<PaymentBloc, PaymentState>(
-              listener: (context, subscribtionState) {
-                if (subscribtionState is CheckSubCompleted) {
-                  if (subscribtionState.subscribtions.isEmpty)
+            BlocConsumer<PaymentBloc, PaymentState>(
+              builder: (context, checksubstate) {
+                return BlocConsumer<StoreBookBloc, StoreBookState>(
+                  listener: (context, storingstate) {
+                    if (storingstate is BookStoringState) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        buildSnackBar(context, text: 'Downloading... '),
+                      );
+                    }
+                    if (storingstate is BookStoredState) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        buildSnackBar(context, text: 'Book added to library'),
+                      );
+                    }
+                    if (storingstate is BookStoringFailedState) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        buildSnackBar(context, text: 'Failed to fetch item'),
+                      );
+                    }
+                  },
+                  builder: (context, storingstate) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        PurchaseButton(
+                          text: 'Get E-book',
+                          onPress: (book.resourceType == 'Ebook')
+                              ? () {
+                                  BlocProvider.of<PaymentBloc>(context)
+                                      .add(CheckSubscription(isEbook: true));
+                                }
+                              : null,
+                        ),
+                        PurchaseButton(
+                          text: 'Get Audio book',
+                          onPress: (book.resourceType == 'AudioBook')
+                              ? () {
+                                  BlocProvider.of<PaymentBloc>(context)
+                                      .add(CheckSubscription(isEbook: false));
+                                }
+                              : null,
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+
+              // ? If subsiripiton plan is available start downloading app
+              listener: (context, checksubstate) {
+                if (checksubstate is CheckSubCompleted) {
+                  if (checksubstate.subscribtions.isEmpty) {
                     showModalBottomSheet(
                       context: context,
                       isScrollControlled: true,
@@ -72,79 +121,30 @@ class DetailsTopSection extends StatelessWidget {
                         return PaymentModalCard();
                       },
                     );
-                  if (subscribtionState.subscribtions.isNotEmpty &&
-                      subscribtionState.isEbook)
+                  }
+                  if (checksubstate.subscribtions.isNotEmpty &&
+                      checksubstate.isEbook) {
                     BlocProvider.of<StoreBookBloc>(context)
                         .add(StoreEBookEvent(book: book));
-                  if (subscribtionState.subscribtions.isNotEmpty &&
-                      !subscribtionState.isEbook)
-                    BlocProvider.of<StoreBookBloc>(context)
-                        .add(StoreAudioBookEvent(book: book));
+                  }
+                  if (checksubstate.subscribtions.isNotEmpty &&
+                      !checksubstate.isEbook) {
+                    BlocProvider.of<StoreBookBloc>(context).add(
+                      StoreAudioBookEvent(
+                        book: book,
+                        episode: Episode(
+                          id: "306d186f-e0dd-4784-bf5a-924b086123d6",
+                          bookTitle: "",
+                          chapterTitle: "ምዕራፍ 1 ",
+                          length: '00:43:23',
+                          fileUrl:
+                              "/mabdocuments/audio_e_books/b099846c-c54e-4e5e-9441-6535b9b3a9a7..mp3",
+                        ),
+                      ),
+                    );
+                  }
                 }
               },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  BlocListener<StoreBookBloc, StoreBookState>(
-                    listener: (context, state) {
-                      if (state is StoringEBookState) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          buildSnackBar(context, text: 'Downloading... '),
-                        );
-                      }
-                      if (state is EBookStoredState) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          buildSnackBar(context, text: 'Book added to library'),
-                        );
-                      }
-                      if (state is StoringEBookFailedState) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          buildSnackBar(context, text: 'Failed to fetch item'),
-                        );
-                      }
-                    },
-                    child: PurchaseButton(
-                      text: 'Get E-book',
-                      onPress: (book.resourceType == 'Ebook')
-                          ? () {
-                              // BlocProvider.of<PaymentBloc>(context)
-                              //     .add(CheckSubscription(isEbook: true));
-                              BlocProvider.of<StoreBookBloc>(context)
-                                  .add(StoreEBookEvent(book: book));
-                            }
-                          : null,
-                    ),
-                  ),
-                  BlocListener<StoreBookBloc, StoreBookState>(
-                    listener: (context, state) {
-                      if (state is StoringEBookState) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          buildSnackBar(context, text: 'Downloading... '),
-                        );
-                      }
-                      if (state is EBookStoredState) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          buildSnackBar(context, text: 'Book added to library'),
-                        );
-                      }
-                      if (state is StoringEBookFailedState) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          buildSnackBar(context, text: 'Failed to fetch item'),
-                        );
-                      }
-                    },
-                    child: PurchaseButton(
-                      text: 'Get Audio book',
-                      onPress: (book.resourceType == 'AudioBook')
-                          ? () {
-                              BlocProvider.of<PaymentBloc>(context)
-                                  .add(CheckSubscription(isEbook: false));
-                            }
-                          : null,
-                    ),
-                  ),
-                ],
-              ),
             ),
           ],
         ),

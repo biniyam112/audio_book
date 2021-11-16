@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:audio_books/constants.dart';
 import 'package:audio_books/models/user.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,9 +21,9 @@ class AuthorizeUserDataProvider {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
+    print(response.statusCode);
     if (response.statusCode == 200) {
       var userJson = jsonDecode(response.body);
-
       return User(
         id: userJson['id'],
         firstName: userJson['fullName'].toString().split(' ')[0],
@@ -32,9 +33,10 @@ class AuthorizeUserDataProvider {
         token: userJson['jwtToken'],
       );
     } else {
-      print(response.headers);
-      print(response.body);
-      throw Exception('User authorization failed');
+      if (jsonDecode(response.body)['message'] == 'Verification Not Successful')
+        throw Exception(kPhoneNotRegisteredError);
+      else
+        throw Exception(kUserAuthorizationError);
     }
   }
 }

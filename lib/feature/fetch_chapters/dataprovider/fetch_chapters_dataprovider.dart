@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:audio_books/models/chapter.dart';
+import 'package:audio_books/models/episode.dart';
 import 'package:http/http.dart' as http;
 
 class FetchChaptersDP {
@@ -8,7 +8,7 @@ class FetchChaptersDP {
 
   FetchChaptersDP({required this.client});
 
-  Future<List<Chapter>> fetchBookChapters(String bookId, token) async {
+  Future<List<Episode>> fetchBookChapters(String bookId, token) async {
     var response = await client.get(
       Uri.parse('http://www.marakigebeya.com.et/api/Chapters?bookId=$bookId'),
       headers: {
@@ -16,11 +16,11 @@ class FetchChaptersDP {
       },
     );
     if (response.statusCode == 200) {
-      var chaptersJson = jsonDecode(response.body)['items'] as List;
-      var chapters = chaptersJson
-          .map((chapterJson) => Chapter.fromMap(chapterJson))
+      var episodeJson = jsonDecode(response.body)['items'] as List;
+      var episodes = episodeJson
+          .map((episodeJson) => Episode.fromMap(episodeJson))
           .toList();
-      return chapters;
+      return episodes;
     } else {
       throw Exception('Unable to fetch chapters');
     }

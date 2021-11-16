@@ -68,7 +68,13 @@ class BooksBody extends StatelessWidget {
               if (pingState == PingSiteState.success) {
                 return Column(
                   children: [
-                    BlocBuilder<FeaturedBooksBloc, FeaturedBooksState>(
+                    BlocConsumer<FeaturedBooksBloc, FeaturedBooksState>(
+                      listener: (context, state) {
+                        if (state is FeaturedBooksFetchingFailed) {
+                          BlocProvider.of<PingSiteBloc>(context)
+                              .add(PingSiteEvent());
+                        }
+                      },
                       builder: (context, state) {
                         if (state is FeaturedBooksFetched) {
                           var books = state.books;
@@ -127,21 +133,18 @@ class BooksBody extends StatelessWidget {
                             ),
                           );
                         }
-                        if (state is FeaturedBooksFetchingFailed) {
-                          return Text('${state.errorMessage}');
-                        }
-                        return Container(
-                          height: 32,
-                          width: 32,
-                          child: CircularProgressIndicator(
-                            color: Darktheme.primaryColor,
-                            strokeWidth: 3,
-                          ),
-                        );
+
+                        return Container();
                       },
                     ),
                     verticalSpacing(10),
-                    BlocBuilder<CategoryBloc, CategoryState>(
+                    BlocConsumer<CategoryBloc, CategoryState>(
+                      listener: (context, categoryState) {
+                        if (categoryState is CategoriesFetchingFailedState) {
+                          BlocProvider.of<CategoryBloc>(context)
+                              .add(CategoryEvent());
+                        }
+                      },
                       builder: (blocContext, categoryState) {
                         if (categoryState is CategoriesFetchedState) {
                           var categories = categoryState.categories;
@@ -203,8 +206,7 @@ class BooksBody extends StatelessWidget {
                                         }
                                         if (booksState
                                             is CategoryBooksFetchFailedState) {
-                                          return Text(
-                                              '${booksState.errorMessage}');
+                                          return Container();
                                         }
                                         return Container(
                                           height: SizeConfig.screenHeight! * .2,
@@ -234,11 +236,10 @@ class BooksBody extends StatelessWidget {
                           );
                         }
                         if (categoryState is CategoriesFetchingFailedState) {
-                          return Text('${categoryState.errorMessage}');
+                          return NoConnectionWidget();
                         }
-                        return Container(
-                          child: Text('idle category state'),
-                        );
+
+                        return NoConnectionWidget();
                       },
                     ),
                     verticalSpacing(10),

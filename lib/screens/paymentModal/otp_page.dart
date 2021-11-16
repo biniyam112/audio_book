@@ -2,6 +2,7 @@ import 'package:audio_books/constants.dart';
 import 'package:audio_books/feature/payment/bloc/payment_bloc.dart';
 import 'package:audio_books/feature/payment/bloc/payment_event.dart';
 import 'package:audio_books/feature/payment/bloc/payment_state.dart';
+import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/components/input_field_container.dart';
 import 'package:audio_books/screens/screens.dart';
 import 'package:audio_books/theme/theme.dart';
@@ -28,6 +29,7 @@ class _OtpPageState extends State<OtpPage> {
   TextEditingController textFieldController = TextEditingController();
   List<String> errors = [];
   int? selectedPlan;
+  late List<Subscribtion> subscriptions;
 
   @override
   void initState() {
@@ -100,20 +102,21 @@ class _OtpPageState extends State<OtpPage> {
         ),
         verticalSpacing(6),
         BlocBuilder<PaymentBloc, PaymentState>(
-            builder: (context, paymentState) {
-          if (paymentState is PaymentOnprocess) {
-            return Center(
-              child: Container(
-                height: 32,
-                width: 32,
-                child: CircularProgressIndicator(
-                  color: Darktheme.primaryColor,
+          builder: (context, paymentState) {
+            if (paymentState is PaymentOnprocess) {
+              return Center(
+                child: Container(
+                  height: 32,
+                  width: 32,
+                  child: CircularProgressIndicator(
+                    color: Darktheme.primaryColor,
+                  ),
                 ),
-              ),
-            );
-          }
-          return FormError(errors: errors);
-        }),
+              );
+            }
+            return FormError(errors: errors);
+          },
+        ),
         verticalSpacing(20),
         Text(
           'Select Subscription plan',
@@ -125,8 +128,8 @@ class _OtpPageState extends State<OtpPage> {
         Align(
           alignment: Alignment.center,
           child: BlocBuilder<PaymentBloc, PaymentState>(
-            builder: (context, paymentstate) {
-              if (paymentstate is PlansFetching) {
+            builder: (context, plansstate) {
+              if (plansstate is PlansFetching) {
                 SizedBox(
                   height: getProportionateScreenHeight(120),
                   child: Center(
@@ -140,8 +143,9 @@ class _OtpPageState extends State<OtpPage> {
                   ),
                 );
               }
-              if (paymentstate is PlansFetched) {
-                var plans = paymentstate.plans;
+              if (plansstate is PlansFetched) {
+                var plans = plansstate.plans;
+                subscriptions = plans;
                 if (plans.isEmpty) {
                   return SizedBox(
                     height: getProportionateScreenHeight(120),
@@ -178,7 +182,7 @@ class _OtpPageState extends State<OtpPage> {
                   },
                 );
               }
-              if (paymentstate is PlansFetchingFailed) {
+              if (plansstate is PlansFetchingFailed) {
                 return SizedBox(
                   height: getProportionateScreenHeight(120),
                   child: Center(
@@ -199,6 +203,11 @@ class _OtpPageState extends State<OtpPage> {
             if (paymentstate is PaymentCompleted) {
               if (paymentstate.errorCode == "00001") {
                 errors.remove(kwrongCodeError);
+                BlocProvider.of<PaymentBloc>(context).add(
+                  FinishPaymentAndRegister(
+                    subscriptionTypeId: subscriptions[selectedPlan!].id,
+                  ),
+                );
                 widget.onPress();
               } else {
                 if (!errors.contains(kwrongCodeError))
@@ -227,7 +236,7 @@ class _OtpPageState extends State<OtpPage> {
                     CommitPayment(
                       phoneNumber: widget.phoneNumber,
                       pin: textFieldController.text,
-                      amount: 100,
+                      amount: subscriptions[selectedPlan!].fee,
                     ),
                   );
                 }

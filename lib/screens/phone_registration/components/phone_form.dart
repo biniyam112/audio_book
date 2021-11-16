@@ -2,6 +2,7 @@ import 'package:audio_books/constants.dart';
 import 'package:audio_books/feature/otp/otp.dart';
 import 'package:audio_books/models/user.dart';
 import 'package:audio_books/screens/components/input_field_container.dart';
+import 'package:audio_books/screens/login/login.dart';
 import 'package:audio_books/screens/otp/otp.dart';
 import 'package:audio_books/screens/screens.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
@@ -94,20 +95,15 @@ class _PhoneFormState extends State<PhoneForm> {
   Widget build(BuildContext context) {
     return BlocConsumer<OtpBloc, OtpState>(
       listener: (context, state) {
-        if (state is OtpInProgress) {
+        if (state is OtpSent) {
           errors.remove(kOtpError);
-        } else if (state is OtpSent) {
-          errors.remove(kOtpError);
-          Navigator.push(
+          Navigator.popAndPushNamed(
             context,
-            MaterialPageRoute(
-              builder: (cotext) {
-                return OTPScreen();
-              },
-            ),
+            OTPScreen.pageRoute,
+            arguments: false,
           );
         } else if (state is OtpFailure) {
-          errors.add(kOtpError);
+          if (!errors.contains(kOtpError)) errors.add(kOtpError);
         }
       },
       builder: (context, state) {
@@ -250,9 +246,6 @@ class _PhoneFormState extends State<PhoneForm> {
                                 user.phoneNumber!.isNotEmpty) {
                               final phoneNumber =
                                   '${user.countryCode}${user.phoneNumber}';
-                              print("OTP BLOC STATE $state");
-                              print(
-                                  "USER PHONE*********************$phoneNumber");
                               BlocProvider.of<OtpBloc>(context)
                                   .add(SendOtp(phoneNumber: phoneNumber));
                             }
@@ -284,6 +277,33 @@ class _PhoneFormState extends State<PhoneForm> {
                           ),
                         ),
                 ),
+              ),
+              verticalSpacing(SizeConfig.screenHeight! * .12),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Already have an account?',
+                    style: Theme.of(context).textTheme.headline5,
+                  ),
+                  TextButton(
+                    onPressed: (state is OtpInProgress)
+                        ? null
+                        : () {
+                            Navigator.popAndPushNamed(
+                              context,
+                              LoginScreen.pageRoute,
+                            );
+                          },
+                    child: Text(
+                      'Login',
+                      style: Theme.of(context).textTheme.headline5!.copyWith(
+                            color: Colors.blue[900],
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

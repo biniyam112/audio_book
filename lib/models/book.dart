@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 class Book {
   final String id,
       title,
@@ -12,6 +14,7 @@ class Book {
       publishmentYear,
       resourceType;
   final int? price;
+  final List<Uint8List>? episodes;
 
   Book({
     required this.id,
@@ -27,6 +30,7 @@ class Book {
     required this.description,
     required this.resourceType,
     required this.price,
+    this.episodes,
   });
 
   factory Book.fromMap(Map<String, dynamic> json) => Book(

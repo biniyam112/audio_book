@@ -21,6 +21,15 @@ class AmolePaymentRepo {
     );
   }
 
+  Future<void> finishPaymentAndRegisteruser({
+    required String token,
+    required String userId,
+    required String subscriptionTypeId,
+  }) async {
+    return await amolePaymentDP.finishPaymentAndRegisteruser(
+        token, userId, subscriptionTypeId);
+  }
+
   Future<List<Subscribtion>> checkPaymentSubscribtion(
       {required String userId, required String token}) async {
     return await amolePaymentDP.checkPaymentSubscribtion(

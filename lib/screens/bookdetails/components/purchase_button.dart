@@ -8,10 +8,12 @@ class PurchaseButton extends StatelessWidget {
     Key? key,
     required this.text,
     required this.onPress,
+    this.child,
   }) : super(key: key);
 
   final String text;
   final GestureTapCallback? onPress;
+  final Widget? child;
 
   @override
   Widget build(BuildContext context) {
@@ -29,13 +31,15 @@ class PurchaseButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(
             vertical: 10,
           ),
-          child: Text(
-            text,
-            style: Theme.of(context).textTheme.headline5!.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
+          child: (child != null)
+              ? child
+              : Text(
+                  text,
+                  style: Theme.of(context).textTheme.headline5!.copyWith(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
                 ),
-          ),
         ),
         onPressed: onPress,
       ),

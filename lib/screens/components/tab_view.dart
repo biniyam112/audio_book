@@ -14,6 +14,8 @@ import 'package:provider/provider.dart';
 class TabViewPage extends StatelessWidget {
   const TabViewPage({Key? key}) : super(key: key);
 
+  static final pageRoute = '/tabview';
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);

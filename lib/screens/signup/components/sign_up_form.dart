@@ -1,3 +1,4 @@
+import 'package:audio_books/feature/authorize_user/bloc/authorize_user_bloc.dart';
 import 'package:audio_books/feature/register_user/bloc/register_user_bloc.dart';
 import 'package:audio_books/feature/register_user/bloc/register_user_event.dart';
 import 'package:audio_books/feature/register_user/bloc/register_user_state.dart';
@@ -33,73 +34,82 @@ class _SignUpFormState extends State<SignUpForm> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<RegisterUserBloc, RegisterUserState>(
+    return BlocConsumer<AuthorizeUserBloc, AuthoriseUserState>(
+        listener: (context, authState) {
+      if (authState is UserAuthorizedState) {
+        Navigator.popAndPushNamed(context, TabViewPage.pageRoute);
+        if (authState is UserAuthorizationFailedState) {
+          BlocProvider.of<AuthorizeUserBloc>(context)
+              .add(AuthoriseUserEvent.authorizeUser);
+        }
+      }
+    }, builder: (context, authState) {
+      return BlocConsumer<RegisterUserBloc, RegisterUserState>(
         listener: (blocContext, state) {
-      if (state is RegsiteringUserState) {
-        errors.remove(kPhoneInUseError);
-        errors.remove(kConnectionError);
-      }
-      if (state is UserRegisteredState) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return TabViewPage();
-            },
-          ),
-        );
-      }
-      if (state is RegsiteringUserFailedState) {
-        setState(() {
-          if (state.errorMessage.contains('Phone'))
-            errors.add(kPhoneInUseError);
-          else
-            errors.add(kConnectionError);
-        });
-      }
-    }, builder: (context, state) {
-      return Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            InputFieldContainer(
-              title: 'First name',
-              child: buildFirstNameField(),
-            ),
-            SizedBox(height: getProportionateScreenHeight(30)),
-            InputFieldContainer(
-              title: 'Last name',
-              child: buildLastNameField(),
-            ),
-            SizedBox(height: getProportionateScreenHeight(30)),
-            FormError(errors: errors),
-            SizedBox(height: getProportionateScreenHeight(40)),
-            if (state is RegsiteringUserState)
-              Center(
-                child: CircularProgressIndicator(
-                  color: Darktheme.primaryColor,
+          if (state is RegsiteringUserState) {
+            errors.remove(kPhoneInUseError);
+            errors.remove(kConnectionError);
+          }
+          if (state is UserRegisteredState) {
+            BlocProvider.of<AuthorizeUserBloc>(context)
+                .add(AuthoriseUserEvent.authorizeUser);
+          }
+          if (state is RegsiteringUserFailedState) {
+            setState(() {
+              if (state.errorMessage.contains('Phone'))
+                errors.add(kPhoneInUseError);
+              else
+                errors.add(kConnectionError);
+            });
+          }
+        },
+        builder: (context, state) {
+          return Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                InputFieldContainer(
+                  title: 'First name',
+                  child: buildFirstNameField(),
                 ),
-              ),
-            if (state is IdleState || state is RegsiteringUserFailedState)
-              ElevatedButton(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('Register'),
+                SizedBox(height: getProportionateScreenHeight(30)),
+                InputFieldContainer(
+                  title: 'Last name',
+                  child: buildLastNameField(),
                 ),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    var user = getIt.get<User>();
-                    user.setFirstName = firstName;
-                    user.setLastName = lastName;
-                    BlocProvider.of<RegisterUserBloc>(context).add(
-                      RegisterUserEvent(user: getIt.get<User>()),
-                    );
-                  }
-                },
-              ),
-          ],
-        ),
+                SizedBox(height: getProportionateScreenHeight(10)),
+                FormError(errors: errors),
+                SizedBox(height: getProportionateScreenHeight(30)),
+                if (state is RegsiteringUserState ||
+                    authState is UserAuthorizingState)
+                  Center(
+                    child: CircularProgressIndicator(
+                      color: Darktheme.primaryColor,
+                    ),
+                  ),
+                if (state is IdleStateReg ||
+                    state is RegsiteringUserFailedState)
+                  ElevatedButton(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Register'),
+                    ),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        var user = getIt.get<User>();
+                        user.setFirstName = firstName;
+                        user.setLastName = lastName;
+                        BlocProvider.of<RegisterUserBloc>(context).add(
+                          RegisterUserEvent(user: getIt.get<User>()),
+                        );
+                      }
+                    },
+                  ),
+              ],
+            ),
+          );
+        },
       );
     });
   }

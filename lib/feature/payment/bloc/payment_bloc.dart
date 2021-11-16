@@ -39,6 +39,19 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         yield PaymentFailed(errorMessage: e.toString());
       }
     }
+    if (event is FinishPaymentAndRegister) {
+      yield UserSubscribing();
+      try {
+        await amolePaymentRepo.finishPaymentAndRegisteruser(
+          token: user.token!,
+          userId: user.id!,
+          subscriptionTypeId: event.subscriptionTypeId,
+        );
+        yield UserSubscribed();
+      } catch (e) {
+        yield UserSubscribtionFailed();
+      }
+    }
     if (event is CheckSubscription) {
       yield CheckSubOnprocess();
       try {

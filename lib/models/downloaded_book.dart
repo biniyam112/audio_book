@@ -1,21 +1,23 @@
 import 'dart:typed_data';
 
+import 'package:audio_books/models/downloaded_episode.dart';
 import 'package:audio_books/models/models.dart';
 
 class DownloadedBook {
   final String id, title, author, category;
-  String bookFilePath, coverArtPath;
+  String? bookFilePath, coverArtPath;
   late Uint8List bookFile;
   late Uint8List coverArt;
+  late List<DownloadedEpisode> episodes;
   double percentCompleted = 0;
 
   DownloadedBook({
     required this.id,
     required this.title,
     required this.author,
-    required this.bookFilePath,
+    this.bookFilePath,
+    this.coverArtPath,
     required this.category,
-    required this.coverArtPath,
     required this.percentCompleted,
   });
 
@@ -33,9 +35,9 @@ class DownloadedBook {
         id: book.id,
         title: book.title,
         author: book.author,
+        category: book.category,
         bookFilePath: book.bookPath,
         coverArtPath: book.coverArt,
-        category: book.category,
         percentCompleted: 0,
       );
 
@@ -57,12 +59,17 @@ class DownloadedBook {
     coverArt = coverImage;
   }
 
-  set setPdffile(String pdfFile) {
-    bookFilePath = pdfFile;
+  set setPdffilePath(String pdfFilePath) {
+    bookFilePath = pdfFilePath;
   }
 
   set setBookFile(Uint8List encodedFile) {
     bookFile = encodedFile;
+  }
+
+  set setEpisodeFile(DownloadedEpisode encodedFile) {
+    episodes.add(encodedFile);
+    episodes.sort();
   }
 
   set setPercentCompleted(double percentile) {
