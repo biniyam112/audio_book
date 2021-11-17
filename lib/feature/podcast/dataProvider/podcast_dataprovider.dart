@@ -45,13 +45,13 @@ class PodcastDataProvider {
       final user = HiveBoxes.getUserBox().get(HiveBoxes.userKey);
       final token = user!.token;
       final subscriberId = user.id;
-      var uuid = Uuid();
-      var id = uuid.v4();
+      // var uuid = Uuid();
+      // var id = uuid.v4();
       final response = await _httpClient.post(
         subscirbePodcastUrl,
         body: jsonEncode(
           <String, String>{
-            'id': id,
+      
             'podcastId': '$podcastId',
             'subscriberId': '$subscriberId'
           },
@@ -91,7 +91,26 @@ class PodcastDataProvider {
     }
   }
 
-  // Future<APIPagedData> getEpisodes() async{
+  Future<APIPagedData> getEpisodes(String podcastId) async {
+    try {
+      final user = HiveBoxes.getUserBox().get(HiveBoxes.userKey);
+      final token = user!.token;
+      final podcastEpisodesUrl =
+          Uri.parse('$podcastEpisodes?podcastId=$podcastId');
+      final response = await _httpClient
+          .get(podcastEpisodesUrl, headers: {'Authorization': token!});
 
-  // }
+          print("*************PODCAST_EPISODES_*************${response.body}");
+      if (response.statusCode == 200) {
+        return APIPagedData.fromJson(jsonDecode(response.body));
+      }
+
+      return APIPagedData(
+          currentPage: 0, items: null, totalItems: 0, totalPages: 0);
+    } catch (e) {
+       print("PODCAST_EPISODE_ERORR***************$e");
+      return APIPagedData(
+          currentPage: 0, items: null, totalItems: 0, totalPages: 0);
+    }
+  }
 }

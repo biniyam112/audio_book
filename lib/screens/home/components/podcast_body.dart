@@ -30,7 +30,19 @@ class PodcastBody extends StatelessWidget {
               ),
               child: BlocBuilder<PodcastBloc, PodcastState>(
                   builder: (context, state) {
-                if (state is PodcastLoadSuccess) {
+                if (state is PodcastFailure) {
+                  return NoConnectionWidget();
+                } else if (state is PodcastInProgress ||
+                    state is PodcastInitState)
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: getProportionateScreenHeight(20)),
+                    child: Center(
+                        child: CircularProgressIndicator(
+                      color: Colors.orange,
+                    )),
+                  );
+                else
                   return Column(
                     children: [
                       Container(
@@ -58,6 +70,7 @@ class PodcastBody extends StatelessWidget {
                                 : SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         ...List.generate(
                                           PodcastBloc
@@ -65,7 +78,7 @@ class PodcastBody extends StatelessWidget {
                                           (index) {
                                             return Container(
                                               width:
-                                                  SizeConfig.screenWidth! * .4,
+                                                  SizeConfig.screenWidth! * .47,
                                               child: AspectRatio(
                                                   aspectRatio: .8,
                                                   child: Padding(
@@ -133,11 +146,6 @@ class PodcastBody extends StatelessWidget {
                       ),
                     ],
                   );
-                } else if (state is PodcastInProgress ||
-                    state is PodcastInitState)
-                  return Center(child: CircularProgressIndicator());
-                else
-                  return NoConnectionWidget();
               })),
         ),
       ),

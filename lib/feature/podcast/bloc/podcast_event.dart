@@ -31,3 +31,12 @@ class FetchSubscribedPodcasts extends PodcastEvent {
   @override
   List<Object?> get props => [this.page];
 }
+
+class FetchPodcastEpisodes extends PodcastEvent {
+  final String podcastId;
+
+  FetchPodcastEpisodes({required this.podcastId});
+
+  @override
+  List<Object?> get props => [this.podcastId];
+}

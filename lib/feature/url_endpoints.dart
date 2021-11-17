@@ -1,4 +1,6 @@
-const baseUrl = 'http://www.marakigebeya.com.et/api';
-const podcastUrl = '$baseUrl/podcast?limit=10';
-const subscribeForPodcastUrl = "$baseUrl/SubscribeForPodcast";
-const mySubscriptions="$baseUrl/MySubscriptions";
+const baseUrl = 'http://www.marakigebeya.com.et';
+
+const podcastUrl = '$baseUrl/api/podcast?limit=10';
+const subscribeForPodcastUrl = "$baseUrl/api/SubscribeForPodcast";
+const mySubscriptions = "$baseUrl/api/MySubscriptions";
+const podcastEpisodes = "$baseUrl/api/Episodes";

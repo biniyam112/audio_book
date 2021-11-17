@@ -1,9 +1,13 @@
+import 'package:audio_books/feature/podcast/bloc/bloc.dart';
+import 'package:audio_books/feature/url_endpoints.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/podcast_details/podcast_details.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class PodcastCard extends StatelessWidget {
@@ -20,16 +24,29 @@ class PodcastCard extends StatelessWidget {
           context,
           MaterialPageRoute(
             builder: (context) {
+              BlocProvider.of<PodcastBloc>(context)
+                  .add(FetchPodcastEpisodes(podcastId: podcast.id));
               return PodcastDetails(podcast: podcast);
             },
           ),
         );
       },
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
+      child: Neumorphic(
+        style: NeumorphicStyle(
+          color: Colors.white,
+          shadowLightColor: LightTheme.shadowColor.withOpacity(.3),
+          shadowDarkColor: Darktheme.shadowColor.withOpacity(.5),
+          intensity: 1,
+          // depth: 1,
+          shape: NeumorphicShape.flat,
+          lightSource: LightSource.top,
+        ),
         child: Container(
           height: getProportionateScreenHeight(200),
-          width: SizeConfig.screenWidth! * .44,
+          padding: EdgeInsets.symmetric(
+              horizontal: getProportionateScreenWidth(10),
+              vertical: getProportionateScreenHeight(5)),
+          width: SizeConfig.screenWidth! * .5,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Colors.transparent,
@@ -48,8 +65,9 @@ class PodcastCard extends StatelessWidget {
                       fit: BoxFit.cover,
                     );
                   },
-                  image: NetworkImage(
-                      podcast.imagePath != null ? podcast.imagePath! : ''),
+                  image: NetworkImage(podcast.imagePath != null
+                      ? '$baseUrl${podcast.imagePath!}'
+                      : ''),
                 ),
               ),
               Expanded(
