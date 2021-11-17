@@ -1,9 +1,5 @@
 import 'package:audio_books/feature/podcast/bloc/bloc.dart';
-<<<<<<< HEAD
-=======
-import 'package:audio_books/models/podcast.dart';
 import 'package:audio_books/screens/components/no_connection_widget.dart';
->>>>>>> 6223f14563b8d8ed3237d8e81be5764d8fcb6a0b
 import 'package:audio_books/screens/home/components/podcast_card.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
