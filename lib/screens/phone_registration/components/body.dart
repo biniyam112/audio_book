@@ -1,4 +1,3 @@
-import 'package:audio_books/screens/login/login.dart';
 import 'package:audio_books/screens/phone_registration/components/phone_form.dart';
 import 'package:audio_books/theme/theme_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,12 +18,12 @@ class Body extends StatelessWidget {
       child: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: getProportionateScreenWidth(30),
+            horizontal: getProportionateScreenWidth(20),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: SizeConfig.screenHeight! * .16),
+              SizedBox(height: SizeConfig.screenHeight! * .08),
               Text(
                 'Enter \nPhone number',
                 style: Theme.of(context)
@@ -41,36 +40,6 @@ class Body extends StatelessWidget {
               ),
               verticalSpacing(40),
               PhoneForm(),
-              verticalSpacing(SizeConfig.screenHeight! * .12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Already have an account?',
-                    style: Theme.of(context).textTheme.headline5,
-                  ),
-                  horizontalSpacing(2),
-                  TextButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return LoginScreen();
-                          },
-                        ),
-                      );
-                    },
-                    child: Text(
-                      'Login',
-                      style: Theme.of(context).textTheme.headline5!.copyWith(
-                            color: Colors.blue[900],
-                            fontWeight: FontWeight.bold,
-                          ),
-                    ),
-                  ),
-                ],
-              ),
             ],
           ),
         ),

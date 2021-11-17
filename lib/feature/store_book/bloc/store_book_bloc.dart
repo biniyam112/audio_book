@@ -1,31 +1,39 @@
 import 'package:audio_books/feature/store_book/bloc/store_book_event.dart';
 import 'package:audio_books/feature/store_book/bloc/store_book_state.dart';
-import 'package:audio_books/feature/store_book/data/repository/store_book_repository.dart';
+import 'package:audio_books/feature/store_book/repository/store_book_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class StoreBookBloc extends Bloc<StoreEvent, StoreBookState> {
+class StoreBookBloc extends Bloc<StoreBookEvent, StoreBookState> {
   StoreBookBloc({required this.storeBookRepo}) : super(IdleState());
   final StoreBookRepo storeBookRepo;
 
   @override
-  Stream<StoreBookState> mapEventToState(StoreEvent event) async* {
-    yield StoringBookState(downloadProgress: 0);
-    if (event is StoreBookEvent) {
+  Stream<StoreBookState> mapEventToState(StoreBookEvent event) async* {
+    yield BookStoringState(downloadProgress: 0);
+    if (event is StoreEBookEvent) {
       try {
-        final storedBook = await storeBookRepo.storeBook(event.book);
+        await storeBookRepo.storeEBook(event.book);
         await Future.delayed(Duration.zero);
-        yield BookStoredState(downloadedBook: storedBook);
+        yield BookStoredState();
       } catch (e) {
-        yield StoringBookFailedState(errorMessage: e.toString());
+        yield BookStoringFailedState(errorMessage: e.toString());
       }
     }
-    if (event is StoreBookProgressEvent) {
+    if (event is StoreEBookProgressEvent) {
       try {
         await storeBookRepo.storeBookProgress(event.downloadedBook);
-        await Future.delayed(Duration.zero);
         yield BookProgressStoredState();
       } catch (e) {
-        yield StoringBookFailedState(errorMessage: e.toString());
+        yield BookStoringFailedState(errorMessage: e.toString());
+      }
+    }
+    if (event is StoreAudioBookEvent) {
+      yield StoringEpisode();
+      try {
+        await storeBookRepo.storeBookEpisode(event.book, event.episode);
+        yield EpisodeStored();
+      } catch (e) {
+        yield StoringEpisodeFailed(errorMessage: e.toString());
       }
     }
   }

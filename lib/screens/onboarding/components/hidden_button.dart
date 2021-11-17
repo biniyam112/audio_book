@@ -16,25 +16,17 @@ class HiddenButton extends StatelessWidget {
     return Visibility(
       visible: isVisible,
       child: ElevatedButton(
+        style: ButtonStyle(
+          padding: MaterialStateProperty.all(
+            EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+          ),
+        ),
         onPressed: () {
           if (HiveBoxes.hasUserSigned()) {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return TabViewPage();
-                },
-              ),
-            );
+            Navigator.popAndPushNamed(context, TabViewPage.pageRoute);
           } else {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) {
-                  return PhoneRegistrationScreen();
-                },
-              ),
-            );
+            Navigator.popAndPushNamed(
+                context, PhoneRegistrationScreen.pageRoute);
           }
         },
         child: Padding(
@@ -43,11 +35,11 @@ class HiddenButton extends StatelessWidget {
             horizontal: 10,
           ),
           child: Text(
-            'Continue',
+            'Get Started',
             style: Theme.of(context)
                 .textTheme
                 .headline4!
-                .copyWith(color: Colors.white),
+                .copyWith(color: Colors.white, fontWeight: FontWeight.bold),
           ),
         ),
       ),

@@ -1,6 +1,14 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:audio_books/constants.dart';
-import 'package:audio_books/models/chapter.dart';
+import 'package:audio_books/feature/fetch_advertisement/bloc/advertisement_bloc.dart';
+import 'package:audio_books/feature/fetch_advertisement/bloc/advertisement_stata.dart';
+import 'package:audio_books/models/downloaded_episode.dart';
+import 'package:audio_books/models/episode.dart';
 import 'package:audio_books/models/models.dart';
+import 'package:audio_books/screens/audioplayer/components/play_pause_button.dart';
+import 'package:audio_books/screens/audioplayer/components/prev_song_button.dart';
 import 'package:audio_books/services/audio/notifiers/progress_notifier.dart';
 import 'package:audio_books/services/audio/page_manager.dart';
 import 'package:audio_books/services/audio/play_button_notifier.dart';
@@ -12,56 +20,45 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 
-// class Playlist extends StatelessWidget {
-//   const Playlist({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final pageManager = getIt<PageManager>();
-//     return Expanded(
-//       child: ValueListenableBuilder<List<String>>(
-//         valueListenable: pageManager.playlistNotifier,
-//         builder: (context, playlistTitles, _) {
-//           return ListView.builder(
-//             itemCount: playlistTitles.length,
-//             itemBuilder: (context, index) {
-//               return ListTile(
-//                 title: Text('${playlistTitles[index]}'),
-//               );
-//             },
-//           );
-//         },
-//       ),
-//     );
-//   }
-// }
+import 'ad_card.dart';
+import 'next_song_button.dart';
 
 class Body extends StatefulWidget {
   const Body({
     Key? key,
-    required this.book,
-    required this.chapter,
+    this.book,
+    this.episode,
+    this.downloadedBook,
+    this.downloadedEpisode,
   }) : super(key: key);
-  final Book book;
-  final Chapter chapter;
+  final Book? book;
+  final Episode? episode;
+  final DownloadedBook? downloadedBook;
+  final DownloadedEpisode? downloadedEpisode;
 
   @override
-  _BodyState createState() => _BodyState(book, chapter);
+  _BodyState createState() =>
+      _BodyState(book, episode, downloadedBook, downloadedEpisode);
 }
 
 class _BodyState extends State<Body> {
-  final Book book;
-  final Chapter chapter;
+  final Book? bookWeb;
+  final Episode? episode;
+  final DownloadedBook? downloadedBook;
+  final DownloadedEpisode? downloadedEpisode;
   late PageManager _pageManager;
   late PageController _pageController;
 
   bool isFavorite = false;
-
-  _BodyState(this.book, this.chapter);
+  late bool isFile;
+  _BodyState(
+      this.bookWeb, this.episode, this.downloadedBook, this.downloadedEpisode);
 
   @override
   void initState() {
@@ -69,6 +66,14 @@ class _BodyState extends State<Body> {
     _pageManager = getIt<PageManager>();
     _pageManager.play();
     _pageController = PageController();
+    isFile = getIt.get<bool>(instanceName: 'isFile');
+    isFile = bookWeb == null;
+  }
+
+  Future<Uint8List> fetchCoverImage({required String imagePath}) async {
+    File file = File(imagePath);
+    final byteImage = file.readAsBytes();
+    return byteImage;
   }
 
   @override
@@ -131,22 +136,151 @@ class _BodyState extends State<Body> {
                                   ),
                                 ],
                               ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(
-                                  getProportionateScreenWidth(20),
-                                ),
-                                child: CachedNetworkImage(
-                                  imageUrl: book.coverArt,
-                                  progressIndicatorBuilder:
-                                      (context, url, downloadProgress) =>
-                                          CircularProgressIndicator(
-                                              value: downloadProgress.progress),
-                                  errorWidget: (context, url, error) =>
-                                      Icon(Icons.error),
-                                  height: SizeConfig.screenHeight! * .3,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
+                              child: BlocBuilder<AdvertisementBloc,
+                                      AdvertisementState>(
+                                  builder: (context, state) {
+                                if (state is AdvertFetched) {
+                                  return CarouselSlider(
+                                    options: CarouselOptions(
+                                      viewportFraction: 1.1,
+                                      enlargeCenterPage: true,
+                                      autoPlayAnimationDuration: slowDuration,
+                                      autoPlayInterval: Duration(seconds: 8),
+                                      autoPlay: true,
+                                      autoPlayCurve: Curves.easeIn,
+                                      scrollPhysics:
+                                          NeverScrollableScrollPhysics(),
+                                    ),
+                                    items: [
+                                      Container(
+                                        height: SizeConfig.screenWidth,
+                                        width: SizeConfig.screenWidth,
+                                        child: isFile
+                                            ? FutureBuilder<Uint8List>(
+                                                future: fetchCoverImage(
+                                                  imagePath: downloadedBook!
+                                                      .coverArtPath!,
+                                                ),
+                                                builder: (context, snapshot) {
+                                                  if (!snapshot.hasData ||
+                                                      snapshot.data == null) {
+                                                    return Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        SizedBox(
+                                                          height: 30,
+                                                          width: 30,
+                                                          child:
+                                                              CircularProgressIndicator(
+                                                            color: Darktheme
+                                                                .primaryColor,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  } else {
+                                                    return Image.memory(
+                                                      snapshot.data!,
+                                                      fit: BoxFit.cover,
+                                                      width: double.infinity,
+                                                      height: double.infinity,
+                                                    );
+                                                  }
+                                                })
+                                            : CachedNetworkImage(
+                                                imageUrl: bookWeb!.coverArt,
+                                                progressIndicatorBuilder:
+                                                    (context, url,
+                                                            downloadProgress) =>
+                                                        CircularProgressIndicator(
+                                                  value:
+                                                      downloadProgress.progress,
+                                                ),
+                                                errorWidget:
+                                                    (context, url, error) =>
+                                                        Icon(Icons.error),
+                                                fit: BoxFit.cover,
+                                              ),
+                                      ),
+                                      ...List.generate(
+                                        state.ads.length,
+                                        (index) => AdvertisementCard(
+                                          advertisement: state.ads[index],
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }
+                                if (state is AdvertFetching) {
+                                  return Center(
+                                    child: CircularProgressIndicator(
+                                      color: Darktheme.primaryColor,
+                                    ),
+                                  );
+                                }
+
+                                if (state is AdvertFetchingFailed) {
+                                  return Center(
+                                    child: SizedBox(
+                                      height: SizeConfig.screenWidth! - 100,
+                                      width: SizeConfig.screenWidth! - 100,
+                                      child: isFile
+                                          ? FutureBuilder<Uint8List>(
+                                              future: fetchCoverImage(
+                                                imagePath: downloadedBook!
+                                                    .coverArtPath!,
+                                              ),
+                                              builder: (context, snapshot) {
+                                                if (!snapshot.hasData ||
+                                                    snapshot.data == null) {
+                                                  return Column(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      SizedBox(
+                                                        height: 30,
+                                                        width: 30,
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                          color: Darktheme
+                                                              .primaryColor,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                } else {
+                                                  return Image.memory(
+                                                    snapshot.data!,
+                                                    fit: BoxFit.cover,
+                                                    width: double.infinity,
+                                                    height: double.infinity,
+                                                  );
+                                                }
+                                              })
+                                          : CachedNetworkImage(
+                                              imageUrl: bookWeb!.coverArt,
+                                              progressIndicatorBuilder:
+                                                  (context, url,
+                                                          downloadProgress) =>
+                                                      CircularProgressIndicator(
+                                                value:
+                                                    downloadProgress.progress,
+                                              ),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Icon(Icons.error),
+                                              fit: BoxFit.cover,
+                                            ),
+                                    ),
+                                  );
+                                }
+                                return Center(
+                                  child: Text('idle state'),
+                                );
+                              }),
                             ),
                           );
                         },
@@ -155,10 +289,15 @@ class _BodyState extends State<Body> {
                   });
             }),
         Spacer(),
-        Text(
-          '${book.title}',
-          style: Theme.of(context).textTheme.headline4,
-        ),
+        isFile
+            ? Text(
+                '${downloadedBook!.title}',
+                style: Theme.of(context).textTheme.headline4,
+              )
+            : Text(
+                '${bookWeb!.title}',
+                style: Theme.of(context).textTheme.headline4,
+              ),
         verticalSpacing(10),
         ValueListenableBuilder<String>(
             valueListenable: _pageManager.currentSongTitleNotifier,
@@ -210,7 +349,6 @@ class _BodyState extends State<Body> {
             PreviousSongButton(
               pageController: _pageController,
               pageManager: _pageManager,
-              isDarkMode: isDarkMode,
             ),
             ValueListenableBuilder<ButtonState>(
               valueListenable: _pageManager.playButtonNotifier,
@@ -218,7 +356,6 @@ class _BodyState extends State<Body> {
                 switch (value) {
                   case ButtonState.loading:
                     return PlayPauseButton(
-                      onPress: () {},
                       child: Container(
                         margin: EdgeInsets.all(8.0),
                         width: getProportionateScreenHeight(20),
@@ -256,7 +393,6 @@ class _BodyState extends State<Body> {
             NextSongButton(
               pageController: _pageController,
               pageManager: _pageManager,
-              isDarkMode: isDarkMode,
             ),
             horizontalSpacing(6),
             Column(
@@ -307,133 +443,6 @@ class _BodyState extends State<Body> {
         ),
         Spacer(flex: 2),
       ],
-    );
-  }
-}
-
-class PreviousSongButton extends StatelessWidget {
-  const PreviousSongButton({
-    Key? key,
-    required PageController pageController,
-    required PageManager pageManager,
-    required this.isDarkMode,
-  })  : _pageController = pageController,
-        _pageManager = pageManager,
-        super(key: key);
-
-  final PageController _pageController;
-  final PageManager _pageManager;
-  final bool isDarkMode;
-
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-        valueListenable: _pageManager.isFirstSongNotifier,
-        builder: (_, isFirst, __) {
-          return IconButton(
-            onPressed: isFirst
-                ? null
-                : () {
-                    _pageController.previousPage(
-                      duration: fastDuration,
-                      curve: Curves.easeIn,
-                    );
-                    _pageManager.previous();
-                    _pageManager.play();
-                  },
-            icon: Icon(
-              CupertinoIcons.backward_end_fill,
-              color: isDarkMode
-                  ? !isFirst
-                      ? Colors.white
-                      : Colors.white54
-                  : !isFirst
-                      ? Color(0xff3b4252)
-                      : Colors.black38,
-              size: 30,
-            ),
-          );
-        });
-  }
-}
-
-class NextSongButton extends StatelessWidget {
-  const NextSongButton({
-    Key? key,
-    required PageController pageController,
-    required PageManager pageManager,
-    required this.isDarkMode,
-  })  : _pageController = pageController,
-        _pageManager = pageManager,
-        super(key: key);
-
-  final PageController _pageController;
-  final PageManager _pageManager;
-  final bool isDarkMode;
-
-  @override
-  Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-      valueListenable: _pageManager.isLastSongNotifier,
-      builder: (_, isLast, __) {
-        return IconButton(
-          onPressed: isLast
-              ? null
-              : () {
-                  _pageController.nextPage(
-                    duration: fastDuration,
-                    curve: Curves.easeIn,
-                  );
-                  _pageManager.next();
-                  _pageManager.play();
-                },
-          icon: Icon(
-            CupertinoIcons.forward_end_fill,
-            size: 30,
-            color: isDarkMode
-                ? !isLast
-                    ? Colors.white
-                    : Colors.white54
-                : !isLast
-                    ? Color(0xff3b4252)
-                    : Colors.black38,
-          ),
-        );
-      },
-    );
-  }
-}
-
-class PlayPauseButton extends StatelessWidget {
-  const PlayPauseButton({
-    Key? key,
-    required this.child,
-    required this.onPress,
-  }) : super(key: key);
-  final Widget child;
-  final GestureTapCallback onPress;
-
-  @override
-  Widget build(BuildContext context) {
-    bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
-
-    return ElevatedButton(
-      onPressed: onPress,
-      child: child,
-      style: ButtonStyle(
-        shape: MaterialStateProperty.all(
-          CircleBorder(),
-        ),
-        backgroundColor: MaterialStateProperty.all(
-          isDarkMode ? Colors.white : Color(0xff3b4252),
-        ),
-        minimumSize: MaterialStateProperty.all(
-          Size(
-            getProportionateScreenWidth(60),
-            getProportionateScreenWidth(60),
-          ),
-        ),
-      ),
     );
   }
 }

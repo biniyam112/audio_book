@@ -53,8 +53,8 @@ class EBookLibraryItem extends StatelessWidget {
                   vertical: getProportionateScreenHeight(0),
                 ),
                 child: FutureBuilder<Uint8List>(
-                    future:
-                        fetchCoverImage(imagePath: downloadedBook.coverArtPath),
+                    future: fetchCoverImage(
+                        imagePath: downloadedBook.coverArtPath!),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData || snapshot.data == null) {
                         return Column(
@@ -150,7 +150,7 @@ class AudioBookLibraryItem extends StatelessWidget {
       onTap: () {
         pushNewScreen(
           context,
-          screen: BookChapters(
+          screen: BookEpisodes(
             downloadedBook: downloadedBook,
           ),
           withNavBar: false,
@@ -175,8 +175,8 @@ class AudioBookLibraryItem extends StatelessWidget {
                   vertical: getProportionateScreenHeight(0),
                 ),
                 child: FutureBuilder<Uint8List>(
-                    future:
-                        fetchCoverImage(imagePath: downloadedBook.coverArtPath),
+                    future: fetchCoverImage(
+                        imagePath: downloadedBook.coverArtPath!),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData || snapshot.data == null) {
                         return Column(

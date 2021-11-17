@@ -1,4 +1,3 @@
-import 'package:audio_books/models/downloaded_book.dart';
 import 'package:equatable/equatable.dart';
 
 class StoreBookState extends Equatable {
@@ -8,22 +7,31 @@ class StoreBookState extends Equatable {
 
 class IdleState extends StoreBookState {}
 
-class StoringBookState extends StoreBookState {
-  final int downloadProgress;
+// ?audiobook
+class StoringEpisode extends StoreBookState {}
 
-  StoringBookState({required this.downloadProgress});
-}
-
-class BookStoredState extends StoreBookState {
-  final DownloadedBook downloadedBook;
-
-  BookStoredState({required this.downloadedBook});
-}
-
-class StoringBookFailedState extends StoreBookState {
+class StoringEpisodeFailed extends StoreBookState {
   final String errorMessage;
 
-  StoringBookFailedState({required this.errorMessage});
+  StoringEpisodeFailed({required this.errorMessage});
 }
 
+class EpisodeStored extends StoreBookState {}
+
+// ?Ebook
+class BookStoringState extends StoreBookState {
+  final int downloadProgress;
+
+  BookStoringState({required this.downloadProgress});
+}
+
+class BookStoredState extends StoreBookState {}
+
+class BookStoringFailedState extends StoreBookState {
+  final String errorMessage;
+
+  BookStoringFailedState({required this.errorMessage});
+}
+
+// ?ebook progress
 class BookProgressStoredState extends StoreBookState {}

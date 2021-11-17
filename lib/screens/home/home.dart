@@ -1,12 +1,7 @@
 import 'package:audio_books/feature/fetch_books/bloc/fetch_books_bloc.dart';
 import 'package:audio_books/feature/fetch_books/bloc/fetch_books_event.dart';
-import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_bloc.dart';
-import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_category_event.dart';
 import 'package:audio_books/feature/podcast/bloc/bloc.dart';
 import 'package:audio_books/models/user.dart';
-import 'package:audio_books/screens/login/login.dart';
-import 'package:audio_books/screens/phone_registration/phone_registration.dart';
-import 'package:audio_books/services/audio/service_locator.dart';
 import 'package:audio_books/services/hiveConfig/hive_config.dart';
 import 'package:audio_books/feature/categories/bloc/category_bloc.dart';
 import 'package:audio_books/feature/categories/bloc/category_event.dart';
@@ -23,7 +18,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 import 'components/books_body.dart';
-import 'components/custom_drawer.dart';
 import 'components/podcast_body.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -60,7 +54,11 @@ class _HomeScreenState extends State<HomeScreen>
           backgroundColor:
               isDarkMode ? Darktheme.backgroundColor : Colors.white,
           leading: IconButton(
-            icon: Icon(CupertinoIcons.option),
+            icon: Icon(
+              CupertinoIcons.text_alignleft,
+              size: 27,
+              color: isDarkMode ? CupertinoColors.white : Colors.black87,
+            ),
             onPressed: () {
               if (!homeKey.currentState!.isDrawerOpen)
                 homeKey.currentState!.openDrawer();

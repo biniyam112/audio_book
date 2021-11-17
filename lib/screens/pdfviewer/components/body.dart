@@ -1,6 +1,6 @@
 import 'package:audio_books/constants.dart';
-import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_down_book_bloc.dart';
-import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_down_book_state.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/bloc/fetch_down_book_bloc.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/bloc/fetch_down_book_state.dart';
 import 'package:audio_books/feature/store_book/bloc/store_book_bloc.dart';
 import 'package:audio_books/feature/store_book/bloc/store_book_event.dart';
 import 'package:audio_books/models/downloaded_book.dart';
@@ -29,15 +29,14 @@ class _BodyState extends State<Body> {
       height: SizeConfig.screenHeight,
       width: SizeConfig.screenWidth,
       child: BlocBuilder<FetchBookFileBloc, FetchBookFileState>(
-        builder: (context, state) {
-          if (state is BookDataFetchedState) {
+        builder: (context, bookFileState) {
+          if (bookFileState is BookDataFetchedState) {
             return SafeArea(
-              // child: NativePdfViewer(
-              //   downloadedBook: widget.downloadedBook),
-              child: PdfReader(downloadedBook: widget.downloadedBook),
+              // child: NativePdfViewer(downloadedBook: state.downloadedBook),
+              child: PdfReader(downloadedBook: bookFileState.downloadedBook),
             );
           }
-          if (state is BookDataFetchedState) {
+          if (bookFileState is BookDataFetchingState) {
             return Center(
               child: Container(
                 height: 30,
@@ -46,9 +45,9 @@ class _BodyState extends State<Body> {
               ),
             );
           }
-          if (state is FetchingBookDataFailedState) {
+          if (bookFileState is FetchingBookDataFailedState) {
             return Center(
-              child: Text(state.errorMessage),
+              child: Text(bookFileState.errorMessage),
             );
           }
           return Container();
@@ -58,7 +57,7 @@ class _BodyState extends State<Body> {
   }
 }
 
-// ?----------------------------------------------------------
+// ?----------------------------NativePdfViewer------------------------------
 
 class NativePdfViewer extends StatefulWidget {
   NativePdfViewer({
@@ -92,7 +91,7 @@ class _NativePdfViewerState extends State<NativePdfViewer> {
     double percentCompleted = currentPage / totalPages;
     widget.downloadedBook.setPercentCompleted = percentCompleted;
     BlocProvider.of<StoreBookBloc>(context).add(
-      StoreBookProgressEvent(downloadedBook: widget.downloadedBook),
+      StoreEBookProgressEvent(downloadedBook: widget.downloadedBook),
     );
   }
 
@@ -119,16 +118,16 @@ class _NativePdfViewerState extends State<NativePdfViewer> {
       ),
       pageSnapping: false,
       onDocumentLoaded: (doc) {
-        //  restorePage();
+        restorePage();
       },
-      onPageChanged: (doc) {
+      onPageChanged: (doc) async {
         storeProgress();
       },
     );
   }
 }
 
-// ?--------------------------------------------------------------------------------------------
+// ?------------------------------------------sfPdfViewer----------------------------------------------------------
 
 class PdfReader extends StatefulWidget {
   const PdfReader({
@@ -157,10 +156,6 @@ class _PdfReaderState extends State<PdfReader> {
       onDocumentLoaded: (loaded) {
         restorePage();
       },
-      onDocumentLoadFailed:
-          (PdfDocumentLoadFailedDetails pdfDocumentLoadFailedDetails) {
-        Navigator.pop(context);
-      },
       onPageChanged: (pagechaged) {
         storeProgress();
       },
@@ -173,19 +168,13 @@ class _PdfReaderState extends State<PdfReader> {
     );
   }
 
-  @override
-  void dispose() {
-    // sfPdfViewer.controller.
-    super.dispose();
-  }
-
   void storeProgress() {
     int totalPages = pdfViewerController.pageCount;
     int currentPage = pdfViewerController.pageNumber;
     double percentCompleted = currentPage / totalPages;
     widget.downloadedBook.setPercentCompleted = percentCompleted;
     BlocProvider.of<StoreBookBloc>(context).add(
-      StoreBookProgressEvent(downloadedBook: widget.downloadedBook),
+      StoreEBookProgressEvent(downloadedBook: widget.downloadedBook),
     );
   }
 
@@ -198,6 +187,26 @@ class _PdfReaderState extends State<PdfReader> {
 
   @override
   Widget build(BuildContext context) {
-    return sfPdfViewer;
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          widget.downloadedBook.title,
+          style: Theme.of(context).textTheme.headline4,
+        ),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {
+              pdfViewerController.zoomLevel++;
+              // pdfViewerController.
+            },
+            icon: Icon(
+              Icons.format_indent_increase_outlined,
+            ),
+          ),
+        ],
+      ),
+      body: sfPdfViewer,
+    );
   }
 }

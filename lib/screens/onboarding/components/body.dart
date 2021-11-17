@@ -1,4 +1,4 @@
-import 'package:audio_books/screens/onboarding/components/page_count_indicator.dart';
+import 'package:audio_books/screens/components/page_count_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -16,7 +16,7 @@ class _BodyState extends State<Body> {
   late String splashImage1;
   late String splashImage2;
   late String splashImage3;
-  
+
   @override
   void initState() {
     super.initState();
@@ -67,12 +67,12 @@ class _BodyState extends State<Body> {
               ];
               List<String> splashTitle = [
                 'Get all your favorite books',
-                'Listen to them everywhere',
+                'Listen everywhere',
                 'Get started',
               ];
               List<String> splashSubTitle = [
                 'get books from all your favorite writters and readers',
-                'you can listen to narrated books while doing your task',
+                'Listen to narrated books and podcasts \nwhere ever you are',
                 'Start reading today!',
               ];
               List<String> splashImagesPath = [
@@ -122,7 +122,13 @@ class _BodyState extends State<Body> {
                         child: Text(
                           splashSubTitle[index],
                           textAlign: TextAlign.center,
-                          style: Theme.of(context).textTheme.headline4,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline4!
+                              .copyWith(
+                                fontFamily: GoogleFonts.montserrat().fontFamily,
+                                wordSpacing: 1.1,
+                              ),
                         ),
                       ),
                       Spacer(),

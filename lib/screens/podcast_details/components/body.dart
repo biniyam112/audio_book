@@ -1,11 +1,10 @@
 import 'dart:math';
 
-import 'package:audio_books/apptheme.dart';
 import 'package:audio_books/feature/podcast/bloc/bloc.dart';
 import 'package:audio_books/feature/url_endpoints.dart';
 import 'package:audio_books/models/api_podcast_episode.dart';
 import 'package:audio_books/models/models.dart';
-import 'package:audio_books/models/podcast.dart';
+
 import 'package:audio_books/screens/components/no_connection_widget.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
@@ -13,7 +12,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+
 // import 'dart:math' as math;
 
 class Body extends StatelessWidget {
@@ -137,16 +136,17 @@ class Body extends StatelessWidget {
                                   right: getProportionateScreenWidth(15),
                                   top: getProportionateScreenHeight(25)),
                               child: ElevatedButton(
-                                  onPressed: () {
-                                    print(
-                                        "USER ID*******************${podcast.id}");
-                                    BlocProvider.of<PodcastBloc>(context).add(
-                                        SubscribePodcast(
-                                            podcastId: podcast.id));
-                                    BlocProvider.of<PodcastBloc>(context)
-                                        .add(FetchSubscribedPodcasts(page: 1));
-                                  },
-                                  child: Text('Subscirbe')));
+                                onPressed: () {
+                                  print(
+                                      "USER ID*******************${podcast.id}");
+                                  BlocProvider.of<PodcastBloc>(context).add(
+                                      SubscribePodcast(podcastId: podcast.id));
+                                  BlocProvider.of<PodcastBloc>(context)
+                                      .add(FetchSubscribedPodcasts(page: 1));
+                                },
+                                child: Text('Subscirbe'),
+                              ),
+                            );
                 },
               )
             ],

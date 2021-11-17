@@ -1,5 +1,5 @@
 import 'package:audio_books/feature/podcast/bloc/bloc.dart';
-import 'package:audio_books/models/podcast.dart';
+
 import 'package:audio_books/screens/components/no_connection_widget.dart';
 import 'package:audio_books/screens/home/components/podcast_card.dart';
 import 'package:audio_books/sizeConfig.dart';

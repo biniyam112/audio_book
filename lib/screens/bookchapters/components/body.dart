@@ -1,11 +1,19 @@
+import 'package:audio_books/feature/fetch_downloaded_book/bloc/fetch_down_book_bloc.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/bloc/fetch_down_book_state.dart';
 import 'package:audio_books/models/downloaded_book.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'episode_tile_for_downloaded.dart';
 
 class Body extends StatelessWidget {
-  const Body({Key? key, required this.downloadedBook}) : super(key: key);
+  const Body({
+    Key? key,
+    required this.downloadedBook,
+  }) : super(key: key);
   final DownloadedBook downloadedBook;
 
   @override
@@ -15,54 +23,28 @@ class Body extends StatelessWidget {
       width: SizeConfig.screenWidth,
       child: SafeArea(
         child: SingleChildScrollView(
-          child: Column(
-            children: [
-              ...List.generate(
-                10,
-                (index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) {
-                            return Container();
-                            // return AudioPlayerScreen(
-                            //   book: libraryMockData[index],
-                            // );
-                          },
-                        ),
+          child: BlocBuilder<FetchBookEpisodesBloc, FetchEpisodesState>(
+              builder: (context, state) {
+            if (state is EpisodesFetchedState) {
+              return Column(
+                children: [
+                  ...List.generate(
+                    state.downloadedEpisodes.length,
+                    (index) {
+                      return EpisodeTileForDownload(
+                        chapterNumber: index + 1,
+                        episode: state.downloadedEpisodes[index],
+                        book: downloadedBook,
                       );
                     },
-                    child: Container(
-                      height: 60,
-                      width: SizeConfig.screenWidth,
-                      child: Row(
-                        children: [
-                          Column(
-                            children: [
-                              Text(
-                                downloadedBook.title,
-                                style: Theme.of(context).textTheme.headline4,
-                              ),
-                              Text(
-                                'Chapter ${index + 1}',
-                                style: Theme.of(context).textTheme.headline5,
-                              ),
-                            ],
-                          ),
-                          Spacer(),
-                          Icon(
-                            CupertinoIcons.right_chevron,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
+                  ),
+                ],
+              );
+            }
+            return Container(
+              height: SizeConfig.screenHeight! * .9,
+            );
+          }),
         ),
       ),
     );

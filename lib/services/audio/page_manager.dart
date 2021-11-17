@@ -1,4 +1,5 @@
-import 'package:audio_books/models/chapter.dart';
+import 'package:audio_books/models/downloaded_episode.dart';
+import 'package:audio_books/models/episode.dart';
 import 'package:audio_books/services/audio/play_button_notifier.dart';
 import 'package:audio_books/services/audio/playlist_repository.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
@@ -24,8 +25,12 @@ class PageManager {
   final _audioHandler = getIt<AudioHandler>();
 
   // Events: Calls coming from the UI
-  void init(List<Chapter> chapters) async {
-    await _loadPlaylist(chapters);
+  void init(
+    List<Episode>? chapters,
+    DownloadedEpisode? downloadedEpisode,
+  ) async {
+    if (chapters != null) await _loadPlaylist(chapters);
+    if (downloadedEpisode != null) await _laodEpisodeFile(downloadedEpisode);
     _listenToChangesInPlaylist();
     _listenToPlaybackState();
     _listenToCurrentPosition();
@@ -34,7 +39,20 @@ class PageManager {
     _listenToChangesInSong();
   }
 
-  Future<void> _loadPlaylist(List<Chapter> chapters) async {
+  Future<void> _laodEpisodeFile(DownloadedEpisode downloadedEpisode) async {
+    final songRepository = getIt<PlaylistRepository>();
+    final episode =
+        songRepository.fetchInitialPlaylistFromDownloaded(downloadedEpisode);
+    final mediaItem = MediaItem(
+      id: episode['id']!,
+      title: episode['title']!,
+      album: episode['album']!,
+      extras: {'url': episode['url']},
+    );
+    _audioHandler.addQueueItem(mediaItem);
+  }
+
+  Future<void> _loadPlaylist(List<Episode> chapters) async {
     final songRepository = getIt<PlaylistRepository>();
     final playlist = songRepository.fetchInitialPlaylist(chapters);
     final mediaItems = playlist
@@ -158,9 +176,9 @@ class PageManager {
     }
   }
 
-  Future<void> add(Chapter chapter) async {
+  Future<void> add(Episode episode) async {
     final songRepository = getIt<PlaylistRepository>();
-    final song = songRepository.fetchAnotherSong(chapter);
+    final song = songRepository.fetchAnotherSong(episode);
     final mediaItem = MediaItem(
       id: song['id'] ?? '',
       album: song['album'] ?? '',

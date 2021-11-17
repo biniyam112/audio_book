@@ -198,23 +198,6 @@ class BookTile extends StatelessWidget {
                       ),
                     ),
                     Spacer(flex: 2),
-                    Row(
-                      children: [
-                        Icon(
-                          CupertinoIcons.time,
-                          color: Darktheme.primaryColor,
-                        ),
-                        SizedBox(width: getProportionateScreenWidth(6)),
-                        Opacity(
-                          opacity: .8,
-                          child: Text(
-                            'edition   ${book.edition}',
-                            style: Theme.of(context).textTheme.headline5,
-                          ),
-                        ),
-                        Spacer(),
-                      ],
-                    ),
                   ],
                 ),
               ),

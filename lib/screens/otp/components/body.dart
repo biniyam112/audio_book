@@ -1,36 +1,48 @@
 import 'package:audio_books/feature/otp/bloc/bloc.dart';
 import 'package:audio_books/feature/otp/bloc/otp_bloc.dart';
+import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/components/tab_view.dart';
 import 'package:audio_books/screens/signup/signup_screen.dart';
+import 'package:audio_books/services/audio/service_locator.dart';
+import 'package:audio_books/services/hiveConfig/hive_config.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-class Body extends StatelessWidget {
+class Body extends StatefulWidget {
   const Body({Key? key, required this.fromLogin}) : super(key: key);
   final bool fromLogin;
 
   @override
+  _BodyState createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
+  var user = getIt.get<User>();
+  @override
   Widget build(BuildContext context) {
-    String phoneNumber = '';
+    String phoneNumber = '${user.countryCode}${user.phoneNumber}';
+
+    void _addUser() {
+      var user = getIt.get<User>();
+      final userBox = HiveBoxes.getUserBox();
+      userBox.put(HiveBoxes.userKey, user);
+    }
 
     return BlocConsumer<OtpBloc, OtpState>(
       listener: (context, state) {
         if (state is OtpVerified) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return fromLogin ? TabViewPage() : SignupScreen();
-              },
-            ),
-          );
+          if (widget.fromLogin) _addUser();
+          Navigator.popAndPushNamed(
+              context,
+              widget.fromLogin
+                  ? TabViewPage.pageRoute
+                  : SignupScreen.pageRoute);
         }
       },
-      builder: (context, state) { 
-        if (state is OtpSent) phoneNumber = state.phoneNumber;
+      builder: (context, state) {
         return SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -56,7 +68,7 @@ class Body extends StatelessWidget {
                             fontSize: 16,
                           ),
                       children: [
-                        TextSpan(text: 'Text has been sent to '),
+                        TextSpan(text: 'OTP has been sent to '),
                         TextSpan(
                           text: '$phoneNumber ',
                           style: TextStyle(
@@ -93,7 +105,10 @@ class Body extends StatelessWidget {
                     children: [
                       Text('Haven\'t receive the code?'),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          BlocProvider.of<OtpBloc>(context)
+                              .add(SendOtp(phoneNumber: phoneNumber));
+                        },
                         child: Text(
                           'resend',
                           style: TextStyle(fontSize: 14),
@@ -101,9 +116,7 @@ class Body extends StatelessWidget {
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: getProportionateScreenHeight(10),
-                  ),
+                  verticalSpacing(SizeConfig.screenHeight! * .04),
                   state is OtpInProgress
                       ? CircularProgressIndicator(
                           color: Colors.orange,
@@ -116,6 +129,7 @@ class Body extends StatelessWidget {
                                   Icons.dangerous_rounded,
                                   color: Colors.red,
                                 ),
+                                horizontalSpacing(4),
                                 Text(" phone auth credential is invalid")
                               ],
                             )

@@ -1,10 +1,15 @@
+import 'package:audio_books/feature/payment/bloc/payment_bloc.dart';
+import 'package:audio_books/feature/payment/bloc/payment_event.dart';
+import 'package:audio_books/feature/payment/bloc/payment_state.dart';
 import 'package:audio_books/feature/store_book/bloc/store_book_bloc.dart';
 import 'package:audio_books/feature/store_book/bloc/store_book_event.dart';
 import 'package:audio_books/feature/store_book/bloc/store_book_state.dart';
 import 'package:audio_books/models/book.dart';
+import 'package:audio_books/models/episode.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/bookdetails/components/purchase_button.dart';
-import 'package:audio_books/screens/bookdetails/components/rating_display.dart';
+import 'package:audio_books/screens/bookdetails/components/author_display.dart';
+import 'package:audio_books/screens/paymentModal/payment_modal_card.dart';
 import 'package:audio_books/theme/theme_colors.dart';
 import 'package:audio_books/theme/theme_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -14,7 +19,6 @@ import 'package:provider/provider.dart';
 
 import '../../../sizeConfig.dart';
 import 'book_genere_card.dart';
-import 'downloads_count.dart';
 
 class DetailsTopSection extends StatelessWidget {
   const DetailsTopSection({
@@ -54,40 +58,93 @@ class DetailsTopSection extends StatelessWidget {
                 ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                BlocListener<StoreBookBloc, StoreBookState>(
-                  listener: (context, state) {
-                    if (state is StoringBookState) {
+            verticalSpacing(10),
+            BlocConsumer<PaymentBloc, PaymentState>(
+              builder: (context, checksubstate) {
+                return BlocConsumer<StoreBookBloc, StoreBookState>(
+                  listener: (context, storingstate) {
+                    if (storingstate is BookStoringState) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         buildSnackBar(context, text: 'Downloading... '),
                       );
                     }
-                    if (state is BookStoredState) {
+                    if (storingstate is BookStoredState) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         buildSnackBar(context, text: 'Book added to library'),
                       );
                     }
-                    if (state is StoringBookFailedState) {
+                    if (storingstate is BookStoringFailedState) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         buildSnackBar(context, text: 'Failed to fetch item'),
                       );
                     }
                   },
-                  child: PurchaseButton(
-                    text: 'Get E-book',
-                    onPress: () {
-                      BlocProvider.of<StoreBookBloc>(context)
-                          .add(StoreBookEvent(book));
-                    },
-                  ),
-                ),
-                PurchaseButton(
-                  text: 'Get Audio book',
-                  onPress: () {},
-                ),
-              ],
+                  builder: (context, storingstate) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        PurchaseButton(
+                          text: 'Get E-book',
+                          onPress: (book.resourceType == 'Ebook')
+                              ? () {
+                                  BlocProvider.of<PaymentBloc>(context)
+                                      .add(CheckSubscription(isEbook: true));
+                                }
+                              : null,
+                        ),
+                        PurchaseButton(
+                          text: 'Get Audio book',
+                          onPress: (book.resourceType == 'AudioBook')
+                              ? () {
+                                  BlocProvider.of<PaymentBloc>(context)
+                                      .add(CheckSubscription(isEbook: false));
+                                }
+                              : null,
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+
+              // ? If subsiripiton plan is available start downloading app
+              listener: (context, checksubstate) {
+                if (checksubstate is CheckSubCompleted) {
+                  if (checksubstate.subscribtions.isEmpty) {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      builder: (context) {
+                        return PaymentModalCard();
+                      },
+                    );
+                  }
+                  if (checksubstate.subscribtions.isNotEmpty &&
+                      checksubstate.isEbook) {
+                    BlocProvider.of<StoreBookBloc>(context)
+                        .add(StoreEBookEvent(book: book));
+                  }
+                  if (checksubstate.subscribtions.isNotEmpty &&
+                      !checksubstate.isEbook) {
+                    BlocProvider.of<StoreBookBloc>(context).add(
+                      StoreAudioBookEvent(
+                        book: book,
+                        episode: Episode(
+                          id: "306d186f-e0dd-4784-bf5a-924b086123d6",
+                          bookTitle: "",
+                          chapterTitle: "ምዕራፍ 1 ",
+                          length: '00:43:23',
+                          fileUrl:
+                              "/mabdocuments/audio_e_books/b099846c-c54e-4e5e-9441-6535b9b3a9a7..mp3",
+                        ),
+                      ),
+                    );
+                  }
+                }
+              },
             ),
           ],
         ),
@@ -170,9 +227,10 @@ class TopDetailsRightSection extends StatelessWidget {
         BookGenereCard(
           genere: '#${book.category}',
         ),
-        verticalSpacing(6),
-        RatingDisplay(ratingValue: 4.6),
-        DownloadsCounter(downloadCount: 87),
+        verticalSpacing(10),
+        AuthorDisplay(
+          authorName: book.author,
+        ),
       ],
     );
   }
@@ -196,13 +254,13 @@ class TopDetailsImageSection extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           child: CachedNetworkImage(
             imageUrl: book.coverArt,
-            progressIndicatorBuilder: (context, url, downloadProgress) =>
-                Center(
-                    child: Container(
-                        height: 30,
-                        width: 30,
-                        child: CircularProgressIndicator(
-                            value: downloadProgress.progress))),
+            placeholder: (context, message) => Center(
+              child: Container(
+                height: 30,
+                width: 30,
+                child: CircularProgressIndicator(),
+              ),
+            ),
             errorWidget: (context, url, error) => Icon(Icons.error),
             height: SizeConfig.screenHeight! * .3,
             fit: BoxFit.cover,

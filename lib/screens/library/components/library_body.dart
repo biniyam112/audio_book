@@ -1,5 +1,5 @@
-import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_down_book_bloc.dart';
-import 'package:audio_books/feature/fetch_downloaded_book/data/bloc/fetch_down_book_event.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/bloc/fetch_down_book_bloc.dart';
+import 'package:audio_books/feature/fetch_downloaded_book/bloc/fetch_down_book_event.dart';
 import 'package:audio_books/screens/library/components/components.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
@@ -19,7 +19,9 @@ class _LibraryBodyState extends State<LibraryBody> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<FetchDownBooksBloc>(context).add(FetchDownBooksEvent());
+    BlocProvider.of<FetchDownEBooksBloc>(context).add(FetchDownEBooksEvent());
+    BlocProvider.of<FetchDownAudioBooksBloc>(context)
+        .add(FetchDownAudioBooksEvent());
   }
 
   @override

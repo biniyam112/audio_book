@@ -5,7 +5,7 @@ class RegisterUserState extends Equatable {
   List<Object?> get props => [];
 }
 
-class IdleState extends RegisterUserState {}
+class IdleStateReg extends RegisterUserState {}
 
 class RegsiteringUserState extends RegisterUserState {}
 

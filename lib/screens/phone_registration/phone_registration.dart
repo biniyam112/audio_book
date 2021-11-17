@@ -9,13 +9,15 @@ import 'components/body.dart';
 class PhoneRegistrationScreen extends StatelessWidget {
   const PhoneRegistrationScreen({Key? key}) : super(key: key);
 
+  static final pageRoute = '/phoneRegistration';
+
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
 
     return Scaffold(
       appBar: customAppBar(context: context, title: 'Register Phone'),
-      body: SingleChildScrollView(child: Body()),
+      body: Body(),
     );
   }
 }

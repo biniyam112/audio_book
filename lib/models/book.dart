@@ -1,7 +1,10 @@
+import 'dart:typed_data';
+
 class Book {
   final String id,
       title,
       author,
+      authorId,
       category,
       coverArt,
       narattor,
@@ -10,6 +13,8 @@ class Book {
       description,
       publishmentYear,
       resourceType;
+  final int? price;
+  final List<Uint8List>? episodes;
 
   Book({
     required this.id,
@@ -20,15 +25,19 @@ class Book {
     required this.title,
     required this.edition,
     required this.author,
+    required this.authorId,
     required this.publishmentYear,
     required this.description,
     required this.resourceType,
+    required this.price,
+    this.episodes,
   });
 
   factory Book.fromMap(Map<String, dynamic> json) => Book(
         id: json['id'],
         title: json['bookName'],
         author: json['author'] ?? 'no author available',
+        authorId: json['authorId'] ?? 'no author available',
         edition: json['edition'] ?? '1',
         category: json['category'] ?? 'unknown',
         bookPath: json['bookFile'] ?? '',
@@ -39,5 +48,6 @@ class Book {
         publishmentYear: json['publicationYear'] ?? '?',
         description: json['description'] ?? 'No description yet',
         resourceType: json['resourceType'] ?? 'not specified',
+        price: null,
       );
 }

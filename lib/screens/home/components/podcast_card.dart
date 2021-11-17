@@ -4,7 +4,6 @@ import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/podcast_details/podcast_details.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -14,7 +13,20 @@ class PodcastCard extends StatelessWidget {
   PodcastCard({Key? key, required this.podcast, this.isSubscribed = false})
       : super(key: key);
   final APIPodcast podcast;
-  bool isSubscribed;
+  final bool isSubscribed;
+
+//   @override
+//   _PodcastCardState createState() => _PodcastCardState();
+// }
+
+// class _PodcastCardState extends State<PodcastCard> {
+//   late bool isSubscribed;
+
+//   @override
+//   void initState() {
+//     super.initState();
+//     isSubscribed = widget.isSubscribed;
+//   }
 
   @override
   Widget build(BuildContext context) {

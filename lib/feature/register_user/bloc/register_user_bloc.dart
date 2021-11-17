@@ -7,7 +7,7 @@ import 'package:audio_books/services/hiveConfig/hive_config.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterUserBloc extends Bloc<RegisterUserEvent, RegisterUserState> {
-  RegisterUserBloc({required this.registerUserRepo}) : super(IdleState());
+  RegisterUserBloc({required this.registerUserRepo}) : super(IdleStateReg());
   final RegisterUserRepo registerUserRepo;
 
   @override
