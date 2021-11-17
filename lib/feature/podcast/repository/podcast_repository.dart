@@ -26,4 +26,10 @@ class PodcastRepository {
 
     return apiSubscribePodcast;
   }
+
+  Future<APIPagedData> getEpisodes(String podcastId) async {
+    final podcastEpisodes = await _podcastDataProvider.getEpisodes(podcastId);
+
+    return podcastEpisodes;
+  }
 }

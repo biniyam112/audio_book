@@ -1,27 +1,32 @@
+import 'package:audio_books/feature/podcast/bloc/bloc.dart';
+import 'package:audio_books/feature/url_endpoints.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/podcast_details/podcast_details.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class PodcastCard extends StatefulWidget {
+class PodcastCard extends StatelessWidget {
   PodcastCard({Key? key, required this.podcast, this.isSubscribed = false})
       : super(key: key);
   final APIPodcast podcast;
   final bool isSubscribed;
 
-  @override
-  _PodcastCardState createState() => _PodcastCardState();
-}
+//   @override
+//   _PodcastCardState createState() => _PodcastCardState();
+// }
 
-class _PodcastCardState extends State<PodcastCard> {
-  late bool isSubscribed;
+// class _PodcastCardState extends State<PodcastCard> {
+//   late bool isSubscribed;
 
-  @override
-  void initState() {
-    super.initState();
-    isSubscribed = widget.isSubscribed;
-  }
+//   @override
+//   void initState() {
+//     super.initState();
+//     isSubscribed = widget.isSubscribed;
+//   }
 
   @override
   Widget build(BuildContext context) {
@@ -31,16 +36,29 @@ class _PodcastCardState extends State<PodcastCard> {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return PodcastDetails(podcast: widget.podcast);
+              BlocProvider.of<PodcastBloc>(context)
+                  .add(FetchPodcastEpisodes(podcastId: podcast.id));
+              return PodcastDetails(podcast: podcast);
             },
           ),
         );
       },
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(10),
+      child: Neumorphic(
+        style: NeumorphicStyle(
+          color: Colors.white,
+          shadowLightColor: LightTheme.shadowColor.withOpacity(.3),
+          shadowDarkColor: Darktheme.shadowColor.withOpacity(.5),
+          intensity: 1,
+          // depth: 1,
+          shape: NeumorphicShape.flat,
+          lightSource: LightSource.top,
+        ),
         child: Container(
           height: getProportionateScreenHeight(200),
-          width: SizeConfig.screenWidth! * .44,
+          padding: EdgeInsets.symmetric(
+              horizontal: getProportionateScreenWidth(10),
+              vertical: getProportionateScreenHeight(5)),
+          width: SizeConfig.screenWidth! * .5,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
             color: Colors.transparent,
@@ -59,8 +77,8 @@ class _PodcastCardState extends State<PodcastCard> {
                       fit: BoxFit.cover,
                     );
                   },
-                  image: NetworkImage(widget.podcast.imagePath != null
-                      ? widget.podcast.imagePath!
+                  image: NetworkImage(podcast.imagePath != null
+                      ? '$baseUrl${podcast.imagePath!}'
                       : ''),
                 ),
               ),
@@ -71,14 +89,14 @@ class _PodcastCardState extends State<PodcastCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${widget.podcast.title}',
+                        '${podcast.title}',
                         style: Theme.of(context).textTheme.headline4,
                       ),
                       Spacer(),
                       Opacity(
                         opacity: .9,
                         child: Text(
-                          '${widget.podcast.creator}',
+                          '${podcast.creator}',
                           style: Theme.of(context).textTheme.headline5,
                         ),
                       ),
@@ -91,7 +109,7 @@ class _PodcastCardState extends State<PodcastCard> {
                         ),
                         child: Center(
                           child: Text(
-                            '${widget.podcast.category}',
+                            '${podcast.category}',
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style:

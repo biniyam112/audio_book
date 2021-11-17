@@ -1,4 +1,8 @@
 import 'package:audio_books/feature/podcast/bloc/bloc.dart';
+<<<<<<< HEAD
+=======
+
+>>>>>>> ef60a87d09110c9b4fc8e8e82ee686f7e9ef2b6c
 import 'package:audio_books/screens/components/no_connection_widget.dart';
 import 'package:audio_books/screens/home/components/podcast_card.dart';
 import 'package:audio_books/sizeConfig.dart';
@@ -29,7 +33,19 @@ class PodcastBody extends StatelessWidget {
               ),
               child: BlocBuilder<PodcastBloc, PodcastState>(
                   builder: (context, state) {
-                if (state is PodcastLoadSuccess) {
+                if (state is PodcastFailure) {
+                  return NoConnectionWidget();
+                } else if (state is PodcastInProgress ||
+                    state is PodcastInitState)
+                  return Padding(
+                    padding: EdgeInsets.symmetric(
+                        vertical: getProportionateScreenHeight(20)),
+                    child: Center(
+                        child: CircularProgressIndicator(
+                      color: Colors.orange,
+                    )),
+                  );
+                else
                   return Column(
                     children: [
                       Container(
@@ -57,6 +73,7 @@ class PodcastBody extends StatelessWidget {
                                 : SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                       children: [
                                         ...List.generate(
                                           PodcastBloc
@@ -64,7 +81,7 @@ class PodcastBody extends StatelessWidget {
                                           (index) {
                                             return Container(
                                               width:
-                                                  SizeConfig.screenWidth! * .4,
+                                                  SizeConfig.screenWidth! * .47,
                                               child: AspectRatio(
                                                   aspectRatio: .8,
                                                   child: Padding(
@@ -132,11 +149,6 @@ class PodcastBody extends StatelessWidget {
                       ),
                     ],
                   );
-                } else if (state is PodcastInProgress ||
-                    state is PodcastInitState)
-                  return Center(child: CircularProgressIndicator());
-                else
-                  return NoConnectionWidget();
               })),
         ),
       ),

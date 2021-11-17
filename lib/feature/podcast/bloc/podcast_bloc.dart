@@ -1,5 +1,6 @@
 import 'package:audio_books/feature/podcast/bloc/bloc.dart';
 import 'package:audio_books/feature/podcast/podcast.dart';
+import 'package:audio_books/models/api_podcast_episode.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
 
@@ -20,6 +21,8 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
     if (event is SubscribePodcast) yield* _mapSubscribeForPodcast(event);
     if (event is FetchSubscribedPodcasts)
       yield* _mapFetchSubscribedPodcastsToState(event);
+    if (event is FetchPodcastEpisodes)
+      yield* _mapFetchPodcastEpisodesToState(event);
   }
 
   Stream<PodcastState> _mapFetchPodcastEventToState(
@@ -89,6 +92,27 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
         subscribedPodcasats.addAll(podcasts.where((podcast) =>
             subscribedPodcasats.every((pdcst) => pdcst.id != podcast.id)));
         yield PodcastLoadSuccess(podcasts: podcasts);
+      }
+    } catch (e) {
+      print('**********************PODCAST FAILURE************** $e');
+      yield PodcastFailure();
+    }
+  }
+
+  Stream<PodcastState> _mapFetchPodcastEpisodesToState(
+      FetchPodcastEpisodes event) async* {
+    yield PodcastInProgress();
+    try {
+      final apiDataResponse =
+          await _podcastRepository.getEpisodes(event.podcastId);
+      if (apiDataResponse.items == null) {
+        yield PodcastFailure();
+      } else {
+        final items = apiDataResponse.items as List;
+        final podcastEpisodes = items
+            .map((podcastEpisode) => APIPodcastEpisode.fromJson(podcastEpisode))
+            .toList();
+        yield PodcastEpisodeLoadSuccess(podcastEpisodes: podcastEpisodes);
       }
     } catch (e) {
       print('**********************PODCAST FAILURE************** $e');

@@ -1,12 +1,19 @@
 import 'dart:math';
 
 import 'package:audio_books/feature/podcast/bloc/bloc.dart';
+import 'package:audio_books/feature/url_endpoints.dart';
+import 'package:audio_books/models/api_podcast_episode.dart';
 import 'package:audio_books/models/models.dart';
+
+import 'package:audio_books/screens/components/no_connection_widget.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+
+// import 'dart:math' as math;
 
 class Body extends StatelessWidget {
   const Body({Key? key, required this.podcast}) : super(key: key);
@@ -38,8 +45,9 @@ class Body extends StatelessWidget {
                         fit: BoxFit.cover,
                       );
                     },
-                    image: NetworkImage(
-                        podcast.imagePath != null ? podcast.imagePath! : ''),
+                    image: NetworkImage(podcast.imagePath != null
+                        ? '$baseUrl${podcast.imagePath!}'
+                        : ''),
                   ),
                 ),
                 Column(
@@ -70,7 +78,7 @@ class Body extends StatelessWidget {
                           image: DecorationImage(
                             fit: BoxFit.cover,
                             image: CachedNetworkImageProvider(
-                              '${podcast.imagePath}',
+                              '$baseUrl${podcast.imagePath}',
                             ),
                           ),
                           color: Darktheme.primaryColor,
@@ -142,15 +150,30 @@ class Body extends StatelessWidget {
             ],
           ),
           verticalSpacing(40),
-          Column(
-            children: [
-              ...List.generate(
-                6,
-                (index) => PodcastListCard(
-                  chapterCount: index + 1,
-                ),
-              ),
-            ],
+          BlocBuilder<PodcastBloc, PodcastState>(
+            builder: (context, state) {
+              return state is PodcastEpisodeLoadSuccess
+                  ? Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: getProportionateScreenWidth(14)),
+                      child: Column(
+                        children: [
+                          ...List.generate(
+                            state.podcastEpisodes.length,
+                            (index) => PodcastListCard(
+                              podcastEpisode: state.podcastEpisodes[index],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : state is PodcastInProgress || state is PodcastInitState
+                      ? Center(
+                          child: CircularProgressIndicator(
+                          color: Colors.orange,
+                        ))
+                      : Center(child: NoConnectionWidget());
+            },
           ),
         ],
       ),
@@ -161,73 +184,111 @@ class Body extends StatelessWidget {
 class PodcastListCard extends StatelessWidget {
   const PodcastListCard({
     Key? key,
-    required this.chapterCount,
+    required this.podcastEpisode,
   }) : super(key: key);
-  final int chapterCount;
+  final APIPodcastEpisode podcastEpisode;
 
   @override
   Widget build(BuildContext context) {
     Random random = Random();
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: 8.0),
-      child: Container(
-        width: SizeConfig.screenWidth! * .95,
-        height: getProportionateScreenHeight(80),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.play_arrow,
-                color: Colors.grey,
-              ),
-            ),
-            horizontalSpacing(10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return GestureDetector(
+      onTap: () {},
+      child: Padding(
+        padding: EdgeInsets.only(bottom: getProportionateScreenHeight(20)),
+        child: Neumorphic(
+          style: NeumorphicStyle(
+            color: Colors.white,
+            shadowLightColor: LightTheme.shadowColor.withOpacity(.3),
+            shadowDarkColor: Darktheme.shadowColor.withOpacity(.5),
+            intensity: 1,
+            depth: 2,
+            shape: NeumorphicShape.flat,
+            lightSource: LightSource.top,
+          ),
+          child: Container(
+            width: SizeConfig.screenWidth! * .96,
+            padding: EdgeInsets.symmetric(
+                vertical: getProportionateScreenHeight(10)),
+            // height: getProportionateScreenHeight(80),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text(
-                  'Episode $chapterCount',
-                  style: Theme.of(context).textTheme.headline4,
-                ),
-                verticalSpacing(4),
-                Container(
-                  width: SizeConfig.screenWidth! * .8,
-                  child: Opacity(
-                    opacity: .8,
-                    child: Text(
-                      'Eu labore exercitation ipsum aliqua Lorem officia.Duis laborum culpa duis mollit consectetur in in.',
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.headline5,
+                Padding(
+                  padding: EdgeInsets.only(left: getProportionateScreenWidth(8)),
+                  child: Neumorphic(
+                    style: NeumorphicStyle(
+                      color: Colors.white,
+                      shadowLightColor: LightTheme.shadowColor.withOpacity(.3),
+                      shadowDarkColor: Darktheme.shadowColor.withOpacity(.5),
+                      intensity: 1,
+                      depth: 2,
+                      boxShape: NeumorphicBoxShape.circle(),
+                      shape: NeumorphicShape.flat,
+                      lightSource: LightSource.top,
                     ),
-                  ),
-                ),
-                verticalSpacing(6),
-                Center(
-                  child: Container(
-                    height: getProportionateScreenHeight(7),
-                    width: SizeConfig.screenWidth! * .7,
-                    decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(10)),
-                    padding: EdgeInsets.symmetric(
-                        vertical: getProportionateScreenHeight(2),
-                        horizontal: getProportionateScreenWidth(5)),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: LinearProgressIndicator(
-                        value: (SizeConfig.screenWidth! *
-                            random.nextDouble() *
-                            .7),
-                        color: Darktheme.primaryColor,
-                        backgroundColor: Darktheme.shadowColor.withOpacity(.4),
+                    child: IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.play_arrow_rounded,
+                        color: Colors.grey,
                       ),
                     ),
                   ),
                 ),
+                horizontalSpacing(10),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: SizeConfig.screenWidth! * .7,
+                      child: Text(
+                        '${podcastEpisode.title}',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: Theme.of(context).textTheme.headline4,
+                      ),
+                    ),
+                    verticalSpacing(4),
+                    Container(
+                      width: SizeConfig.screenWidth! * .7 ,
+                      child: Opacity(
+                        opacity: .8,
+                        child: Text(
+                          podcastEpisode.description,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: Theme.of(context).textTheme.headline5,
+                        ),
+                      ),
+                    ),
+                    verticalSpacing(6),
+                    Center(
+                      child: Container(
+                        height: getProportionateScreenHeight(7),
+                        width: SizeConfig.screenWidth! * .7,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10)),
+                        padding: EdgeInsets.symmetric(
+                            vertical: getProportionateScreenHeight(2),
+                            horizontal: getProportionateScreenWidth(5)),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: LinearProgressIndicator(
+                            value: (SizeConfig.screenWidth! *
+                                random.nextDouble() *
+                                .7),
+                            color: Darktheme.primaryColor,
+                            backgroundColor:
+                                Darktheme.shadowColor.withOpacity(.4),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
-          ],
+          ),
         ),
       ),
     );
