@@ -1,6 +1,7 @@
 import 'package:audio_books/models/episode.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/audioplayer/audio_player.dart';
+import 'package:audio_books/services/audio/service_locator.dart';
 import 'package:audio_books/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,8 @@ class EpisodeTile extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () {
+          getIt.get<bool>(instanceName: 'isFile', param1: false);
+          // isFile = false;
           Navigator.push(
             context,
             MaterialPageRoute(

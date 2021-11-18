@@ -1,6 +1,5 @@
 import 'package:audio_books/feature/fetch_advertisement/bloc/advertisement_bloc.dart';
 import 'package:audio_books/feature/fetch_advertisement/bloc/advertisement_event.dart';
-import 'package:audio_books/feature/url_endpoints.dart';
 import 'package:audio_books/models/api_podcast_episode.dart';
 import 'package:audio_books/models/downloaded_episode.dart';
 import 'package:audio_books/models/episode.dart';

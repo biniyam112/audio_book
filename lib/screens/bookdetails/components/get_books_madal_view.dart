@@ -1,9 +1,12 @@
 import 'package:audio_books/feature/request_hard_copy/bloc/request_hard_copy_bloc.dart';
 import 'package:audio_books/models/models.dart';
+import 'package:audio_books/screens/bookdetails/components/author_display.dart';
 import 'package:audio_books/theme/theme.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 import '../../../sizeConfig.dart';
 
@@ -25,46 +28,141 @@ class GetHardCopy extends StatelessWidget {
             },
             builder: (context, copystate) {
               return Container(
-                height: SizeConfig.screenHeight! * .4,
+                height: SizeConfig.screenHeight! * .6,
                 width: SizeConfig.screenWidth,
-                margin: EdgeInsets.all(10),
+                margin: EdgeInsets.all(24),
                 child: Column(
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    verticalSpacing(10),
-                    Text(
-                      'Number of copies',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline3!
-                          .copyWith(color: Colors.black87),
-                    ),
-                    verticalSpacing(12),
                     Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        MinusButton(),
-                        Container(
-                          height: 40,
-                          constraints:
-                              BoxConstraints(maxWidth: 50, minWidth: 42),
-                          alignment: Alignment.center,
-                          child: Text(
-                            '${counterState.counter}',
-                            style: Theme.of(context).textTheme.headline3,
+                        Text(
+                          'Request hard copy',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline3!
+                              .copyWith(color: Colors.black.withOpacity(.85)),
+                        ),
+                        Spacer(),
+                        TextButton(
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.all(EdgeInsets.zero),
+                            shape: MaterialStateProperty.all(
+                              CircleBorder(),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.zero,
+                            child: Icon(
+                              Icons.cancel,
+                              color: Colors.black54,
+                            ),
                           ),
                         ),
-                        PlusButton(),
                       ],
+                    ),
+                    verticalSpacing(20),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: SizeConfig.screenWidth! * .4,
+                          width: SizeConfig.screenWidth! * .3,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: CachedNetworkImage(
+                              imageUrl: book.coverArt,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        horizontalSpacing(14),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Opacity(
+                                opacity: .9,
+                                child: Text(
+                                  '${book.title}',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline5!
+                                      .copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17,
+                                      ),
+                                ),
+                              ),
+                              verticalSpacing(10),
+                              Text(
+                                '${book.description}',
+                                maxLines: 4,
+                                overflow: TextOverflow.ellipsis,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6!
+                                    .copyWith(
+                                      height: 1.5,
+                                      color: Colors.black87,
+                                    ),
+                              ),
+                              verticalSpacing(10),
+                              AuthorDisplay(
+                                authorName: book.author,
+                                radius: 20,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    verticalSpacing(20),
+                    Container(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: Colors.grey[300]!,
+                          width: 2,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          MinusButton(),
+                          Container(
+                            height: 40,
+                            alignment: Alignment.center,
+                            child: Text(
+                              '${counterState.counter} Book${(counterState.counter == 1) ? '' : 's'}',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline3!
+                                  .copyWith(
+                                    fontSize: 20,
+                                    color: Colors.blueGrey[800],
+                                  ),
+                            ),
+                          ),
+                          PlusButton(),
+                        ],
+                      ),
                     ),
                     Spacer(),
                     if (copystate == RequestHardCopyState.idleState)
                       Center(
                         child: Opacity(
-                          opacity: .8,
+                          opacity: .6,
                           child: SizedBox(
                             width: SizeConfig.screenWidth! / 1.5,
                             child: Text(
@@ -92,7 +190,7 @@ class GetHardCopy extends StatelessWidget {
                         RequestHardCopyState.requestHardcopySubmissionFailed)
                       Center(
                         child: Opacity(
-                          opacity: .8,
+                          opacity: .6,
                           child: Text(
                             'Request failed try again',
                             textAlign: TextAlign.center,
@@ -104,7 +202,7 @@ class GetHardCopy extends StatelessWidget {
                         RequestHardCopyState.requestHardcopySubmitted)
                       Center(
                         child: Opacity(
-                          opacity: .8,
+                          opacity: .6,
                           child: SizedBox(
                             width: SizeConfig.screenWidth! / 1.5,
                             child: Text(
@@ -120,7 +218,7 @@ class GetHardCopy extends StatelessWidget {
                           ),
                         ),
                       ),
-                    Spacer(flex: 2),
+                    Spacer(),
                     SizedBox(
                       height: 50,
                       width: SizeConfig.screenWidth! - 30,
@@ -148,7 +246,7 @@ class GetHardCopy extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               vertical: 6, horizontal: 8),
                           child: Text(
-                            'Request ${counterState.counter} hard cop${(counterState.counter == 1) ? 'y' : 'ies'}',
+                            'Request ${counterState.counter} Book${(counterState.counter == 1) ? '' : 's'}',
                             style:
                                 Theme.of(context).textTheme.headline4!.copyWith(
                                       color: Colors.white,

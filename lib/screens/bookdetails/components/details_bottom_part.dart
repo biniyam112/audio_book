@@ -2,7 +2,6 @@ import 'package:audio_books/models/book.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../constants.dart';
 import '../../../sizeConfig.dart';
 import 'custom_tab_view_children.dart';
 import 'text_with_custom_underline.dart';
@@ -37,7 +36,7 @@ class _DetailsBottomPartState extends State<DetailsBottomPart> {
       width: SizeConfig.screenWidth,
       child: Padding(
         padding:
-            EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(16)),
+            EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(14)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

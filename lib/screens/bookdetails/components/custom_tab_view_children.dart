@@ -1,6 +1,5 @@
 import 'package:audio_books/feature/fetch_chapters/bloc/fetch_chapters_bloc.dart';
 import 'package:audio_books/feature/fetch_chapters/bloc/fetch_chapters_state.dart';
-import 'package:audio_books/feature/request_hard_copy/bloc/request_hard_copy_bloc.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/theme/theme.dart';
 import 'package:flutter/cupertino.dart';

@@ -1,5 +1,3 @@
-import 'dart:async';
-import 'dart:ui' as ui;
 import 'package:audio_books/feature/payment/bloc/payment_bloc.dart';
 import 'package:audio_books/feature/payment/bloc/payment_event.dart';
 import 'package:audio_books/feature/payment/bloc/payment_state.dart';
@@ -18,7 +16,6 @@ import 'package:audio_books/theme/theme_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
 
 import '../../../sizeConfig.dart';
@@ -85,7 +82,7 @@ class DetailsTopSection extends StatelessWidget {
                   },
                   builder: (context, storingstate) {
                     return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         PurchaseButton(
                           text: 'Get E-book',
@@ -231,26 +228,25 @@ class TopDetailsRightSection extends StatelessWidget {
         BookGenereCard(
           genere: '#${book.category}',
         ),
-        verticalSpacing(10),
+        verticalSpacing(6),
         AuthorDisplay(
           authorName: book.author,
         ),
+        verticalSpacing(4),
         Container(
           color: Colors.transparent,
           child: TextButton(
             onPressed: () {
-              // showModalBottomSheet(
-              // context: context,
-              // builder: (context) {
-              // return GetHardCopy(book: book);
-              // },
-              // );
-              var theRoute = MaterialPageRoute(
-                builder: (context) => Scaffold(
-                  body: SafeArea(child: GetHardCopy(book: book)),
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
                 ),
+                builder: (context) {
+                  return GetHardCopy(book: book);
+                },
               );
-              Navigator.push(context, theRoute);
             },
             style: ButtonStyle(
               padding: MaterialStateProperty.all(EdgeInsets.all(6)),
@@ -258,7 +254,7 @@ class TopDetailsRightSection extends StatelessWidget {
             child: Text(
               'Get Hard Copy',
               style: Theme.of(context).textTheme.headline5!.copyWith(
-                    fontWeight: FontWeight.w300,
+                    fontWeight: FontWeight.w600,
                     color: Colors.grey[850],
                   ),
             ),
