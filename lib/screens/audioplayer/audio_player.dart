@@ -17,18 +17,21 @@ import 'components/body.dart';
 class AudioPlayerScreen extends StatefulWidget {
   const AudioPlayerScreen({
     Key? key,
+    required this.isFile,
     this.book,
-    this.episode,
     this.downloadedBook,
-    this.downloadedEpisode,
-    this.podcastEpisode,
+    this.podcastEpisodes,
+    this.podcast,
+    this.episodes,
+    this.downloadedEpisodes,
   }) : super(key: key);
+  final bool isFile;
   final Book? book;
-  // ?has to be make List<Episode> in future
-  final Episode? episode;
+  final Podcast? podcast;
   final DownloadedBook? downloadedBook;
-  final DownloadedEpisode? downloadedEpisode;
-  final List<APIPodcastEpisode>? podcastEpisode;
+  final List<Episode>? episodes;
+  final List<DownloadedEpisode>? downloadedEpisodes;
+  final List<APIPodcastEpisode>? podcastEpisodes;
 
   @override
   _AudioPlayerScreenState createState() => _AudioPlayerScreenState();
@@ -37,9 +40,14 @@ class AudioPlayerScreen extends StatefulWidget {
 class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   @override
   void initState() {
-    var playList = widget.episode == null ? null : [widget.episode!];
-    getIt<PageManager>()
-        .init(playList, widget.downloadedEpisode, widget.podcastEpisode);
+    bool isFile = getIt.get<bool>(instanceName: 'isFile');
+    isFile = widget.isFile;
+    print(isFile);
+    getIt<PageManager>().init(
+      chapters: widget.episodes,
+      downloadedEpisodes: widget.downloadedEpisodes,
+      podcastEpisodes: widget.podcastEpisodes,
+    );
     BlocProvider.of<AdvertisementBloc>(context).add(FetchAdvertEvent());
     super.initState();
   }
@@ -66,11 +74,13 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
         ),
       ),
       body: Body(
+        isFile: widget.isFile,
         book: widget.book,
-        episode: widget.episode,
         downloadedBook: widget.downloadedBook,
-        downloadedEpisode: widget.downloadedEpisode,
-        podcastEpisodes: widget.podcastEpisode,
+        podcast: widget.podcast,
+        episodes: widget.episodes,
+        downloadedEpisodes: widget.downloadedEpisodes,
+        podcastEpisodes: widget.podcastEpisodes,
       ),
     );
   }

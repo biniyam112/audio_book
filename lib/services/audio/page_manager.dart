@@ -24,16 +24,17 @@ class PageManager {
   final isShuffleModeEnabledNotifier = ValueNotifier<bool>(false);
 
   final _audioHandler = getIt<AudioHandler>();
-  
+
   // Events: Calls coming from the UI
-  void init(
+  void init({
     List<Episode>? chapters,
-    DownloadedEpisode? downloadedEpisode,
+    List<DownloadedEpisode>? downloadedEpisodes,
     List<APIPodcastEpisode>? podcastEpisodes,
-  ) async {
+  }) async {
     if (chapters != null) await _loadPlaylist(chapters);
-    if (downloadedEpisode != null) await _laodEpisodeFile(downloadedEpisode);
-    if (podcastEpisodes != null) await _loadPodcastEpisode(podcastEpisodes);
+    if (downloadedEpisodes != null)
+      await _laodDownloadedPlaylist(downloadedEpisodes);
+    if (podcastEpisodes != null) await _loadPodcastPlaylist(podcastEpisodes);
     _listenToChangesInPlaylist();
     _listenToPlaybackState();
     _listenToCurrentPosition();
@@ -42,35 +43,43 @@ class PageManager {
     _listenToChangesInSong();
   }
 
-  Future<void> _laodEpisodeFile(DownloadedEpisode downloadedEpisode) async {
-    final songRepository = getIt<PlaylistRepository>();
-    final episode =
-        songRepository.fetchInitialPlaylistFromDownloaded(downloadedEpisode);
-    final mediaItem = MediaItem(
-      id: episode['id']!,
-      title: episode['title']!,
-      album: episode['album']!,
-      extras: {'url': episode['url']},
-    );
-    _audioHandler.addQueueItem(mediaItem);
-  }
-
-  Future<void> _loadPodcastEpisode(
-      List<APIPodcastEpisode> podcastEpisodes) async {
-    final mediaItems = podcastEpisodes
-        .map((episode) => MediaItem(
-              id: episode.id,
-              title: episode.title,
-              album: episode.podcast,
-              extras: {'url': episode.path},
-            ))
-        .toList();
-    _audioHandler.addQueueItems(mediaItems);
-  }
-
   Future<void> _loadPlaylist(List<Episode> chapters) async {
     final songRepository = getIt<PlaylistRepository>();
     final playlist = songRepository.fetchInitialPlaylist(chapters);
+    final mediaItems = playlist
+        .map((song) => MediaItem(
+              id: song['id'] ?? '',
+              title: song['title'] ?? '',
+              album: song['album'] ?? '',
+              extras: {'url': song['url']},
+            ))
+        .toList();
+    print('the media item is $mediaItems');
+    _audioHandler.addQueueItems(mediaItems);
+  }
+
+  Future<void> _laodDownloadedPlaylist(
+      List<DownloadedEpisode> downloadedEpisodes) async {
+    final songRepository = getIt<PlaylistRepository>();
+    final playlist =
+        songRepository.fetchInitialPlaylistFromDownloaded(downloadedEpisodes);
+    final mediaItems = playlist
+        .map((song) => MediaItem(
+              id: song['id'] ?? '',
+              album: song['album'] ?? '',
+              title: song['title'] ?? '',
+              extras: {'url': song['url']},
+            ))
+        .toList();
+
+    _audioHandler.addQueueItems(mediaItems);
+  }
+
+  Future<void> _loadPodcastPlaylist(
+      List<APIPodcastEpisode> podcastEpisodes) async {
+    final songRepository = getIt<PlaylistRepository>();
+    final playlist =
+        songRepository.fetchInitialPlaylistFromPoscast(podcastEpisodes);
     final mediaItems = playlist
         .map((song) => MediaItem(
               id: song['id'] ?? '',

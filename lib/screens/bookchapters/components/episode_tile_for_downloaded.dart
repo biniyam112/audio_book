@@ -39,8 +39,9 @@ class EpisodeTileForDownload extends StatelessWidget {
               MaterialPageRoute(
                 builder: (context) {
                   return AudioPlayerScreen(
+                    isFile: true,
                     downloadedBook: book,
-                    downloadedEpisode: episode,
+                    downloadedEpisodes: [episode],
                   );
                 },
               ),
@@ -119,7 +120,10 @@ class EpisodeTileForDownload extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (context) {
                           return AudioPlayerScreen(
-                              downloadedBook: book, downloadedEpisode: episode);
+                            isFile: true,
+                            downloadedBook: book,
+                            downloadedEpisodes: [episode],
+                          );
                         },
                       ),
                     );

@@ -33,38 +33,55 @@ import 'next_song_button.dart';
 class Body extends StatefulWidget {
   const Body({
     Key? key,
+    required this.isFile,
     this.book,
-    this.episode,
+    this.episodes,
     this.podcast,
     this.downloadedBook,
-    this.downloadedEpisode,
+    this.downloadedEpisodes,
     this.podcastEpisodes,
   }) : super(key: key);
+  final bool isFile;
   final Book? book;
-  final Episode? episode;
   final DownloadedBook? downloadedBook;
-  final DownloadedEpisode? downloadedEpisode;
   final Podcast? podcast;
+  final List<Episode>? episodes;
+  final List<DownloadedEpisode>? downloadedEpisodes;
   final List<APIPodcastEpisode>? podcastEpisodes;
 
   @override
-  _BodyState createState() =>
-      _BodyState(book, episode, downloadedBook, downloadedEpisode,podcast);
+  _BodyState createState() => _BodyState(
+        isFile,
+        book,
+        episodes,
+        downloadedBook,
+        downloadedEpisodes,
+        podcast,
+        podcastEpisodes,
+      );
 }
 
 class _BodyState extends State<Body> {
-  final Book? bookWeb;
+  final bool isFile;
+  final Book? book;
   final Podcast? podcast;
-  final Episode? episode;
   final DownloadedBook? downloadedBook;
-  final DownloadedEpisode? downloadedEpisode;
+  final List<Episode>? episodes;
+  final List<DownloadedEpisode>? downloadedEpisodes;
+  final List<APIPodcastEpisode>? podcastEpisodes;
   late PageManager _pageManager;
   late PageController _pageController;
 
   bool isFavorite = false;
-  late int isFile;
   _BodyState(
-      this.bookWeb, this.episode, this.downloadedBook, this.downloadedEpisode,this.podcast);
+    this.isFile,
+    this.book,
+    this.episodes,
+    this.downloadedBook,
+    this.downloadedEpisodes,
+    this.podcast,
+    this.podcastEpisodes,
+  );
 
   @override
   void initState() {
@@ -72,8 +89,6 @@ class _BodyState extends State<Body> {
     _pageManager = getIt<PageManager>();
     _pageManager.play();
     _pageController = PageController();
-    isFile = getIt.get<int>(instanceName: 'isFile');
-    // isFile = bookWeb  == null;
   }
 
   Future<Uint8List> fetchCoverImage({required String imagePath}) async {
@@ -161,7 +176,7 @@ class _BodyState extends State<Body> {
                                       Container(
                                         height: SizeConfig.screenWidth,
                                         width: SizeConfig.screenWidth,
-                                        child: isFile==0
+                                        child: isFile
                                             ? FutureBuilder<Uint8List>(
                                                 future: fetchCoverImage(
                                                   imagePath: downloadedBook!
@@ -194,9 +209,10 @@ class _BodyState extends State<Body> {
                                                       height: double.infinity,
                                                     );
                                                   }
-                                                })
+                                                },
+                                              )
                                             : CachedNetworkImage(
-                                                imageUrl: bookWeb!.coverArt,
+                                                imageUrl: book!.coverArt,
                                                 progressIndicatorBuilder:
                                                     (context, url,
                                                             downloadProgress) =>
@@ -267,7 +283,7 @@ class _BodyState extends State<Body> {
                                                 }
                                               })
                                           : CachedNetworkImage(
-                                              imageUrl: bookWeb!.coverArt,
+                                              imageUrl: book!.coverArt,
                                               progressIndicatorBuilder:
                                                   (context, url,
                                                           downloadProgress) =>
@@ -301,7 +317,7 @@ class _BodyState extends State<Body> {
                 style: Theme.of(context).textTheme.headline4,
               )
             : Text(
-                '${bookWeb!.title}',
+                '${book!.title}',
                 style: Theme.of(context).textTheme.headline4,
               ),
         verticalSpacing(10),

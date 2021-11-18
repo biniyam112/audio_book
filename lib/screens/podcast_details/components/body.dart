@@ -5,15 +5,14 @@ import 'package:audio_books/feature/url_endpoints.dart';
 import 'package:audio_books/models/api_podcast_episode.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/audioplayer/audio_player.dart';
-
 import 'package:audio_books/screens/components/no_connection_widget.dart';
-import 'package:audio_books/services/audio/service_locator.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 // import 'dart:math' as math;
 
@@ -163,6 +162,7 @@ class Body extends StatelessWidget {
                           ...List.generate(
                             PodcastBloc.podcastEpisodes.length,
                             (index) => PodcastListCard(
+                                podcast: podcast,
                                 podcastEpisode:
                                     PodcastBloc.podcastEpisodes[index]),
                           ),
@@ -187,24 +187,37 @@ class PodcastListCard extends StatelessWidget {
   const PodcastListCard({
     Key? key,
     required this.podcastEpisode,
+    required this.podcast,
   }) : super(key: key);
+  final APIPodcast podcast;
   final APIPodcastEpisode podcastEpisode;
 
   @override
   Widget build(BuildContext context) {
     Random random = Random();
     return GestureDetector(
-
       onTap: () {
-        bool isFile=getIt.get<bool>(instanceName: 'isFile');
-        isFile=false;
-        Navigator.push(
+        pushNewScreen(
           context,
-          MaterialPageRoute(
-            builder: (context) {
-              return AudioPlayerScreen(
-                  podcastEpisode: PodcastBloc.podcastEpisodes);
-            },
+          withNavBar: false,
+          screen: AudioPlayerScreen(
+            isFile: false,
+            book: Book(
+              id: podcastEpisode.id,
+              bookPath: '',
+              narattor: '',
+              coverArt: '$baseUrl${podcast.imagePath}',
+              category: podcast.category,
+              title: podcast.title,
+              edition: '',
+              author: podcast.creator,
+              authorId: '',
+              publishmentYear: '',
+              description: '',
+              resourceType: '',
+              price: 0,
+            ),
+            podcastEpisodes: PodcastBloc.podcastEpisodes,
           ),
         );
       },
