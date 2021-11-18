@@ -1,5 +1,7 @@
 import 'package:audio_books/feature/fetch_advertisement/bloc/advertisement_bloc.dart';
 import 'package:audio_books/feature/fetch_advertisement/bloc/advertisement_event.dart';
+import 'package:audio_books/feature/url_endpoints.dart';
+import 'package:audio_books/models/api_podcast_episode.dart';
 import 'package:audio_books/models/downloaded_episode.dart';
 import 'package:audio_books/models/episode.dart';
 import 'package:audio_books/models/models.dart';
@@ -20,12 +22,14 @@ class AudioPlayerScreen extends StatefulWidget {
     this.episode,
     this.downloadedBook,
     this.downloadedEpisode,
+    this.podcastEpisode,
   }) : super(key: key);
   final Book? book;
   // ?has to be make List<Episode> in future
   final Episode? episode;
   final DownloadedBook? downloadedBook;
   final DownloadedEpisode? downloadedEpisode;
+  final List<APIPodcastEpisode>? podcastEpisode;
 
   @override
   _AudioPlayerScreenState createState() => _AudioPlayerScreenState();
@@ -35,7 +39,8 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   @override
   void initState() {
     var playList = widget.episode == null ? null : [widget.episode!];
-    getIt<PageManager>().init(playList, widget.downloadedEpisode);
+    getIt<PageManager>()
+        .init(playList, widget.downloadedEpisode, widget.podcastEpisode);
     BlocProvider.of<AdvertisementBloc>(context).add(FetchAdvertEvent());
     super.initState();
   }

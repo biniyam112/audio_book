@@ -137,8 +137,6 @@ class Body extends StatelessWidget {
                                   top: getProportionateScreenHeight(25)),
                               child: ElevatedButton(
                                 onPressed: () {
-                                  print(
-                                      "USER ID*******************${podcast.id}");
                                   BlocProvider.of<PodcastBloc>(context).add(
                                       SubscribePodcast(podcastId: podcast.id));
                                   BlocProvider.of<PodcastBloc>(context)

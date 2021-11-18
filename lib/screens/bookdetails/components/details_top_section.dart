@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'dart:ui' as ui;
 import 'package:audio_books/feature/payment/bloc/payment_bloc.dart';
 import 'package:audio_books/feature/payment/bloc/payment_event.dart';
 import 'package:audio_books/feature/payment/bloc/payment_state.dart';
@@ -7,6 +9,7 @@ import 'package:audio_books/feature/store_book/bloc/store_book_state.dart';
 import 'package:audio_books/models/book.dart';
 import 'package:audio_books/models/episode.dart';
 import 'package:audio_books/models/models.dart';
+import 'package:audio_books/screens/bookdetails/components/get_books_madal_view.dart';
 import 'package:audio_books/screens/bookdetails/components/purchase_button.dart';
 import 'package:audio_books/screens/bookdetails/components/author_display.dart';
 import 'package:audio_books/screens/paymentModal/payment_modal_card.dart';
@@ -15,6 +18,7 @@ import 'package:audio_books/theme/theme_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:palette_generator/palette_generator.dart';
 import 'package:provider/provider.dart';
 
 import '../../../sizeConfig.dart';
@@ -231,12 +235,41 @@ class TopDetailsRightSection extends StatelessWidget {
         AuthorDisplay(
           authorName: book.author,
         ),
+        Container(
+          color: Colors.transparent,
+          child: TextButton(
+            onPressed: () {
+              // showModalBottomSheet(
+              // context: context,
+              // builder: (context) {
+              // return GetHardCopy(book: book);
+              // },
+              // );
+              var theRoute = MaterialPageRoute(
+                builder: (context) => Scaffold(
+                  body: SafeArea(child: GetHardCopy(book: book)),
+                ),
+              );
+              Navigator.push(context, theRoute);
+            },
+            style: ButtonStyle(
+              padding: MaterialStateProperty.all(EdgeInsets.all(6)),
+            ),
+            child: Text(
+              'Get Hard Copy',
+              style: Theme.of(context).textTheme.headline5!.copyWith(
+                    fontWeight: FontWeight.w300,
+                    color: Colors.grey[850],
+                  ),
+            ),
+          ),
+        ),
       ],
     );
   }
 }
 
-class TopDetailsImageSection extends StatelessWidget {
+class TopDetailsImageSection extends StatefulWidget {
   const TopDetailsImageSection({
     Key? key,
     required this.book,
@@ -245,15 +278,20 @@ class TopDetailsImageSection extends StatelessWidget {
   final Book book;
 
   @override
+  _TopDetailsImageSectionState createState() => _TopDetailsImageSectionState();
+}
+
+class _TopDetailsImageSectionState extends State<TopDetailsImageSection> {
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      width: SizeConfig.screenWidth! * .43,
-      child: Hero(
-        tag: book.id,
+    return Hero(
+      tag: widget.book.id,
+      child: Container(
+        width: SizeConfig.screenWidth! * .43,
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: CachedNetworkImage(
-            imageUrl: book.coverArt,
+            imageUrl: widget.book.coverArt,
             placeholder: (context, message) => Center(
               child: Container(
                 height: 30,
@@ -262,7 +300,7 @@ class TopDetailsImageSection extends StatelessWidget {
               ),
             ),
             errorWidget: (context, url, error) => Icon(Icons.error),
-            height: SizeConfig.screenHeight! * .3,
+            width: double.infinity,
             fit: BoxFit.cover,
           ),
         ),

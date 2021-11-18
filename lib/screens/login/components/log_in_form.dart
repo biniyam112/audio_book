@@ -26,6 +26,13 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  TextEditingController _controller = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final List<String> errors = [];
+  String phoneNumber = '';
+  late Country _selectedCountry;
+  bool rememberMe = false;
+
   @override
   void initState() {
     super.initState();
@@ -84,13 +91,6 @@ class _LoginFormState extends State<LoginForm> {
     }
   }
 
-  TextEditingController _controller = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-  final List<String> errors = [];
-  String phoneNumber = '';
-  late Country _selectedCountry;
-  bool rememberMe = false;
-
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AuthorizeUserBloc, AuthoriseUserState>(
@@ -145,7 +145,7 @@ class _LoginFormState extends State<LoginForm> {
                   SizedBox(height: getProportionateScreenHeight(20)),
                   InputFieldContainer(
                     title: 'Phone number',
-                    child: buildPhoneField(),
+                    child: buildPhoneField(authstate: authstate),
                   ),
                   SizedBox(height: getProportionateScreenHeight(20)),
                   FormError(errors: errors),
@@ -228,7 +228,7 @@ class _LoginFormState extends State<LoginForm> {
   }
 
 // ?phone formfield
-  TextFormField buildPhoneField() {
+  TextFormField buildPhoneField({required AuthoriseUserState authstate}) {
     return TextFormField(
       controller: _controller,
       style: Theme.of(context).textTheme.headline5!.copyWith(
@@ -246,19 +246,21 @@ class _LoginFormState extends State<LoginForm> {
           return '';
         }
       },
-      onChanged: (value) {
-        _controller.text = modifyText();
-        _controller.selection = TextSelection.fromPosition(
-            TextPosition(offset: _controller.text.length));
-        if (value.isNotEmpty && errors.contains(kPhoneNullError)) {
-          setState(() {
-            errors.remove(kPhoneNullError);
-          });
-        }
-        phoneNumber = value.replaceAll(' ', '');
-        var user = getIt.get<User>();
-        user.setPhoneNumber = value;
-      },
+      onChanged: (authstate is UserAuthorizingState)
+          ? null
+          : (value) {
+              _controller.text = modifyText();
+              _controller.selection = TextSelection.fromPosition(
+                  TextPosition(offset: _controller.text.length));
+              if (value.isNotEmpty && errors.contains(kPhoneNullError)) {
+                setState(() {
+                  errors.remove(kPhoneNullError);
+                });
+              }
+              phoneNumber = value.replaceAll(' ', '');
+              var user = getIt.get<User>();
+              user.setPhoneNumber = value;
+            },
       keyboardType: TextInputType.phone,
       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
       decoration: InputDecoration(

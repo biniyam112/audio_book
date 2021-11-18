@@ -1,3 +1,5 @@
+import 'package:audio_books/feature/url_endpoints.dart';
+import 'package:audio_books/models/api_podcast_episode.dart';
 import 'package:audio_books/models/downloaded_episode.dart';
 import 'package:audio_books/models/episode.dart';
 import 'package:audio_books/services/audio/play_button_notifier.dart';
@@ -28,9 +30,11 @@ class PageManager {
   void init(
     List<Episode>? chapters,
     DownloadedEpisode? downloadedEpisode,
+    List<APIPodcastEpisode>? podcastEpisodes,
   ) async {
     if (chapters != null) await _loadPlaylist(chapters);
     if (downloadedEpisode != null) await _laodEpisodeFile(downloadedEpisode);
+    if (podcastEpisodes != null) await _loadPodcastEpisode(podcastEpisodes);
     _listenToChangesInPlaylist();
     _listenToPlaybackState();
     _listenToCurrentPosition();
@@ -50,6 +54,19 @@ class PageManager {
       extras: {'url': episode['url']},
     );
     _audioHandler.addQueueItem(mediaItem);
+  }
+
+  Future<void> _loadPodcastEpisode(
+      List<APIPodcastEpisode> podcastEpisodes) async {
+    final mediaItems = podcastEpisodes
+        .map((episode) => MediaItem(
+              id: episode.id,
+              title: episode.title,
+              album: episode.podcast,
+              extras: {'url': episode.path},
+            ))
+        .toList();
+    _audioHandler.addQueueItems(mediaItems);
   }
 
   Future<void> _loadPlaylist(List<Episode> chapters) async {

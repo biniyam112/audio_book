@@ -1,5 +1,4 @@
 import 'package:audio_books/feature/podcast/bloc/bloc.dart';
-
 import 'package:audio_books/screens/components/no_connection_widget.dart';
 import 'package:audio_books/screens/home/components/podcast_card.dart';
 import 'package:audio_books/sizeConfig.dart';
@@ -70,7 +69,8 @@ class PodcastBody extends StatelessWidget {
                                 : SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         ...List.generate(
                                           PodcastBloc
