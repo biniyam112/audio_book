@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:audio_books/constants.dart';
 import 'package:audio_books/feature/fetch_advertisement/bloc/advertisement_bloc.dart';
 import 'package:audio_books/feature/fetch_advertisement/bloc/advertisement_stata.dart';
+import 'package:audio_books/models/api_podcast_episode.dart';
 import 'package:audio_books/models/downloaded_episode.dart';
 import 'package:audio_books/models/episode.dart';
 import 'package:audio_books/models/models.dart';
@@ -34,21 +35,26 @@ class Body extends StatefulWidget {
     Key? key,
     this.book,
     this.episode,
+    this.podcast,
     this.downloadedBook,
     this.downloadedEpisode,
+    this.podcastEpisodes,
   }) : super(key: key);
   final Book? book;
   final Episode? episode;
   final DownloadedBook? downloadedBook;
   final DownloadedEpisode? downloadedEpisode;
+  final Podcast? podcast;
+  final List<APIPodcastEpisode>? podcastEpisodes;
 
   @override
   _BodyState createState() =>
-      _BodyState(book, episode, downloadedBook, downloadedEpisode);
+      _BodyState(book, episode, downloadedBook, downloadedEpisode,podcast);
 }
 
 class _BodyState extends State<Body> {
   final Book? bookWeb;
+  final Podcast? podcast;
   final Episode? episode;
   final DownloadedBook? downloadedBook;
   final DownloadedEpisode? downloadedEpisode;
@@ -56,9 +62,9 @@ class _BodyState extends State<Body> {
   late PageController _pageController;
 
   bool isFavorite = false;
-  late bool isFile;
+  late int isFile;
   _BodyState(
-      this.bookWeb, this.episode, this.downloadedBook, this.downloadedEpisode);
+      this.bookWeb, this.episode, this.downloadedBook, this.downloadedEpisode,this.podcast);
 
   @override
   void initState() {
@@ -66,8 +72,8 @@ class _BodyState extends State<Body> {
     _pageManager = getIt<PageManager>();
     _pageManager.play();
     _pageController = PageController();
-    isFile = getIt.get<bool>(instanceName: 'isFile');
-    isFile = bookWeb == null;
+    isFile = getIt.get<int>(instanceName: 'isFile');
+    // isFile = bookWeb  == null;
   }
 
   Future<Uint8List> fetchCoverImage({required String imagePath}) async {
@@ -155,7 +161,7 @@ class _BodyState extends State<Body> {
                                       Container(
                                         height: SizeConfig.screenWidth,
                                         width: SizeConfig.screenWidth,
-                                        child: isFile
+                                        child: isFile==0
                                             ? FutureBuilder<Uint8List>(
                                                 future: fetchCoverImage(
                                                   imagePath: downloadedBook!

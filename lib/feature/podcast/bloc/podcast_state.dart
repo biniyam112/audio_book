@@ -11,6 +11,10 @@ class PodcastInitState extends PodcastState {}
 
 class PodcastInProgress extends PodcastState {}
 
+class PodcastSubscribeProgress extends PodcastState{}
+
+class PodcastSubscribeFailure extends PodcastState{}
+
 class PodcastFailure extends PodcastState {}
 
 class PodcastSuccess extends PodcastState {}

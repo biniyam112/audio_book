@@ -10,6 +10,7 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
 
   static List<APIPodcast> allPodcasts = [];
   static List<APIPodcast> subscribedPodcasats = [];
+  static List<APIPodcastEpisode> podcastEpisodes = [];
 
   PodcastBloc()
       : _podcastRepository = getIt<PodcastRepository>(),
@@ -73,7 +74,7 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
 
   Stream<PodcastState> _mapFetchSubscribedPodcastsToState(
       FetchSubscribedPodcasts event) async* {
-    yield PodcastInProgress();
+    yield PodcastSubscribeProgress();
     podcastPage = event.page;
     try {
       final apiDataResponse =
@@ -81,7 +82,7 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
       print(apiDataResponse);
 
       if (apiDataResponse.items == null) {
-        yield PodcastFailure();
+        yield PodcastSubscribeFailure();
       } else {
         // print('************************PODCAST SUCCESS**************');
         final items = apiDataResponse.items as List;
@@ -109,10 +110,11 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
         yield PodcastFailure();
       } else {
         final items = apiDataResponse.items as List;
-        final podcastEpisodes = items
+        final apiPodcastEpisodes = items
             .map((podcastEpisode) => APIPodcastEpisode.fromJson(podcastEpisode))
             .toList();
-        yield PodcastEpisodeLoadSuccess(podcastEpisodes: podcastEpisodes);
+        podcastEpisodes = apiPodcastEpisodes;
+        yield PodcastEpisodeLoadSuccess(podcastEpisodes: apiPodcastEpisodes);
       }
     } catch (e) {
       print('**********************PODCAST FAILURE************** $e');

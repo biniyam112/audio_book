@@ -71,6 +71,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
         episode: widget.episode,
         downloadedBook: widget.downloadedBook,
         downloadedEpisode: widget.downloadedEpisode,
+        podcastEpisodes: widget.podcastEpisode,
       ),
     );
   }
