@@ -275,12 +275,13 @@ class LoadingTransition extends StatelessWidget {
               var user = getIt.get<User>();
               var userBox = HiveBoxes.getUserBox();
               var storedUser = userBox.get(HiveBoxes.userKey)!;
+              user.id = storedUser.id;
+              user.token = storedUser.token;
+              user.email = storedUser.email;
               user.firstName = storedUser.firstName;
               user.lastName = storedUser.lastName;
               user.phoneNumber = storedUser.phoneNumber;
-              user.token = storedUser.token;
-              user.email = storedUser.email;
-              user.id = storedUser.id;
+              user.countryCode = storedUser.countryCode;
               BlocProvider.of<PingSiteBloc>(context).add(
                 PingSiteEvent(
                   address:

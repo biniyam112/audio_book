@@ -36,6 +36,7 @@ class _SubmitPhonePageState extends State<SubmitPhonePage> {
   @override
   void initState() {
     super.initState();
+    print(user.countryCode);
     print(user.phoneNumber);
     textFieldController = TextEditingController(text: '${user.phoneNumber}');
     _selectedCountry = Country.fromJson(

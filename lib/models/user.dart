@@ -26,12 +26,12 @@ class User {
   String? countryCode;
   User({
     this.id,
+    this.token,
+    this.email,
     this.firstName,
     this.lastName,
     this.phoneNumber,
     this.countryCode,
-    this.token,
-    this.email,
   });
 
   factory User.copywith(User user) => User(

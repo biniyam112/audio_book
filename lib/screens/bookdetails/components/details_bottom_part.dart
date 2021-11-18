@@ -51,14 +51,8 @@ class _DetailsBottomPartState extends State<DetailsBottomPart> {
                     TextWithCustomUnderline(
                       title: 'Preface',
                       onTap: () {
-                        setState(() {
-                          activeContextIndex = 0;
-                          pageViewController.animateToPage(
-                            0,
-                            curve: Curves.easeIn,
-                            duration: fastDuration,
-                          );
-                        });
+                        activeContextIndex = 0;
+                        pageViewController.jumpToPage(0);
                       },
                       isActive: activeContextIndex == 0,
                     ),
@@ -66,29 +60,17 @@ class _DetailsBottomPartState extends State<DetailsBottomPart> {
                     TextWithCustomUnderline(
                       title: 'Chapters',
                       onTap: () {
-                        setState(() {
-                          activeContextIndex = 1;
-                          pageViewController.animateToPage(
-                            1,
-                            curve: Curves.easeIn,
-                            duration: fastDuration,
-                          );
-                        });
+                        activeContextIndex = 1;
+                        pageViewController.jumpToPage(1);
                       },
                       isActive: activeContextIndex == 1,
                     ),
                     Spacer(),
                     TextWithCustomUnderline(
-                      title: 'Get Book',
+                      title: 'Comments',
                       onTap: () {
-                        setState(() {
-                          activeContextIndex = 2;
-                          pageViewController.animateToPage(
-                            2,
-                            curve: Curves.easeIn,
-                            duration: fastDuration,
-                          );
-                        });
+                        activeContextIndex = 2;
+                        pageViewController.jumpToPage(2);
                       },
                       isActive: activeContextIndex == 2,
                     ),
