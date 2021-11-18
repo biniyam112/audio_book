@@ -4,8 +4,10 @@ import 'package:audio_books/feature/podcast/bloc/bloc.dart';
 import 'package:audio_books/feature/url_endpoints.dart';
 import 'package:audio_books/models/api_podcast_episode.dart';
 import 'package:audio_books/models/models.dart';
+import 'package:audio_books/screens/audioplayer/audio_player.dart';
 
 import 'package:audio_books/screens/components/no_connection_widget.dart';
+import 'package:audio_books/services/audio/service_locator.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -159,10 +161,10 @@ class Body extends StatelessWidget {
                       child: Column(
                         children: [
                           ...List.generate(
-                            state.podcastEpisodes.length,
+                            PodcastBloc.podcastEpisodes.length,
                             (index) => PodcastListCard(
-                              podcastEpisode: state.podcastEpisodes[index],
-                            ),
+                                podcastEpisode:
+                                    PodcastBloc.podcastEpisodes[index]),
                           ),
                         ],
                       ),
@@ -192,7 +194,20 @@ class PodcastListCard extends StatelessWidget {
   Widget build(BuildContext context) {
     Random random = Random();
     return GestureDetector(
-      onTap: () {},
+
+      onTap: () {
+        bool isFile=getIt.get<bool>(instanceName: 'isFile');
+        isFile=false;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return AudioPlayerScreen(
+                  podcastEpisode: PodcastBloc.podcastEpisodes);
+            },
+          ),
+        );
+      },
       child: Padding(
         padding: EdgeInsets.only(bottom: getProportionateScreenHeight(20)),
         child: Neumorphic(
@@ -214,7 +229,8 @@ class PodcastListCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Padding(
-                  padding: EdgeInsets.only(left: getProportionateScreenWidth(8)),
+                  padding:
+                      EdgeInsets.only(left: getProportionateScreenWidth(8)),
                   child: Neumorphic(
                     style: NeumorphicStyle(
                       color: Colors.white,
@@ -250,7 +266,7 @@ class PodcastListCard extends StatelessWidget {
                     ),
                     verticalSpacing(4),
                     Container(
-                      width: SizeConfig.screenWidth! * .7 ,
+                      width: SizeConfig.screenWidth! * .7,
                       child: Opacity(
                         opacity: .8,
                         child: Text(

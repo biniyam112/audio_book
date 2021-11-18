@@ -24,7 +24,7 @@ class PageManager {
   final isShuffleModeEnabledNotifier = ValueNotifier<bool>(false);
 
   final _audioHandler = getIt<AudioHandler>();
-
+  
   // Events: Calls coming from the UI
   void init(
     List<Episode>? chapters,
