@@ -12,11 +12,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-<<<<<<< HEAD
 import 'package:provider/provider.dart';
-=======
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
->>>>>>> f83e56f44091346744173685e5c360b378dae3c0
 
 // import 'dart:math' as math;
 
@@ -202,14 +199,8 @@ class PodcastListCard extends StatelessWidget {
     Random random = Random();
     return GestureDetector(
       onTap: () {
-<<<<<<< HEAD
-        bool isFile = getIt.get<bool>(instanceName: 'isFile');
-        isFile = false;
-        Navigator.push(
-=======
         print(PodcastBloc.podcastEpisodes[0].toJson());
         pushNewScreen(
->>>>>>> f83e56f44091346744173685e5c360b378dae3c0
           context,
           withNavBar: false,
           screen: AudioPlayerScreen(
