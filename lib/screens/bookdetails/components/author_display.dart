@@ -15,8 +15,10 @@ class AuthorDisplay extends StatelessWidget {
   const AuthorDisplay({
     Key? key,
     required this.authorName,
+    this.radius = 30,
   }) : super(key: key);
   final String authorName;
+  final double radius;
 
   @override
   Widget build(BuildContext context) {
@@ -40,34 +42,34 @@ class AuthorDisplay extends StatelessWidget {
             children: [
               if (authorState is AuthorsFetchedState)
                 CircleAvatar(
-                  radius: 30,
+                  radius: radius,
                   foregroundImage: CachedNetworkImageProvider(
                     '${authorState.author.authorImage}',
                   ),
                 ),
               if (authorState is AuthorsFetchingFailedState)
                 Container(
-                  height: 60,
-                  width: 60,
+                  height: radius * 2,
+                  width: radius * 2,
                   padding: EdgeInsets.all(10),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(radius),
                     color: Darktheme.shadowColor.withOpacity(.071),
                   ),
                   child: Center(
                     child: SvgPicture.asset(
                       'assets/icons/User Icon.svg',
-                      height: 20,
-                      width: 20,
+                      height: radius * 2 / 3,
+                      width: radius * 2 / 3,
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
               if (authorState is AuthorsFetchingState)
                 Container(
-                  height: 60,
-                  width: 60,
+                  height: radius * 2,
+                  width: radius * 2,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(30),

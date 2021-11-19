@@ -18,7 +18,7 @@ class PurchaseButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: getProportionateScreenWidth(160),
+      width: (SizeConfig.screenWidth! / 2) - 20,
       child: ElevatedButton(
         style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all(

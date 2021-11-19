@@ -33,15 +33,25 @@ import 'next_song_button.dart';
 class Body extends StatefulWidget {
   const Body({
     Key? key,
+    required this.isFile,
     this.book,
+<<<<<<< HEAD
     this.episode,
     this.downloadedBook,
     this.downloadedEpisode,
     this.podcastEpisodes
+=======
+    this.episodes,
+    this.podcast,
+    this.downloadedBook,
+    this.downloadedEpisodes,
+    this.podcastEpisodes,
+>>>>>>> f83e56f44091346744173685e5c360b378dae3c0
   }) : super(key: key);
+  final bool isFile;
   final Book? book;
-  final Episode? episode;
   final DownloadedBook? downloadedBook;
+<<<<<<< HEAD
   final DownloadedEpisode? downloadedEpisode;
   final List<APIPodcastEpisode>? podcastEpisodes;
 
@@ -53,15 +63,52 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   final Book? bookWeb;
   final Episode? episode;
+=======
+  final Podcast? podcast;
+  final List<Episode>? episodes;
+  final List<DownloadedEpisode>? downloadedEpisodes;
+  final List<APIPodcastEpisode>? podcastEpisodes;
+
+  @override
+  _BodyState createState() => _BodyState(
+        isFile,
+        book,
+        episodes,
+        downloadedBook,
+        downloadedEpisodes,
+        podcast,
+        podcastEpisodes,
+      );
+}
+
+class _BodyState extends State<Body> {
+  final bool isFile;
+  final Book? book;
+  final Podcast? podcast;
+>>>>>>> f83e56f44091346744173685e5c360b378dae3c0
   final DownloadedBook? downloadedBook;
-  final DownloadedEpisode? downloadedEpisode;
+  final List<Episode>? episodes;
+  final List<DownloadedEpisode>? downloadedEpisodes;
+  final List<APIPodcastEpisode>? podcastEpisodes;
   late PageManager _pageManager;
   late PageController _pageController;
 
   bool isFavorite = false;
+<<<<<<< HEAD
   late bool isFile;
   _BodyState(
       this.bookWeb, this.episode, this.downloadedBook, this.downloadedEpisode);
+=======
+  _BodyState(
+    this.isFile,
+    this.book,
+    this.episodes,
+    this.downloadedBook,
+    this.downloadedEpisodes,
+    this.podcast,
+    this.podcastEpisodes,
+  );
+>>>>>>> f83e56f44091346744173685e5c360b378dae3c0
 
   @override
   void initState() {
@@ -69,8 +116,11 @@ class _BodyState extends State<Body> {
     _pageManager = getIt<PageManager>();
     _pageManager.play();
     _pageController = PageController();
+<<<<<<< HEAD
     isFile = getIt.get<bool>(instanceName: 'isFile');
     isFile = bookWeb == null;
+=======
+>>>>>>> f83e56f44091346744173685e5c360b378dae3c0
   }
 
   Future<Uint8List> fetchCoverImage({required String imagePath}) async {
@@ -191,9 +241,10 @@ class _BodyState extends State<Body> {
                                                       height: double.infinity,
                                                     );
                                                   }
-                                                })
+                                                },
+                                              )
                                             : CachedNetworkImage(
-                                                imageUrl: bookWeb!.coverArt,
+                                                imageUrl: book!.coverArt,
                                                 progressIndicatorBuilder:
                                                     (context, url,
                                                             downloadProgress) =>
@@ -264,7 +315,7 @@ class _BodyState extends State<Body> {
                                                 }
                                               })
                                           : CachedNetworkImage(
-                                              imageUrl: bookWeb!.coverArt,
+                                              imageUrl: book!.coverArt,
                                               progressIndicatorBuilder:
                                                   (context, url,
                                                           downloadProgress) =>
@@ -298,7 +349,7 @@ class _BodyState extends State<Body> {
                 style: Theme.of(context).textTheme.headline4,
               )
             : Text(
-                '${bookWeb!.title}',
+                '${book!.title}',
                 style: Theme.of(context).textTheme.headline4,
               ),
         verticalSpacing(10),

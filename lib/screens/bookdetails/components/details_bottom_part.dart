@@ -2,7 +2,6 @@ import 'package:audio_books/models/book.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../constants.dart';
 import '../../../sizeConfig.dart';
 import 'custom_tab_view_children.dart';
 import 'text_with_custom_underline.dart';
@@ -37,7 +36,7 @@ class _DetailsBottomPartState extends State<DetailsBottomPart> {
       width: SizeConfig.screenWidth,
       child: Padding(
         padding:
-            EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(16)),
+            EdgeInsets.symmetric(horizontal: getProportionateScreenWidth(14)),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -78,31 +77,26 @@ class _DetailsBottomPartState extends State<DetailsBottomPart> {
                   ],
                 ),
                 SizedBox(height: getProportionateScreenHeight(16)),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 6),
-                  child: Container(
-                    height: SizeConfig.screenHeight! * .405,
-                    child: PageView(
-                      controller: pageViewController,
-                      onPageChanged: (index) {
-                        setState(() {
-                          activeContextIndex = index;
-                        });
-                      },
-                      children: [
-                        ...List.generate(
-                          3,
-                          (index) {
-                            return SingleChildScrollView(
-                              child: CustomTabViewChildren(
-                                index: index,
-                                book: widget.book,
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
+                Container(
+                  height: SizeConfig.screenHeight! * .405,
+                  child: PageView(
+                    controller: pageViewController,
+                    onPageChanged: (index) {
+                      setState(() {
+                        activeContextIndex = index;
+                      });
+                    },
+                    children: [
+                      ...List.generate(
+                        3,
+                        (index) {
+                          return CustomTabViewChildren(
+                            index: index,
+                            book: widget.book,
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ],

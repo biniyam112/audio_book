@@ -55,6 +55,11 @@ class CustomDrawer extends StatelessWidget {
                   onPress: () {},
                 ),
                 DrawerTile(
+                  title: 'Feedback',
+                  icon: Icons.feedback_rounded,
+                  onPress: () {},
+                ),
+                DrawerTile(
                   title: 'Log out',
                   icon: CupertinoIcons.square_arrow_left,
                   onPress: () async {

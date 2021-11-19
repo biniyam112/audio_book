@@ -6,7 +6,7 @@ class InputFieldContainer extends StatelessWidget {
   const InputFieldContainer({
     Key? key,
     required this.child,
-    required this.title,
+    this.title = '',
     this.subtitle = '',
     this.spacing = 20,
   }) : super(key: key);
@@ -21,32 +21,34 @@ class InputFieldContainer extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        subtitle.isEmpty
-            ? Text(
-                title,
-                style: Theme.of(context).textTheme.headline5!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: Theme.of(context).textTheme.headline5!.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  verticalSpacing(4),
-                  Opacity(
-                    opacity: .7,
-                    child: Text(
-                      ' ($subtitle)',
-                      style: Theme.of(context).textTheme.headline6,
-                    ),
-                  ),
-                ],
+        if (subtitle.isEmpty && title.isNotEmpty)
+          Text(
+            title,
+            style: Theme.of(context).textTheme.headline5!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+          ),
+        if (subtitle.isNotEmpty)
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (title.isNotEmpty)
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.headline5!.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              verticalSpacing(4),
+              Opacity(
+                opacity: .7,
+                child: Text(
+                  ' ($subtitle)',
+                  style: Theme.of(context).textTheme.headline6,
+                ),
               ),
+            ],
+          ),
         verticalSpacing(spacing),
         Container(
           padding: EdgeInsets.symmetric(

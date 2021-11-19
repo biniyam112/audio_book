@@ -34,44 +34,6 @@ class MyAudioHandler extends BaseAudioHandler {
     }
   }
 
-  void _notifyAudioHandlerAboutPlaybackEvents() {
-    _player.playbackEventStream.listen((PlaybackEvent event) {
-      final playing = _player.playing;
-      playbackState.add(playbackState.value.copyWith(
-        controls: [
-          MediaControl.skipToPrevious,
-          if (playing) MediaControl.pause else MediaControl.play,
-          MediaControl.stop,
-          MediaControl.skipToNext,
-        ],
-        systemActions: const {
-          MediaAction.seek,
-        },
-        androidCompactActionIndices: const [0, 1, 3],
-        processingState: const {
-          ProcessingState.idle: AudioProcessingState.idle,
-          ProcessingState.loading: AudioProcessingState.loading,
-          ProcessingState.buffering: AudioProcessingState.buffering,
-          ProcessingState.ready: AudioProcessingState.ready,
-          ProcessingState.completed: AudioProcessingState.completed,
-        }[_player.processingState]!,
-        repeatMode: const {
-          LoopMode.off: AudioServiceRepeatMode.none,
-          LoopMode.one: AudioServiceRepeatMode.one,
-          LoopMode.all: AudioServiceRepeatMode.all,
-        }[_player.loopMode]!,
-        shuffleMode: (_player.shuffleModeEnabled)
-            ? AudioServiceShuffleMode.all
-            : AudioServiceShuffleMode.none,
-        playing: playing,
-        updatePosition: _player.position,
-        bufferedPosition: _player.bufferedPosition,
-        speed: _player.speed,
-        queueIndex: event.currentIndex,
-      ));
-    });
-  }
-
   void _listenForDurationChanges() {
     _player.durationStream.listen((duration) {
       var index = _player.currentIndex;
@@ -131,16 +93,15 @@ class MyAudioHandler extends BaseAudioHandler {
   }
 
   AudioSource _createAudioSource(MediaItem mediaItem) {
-    print('the file item is ${mediaItem.extras!['url']}');
     bool isFile = getIt.get<bool>(instanceName: 'isFile');
-
-    return isFile
+    return !isFile
         ? AudioSource.uri(
             Uri.parse(mediaItem.extras!['url']),
             tag: mediaItem,
           )
         : AudioSource.uri(
             Uri.file(mediaItem.extras!['url']),
+            tag: mediaItem,
           );
   }
 
@@ -180,6 +141,44 @@ class MyAudioHandler extends BaseAudioHandler {
 
   @override
   Future<void> skipToPrevious() => _player.seekToPrevious();
+
+  void _notifyAudioHandlerAboutPlaybackEvents() {
+    _player.playbackEventStream.listen((PlaybackEvent event) {
+      final playing = _player.playing;
+      playbackState.add(playbackState.value.copyWith(
+        controls: [
+          MediaControl.skipToPrevious,
+          if (playing) MediaControl.pause else MediaControl.play,
+          MediaControl.stop,
+          MediaControl.skipToNext,
+        ],
+        systemActions: const {
+          MediaAction.seek,
+        },
+        androidCompactActionIndices: const [0, 1, 3],
+        processingState: const {
+          ProcessingState.idle: AudioProcessingState.idle,
+          ProcessingState.loading: AudioProcessingState.loading,
+          ProcessingState.buffering: AudioProcessingState.buffering,
+          ProcessingState.ready: AudioProcessingState.ready,
+          ProcessingState.completed: AudioProcessingState.completed,
+        }[_player.processingState]!,
+        repeatMode: const {
+          LoopMode.off: AudioServiceRepeatMode.none,
+          LoopMode.one: AudioServiceRepeatMode.one,
+          LoopMode.all: AudioServiceRepeatMode.all,
+        }[_player.loopMode]!,
+        shuffleMode: (_player.shuffleModeEnabled)
+            ? AudioServiceShuffleMode.all
+            : AudioServiceShuffleMode.none,
+        playing: playing,
+        updatePosition: _player.position,
+        bufferedPosition: _player.bufferedPosition,
+        speed: _player.speed,
+        queueIndex: event.currentIndex,
+      ));
+    });
+  }
 
   @override
   Future<void> setRepeatMode(AudioServiceRepeatMode repeatMode) async {

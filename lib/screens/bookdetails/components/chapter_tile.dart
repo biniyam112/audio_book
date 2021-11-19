@@ -33,7 +33,11 @@ class EpisodeTile extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) {
-                return AudioPlayerScreen(book: book, episode: episode);
+                return AudioPlayerScreen(
+                  isFile: false,
+                  book: book,
+                  episodes: [episode],
+                );
               },
             ),
           );
@@ -94,32 +98,12 @@ class EpisodeTile extends StatelessWidget {
                 ),
               ),
               Spacer(),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return AudioPlayerScreen(book: book, episode: episode);
-                      },
-                    ),
-                  );
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(left: 3),
-                  child: Icon(
-                    CupertinoIcons.play_fill,
-                    size: 20,
-                    color: isDarkMode ? Colors.grey : LightTheme.secondaryColor,
-                  ),
-                ),
-                style: ButtonStyle(
-                  elevation: MaterialStateProperty.all(0),
-                  shape: MaterialStateProperty.all(CircleBorder()),
-                  padding: MaterialStateProperty.all(
-                    EdgeInsets.all(10),
-                  ),
-                  backgroundColor: MaterialStateProperty.all(Color(0xffF0F3FE)),
+              Padding(
+                padding: EdgeInsets.only(left: 3),
+                child: Icon(
+                  CupertinoIcons.play_fill,
+                  size: 20,
+                  color: isDarkMode ? Colors.grey : LightTheme.secondaryColor,
                 ),
               ),
             ],
