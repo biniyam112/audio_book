@@ -35,35 +35,15 @@ class Body extends StatefulWidget {
     Key? key,
     required this.isFile,
     this.book,
-<<<<<<< HEAD
-    this.episode,
-    this.downloadedBook,
-    this.downloadedEpisode,
-    this.podcastEpisodes
-=======
     this.episodes,
     this.podcast,
     this.downloadedBook,
     this.downloadedEpisodes,
     this.podcastEpisodes,
->>>>>>> f83e56f44091346744173685e5c360b378dae3c0
   }) : super(key: key);
   final bool isFile;
   final Book? book;
   final DownloadedBook? downloadedBook;
-<<<<<<< HEAD
-  final DownloadedEpisode? downloadedEpisode;
-  final List<APIPodcastEpisode>? podcastEpisodes;
-
-  @override
-  _BodyState createState() =>
-      _BodyState(book, episode, downloadedBook, downloadedEpisode);
-}
-
-class _BodyState extends State<Body> {
-  final Book? bookWeb;
-  final Episode? episode;
-=======
   final Podcast? podcast;
   final List<Episode>? episodes;
   final List<DownloadedEpisode>? downloadedEpisodes;
@@ -85,7 +65,6 @@ class _BodyState extends State<Body> {
   final bool isFile;
   final Book? book;
   final Podcast? podcast;
->>>>>>> f83e56f44091346744173685e5c360b378dae3c0
   final DownloadedBook? downloadedBook;
   final List<Episode>? episodes;
   final List<DownloadedEpisode>? downloadedEpisodes;
@@ -94,11 +73,6 @@ class _BodyState extends State<Body> {
   late PageController _pageController;
 
   bool isFavorite = false;
-<<<<<<< HEAD
-  late bool isFile;
-  _BodyState(
-      this.bookWeb, this.episode, this.downloadedBook, this.downloadedEpisode);
-=======
   _BodyState(
     this.isFile,
     this.book,
@@ -108,7 +82,6 @@ class _BodyState extends State<Body> {
     this.podcast,
     this.podcastEpisodes,
   );
->>>>>>> f83e56f44091346744173685e5c360b378dae3c0
 
   @override
   void initState() {
@@ -116,11 +89,6 @@ class _BodyState extends State<Body> {
     _pageManager = getIt<PageManager>();
     _pageManager.play();
     _pageController = PageController();
-<<<<<<< HEAD
-    isFile = getIt.get<bool>(instanceName: 'isFile');
-    isFile = bookWeb == null;
-=======
->>>>>>> f83e56f44091346744173685e5c360b378dae3c0
   }
 
   Future<Uint8List> fetchCoverImage({required String imagePath}) async {
