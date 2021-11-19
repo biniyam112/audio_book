@@ -15,26 +15,29 @@ class BookCategory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          categoryName,
-          style: Theme.of(context).textTheme.headline4!.copyWith(
-                fontSize: 16,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 6),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            categoryName,
+            style: Theme.of(context).textTheme.headline4!.copyWith(
+                  fontSize: 16,
+                ),
+          ),
+          TextButton(
+            onPressed: onPressed,
+            child: Text(
+              'see all',
+              style: TextStyle(
+                fontSize: 13,
+                color: isDarkMode ? Colors.white : Colors.black,
               ),
-        ),
-        TextButton(
-          onPressed: onPressed,
-          child: Text(
-            'see all',
-            style: TextStyle(
-              fontSize: 13,
-              color: isDarkMode ? Colors.white : Colors.black,
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

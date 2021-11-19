@@ -77,31 +77,26 @@ class _DetailsBottomPartState extends State<DetailsBottomPart> {
                   ],
                 ),
                 SizedBox(height: getProportionateScreenHeight(16)),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 6),
-                  child: Container(
-                    height: SizeConfig.screenHeight! * .405,
-                    child: PageView(
-                      controller: pageViewController,
-                      onPageChanged: (index) {
-                        setState(() {
-                          activeContextIndex = index;
-                        });
-                      },
-                      children: [
-                        ...List.generate(
-                          3,
-                          (index) {
-                            return SingleChildScrollView(
-                              child: CustomTabViewChildren(
-                                index: index,
-                                book: widget.book,
-                              ),
-                            );
-                          },
-                        ),
-                      ],
-                    ),
+                Container(
+                  height: SizeConfig.screenHeight! * .405,
+                  child: PageView(
+                    controller: pageViewController,
+                    onPageChanged: (index) {
+                      setState(() {
+                        activeContextIndex = index;
+                      });
+                    },
+                    children: [
+                      ...List.generate(
+                        3,
+                        (index) {
+                          return CustomTabViewChildren(
+                            index: index,
+                            book: widget.book,
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ],

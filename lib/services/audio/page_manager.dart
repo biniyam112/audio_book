@@ -1,3 +1,4 @@
+import 'package:audio_books/feature/url_endpoints.dart';
 import 'package:audio_books/models/api_podcast_episode.dart';
 import 'package:audio_books/models/downloaded_episode.dart';
 import 'package:audio_books/models/episode.dart';
@@ -35,12 +36,21 @@ class PageManager {
     if (downloadedEpisodes != null)
       await _laodDownloadedPlaylist(downloadedEpisodes);
     if (podcastEpisodes != null) await _loadPodcastPlaylist(podcastEpisodes);
+    _resetPlaylist();
     _listenToChangesInPlaylist();
     _listenToPlaybackState();
     _listenToCurrentPosition();
     _listenToBufferedPosition();
     _listenToTotalDuration();
     _listenToChangesInSong();
+  }
+
+  Future<void> _resetPlaylist() async {
+    var mediaItems = _audioHandler.queue.value;
+    for (var mediaItem in mediaItems) {
+      _audioHandler.removeQueueItem(mediaItem);
+    }
+    _audioHandler.stop();
   }
 
   Future<void> _loadPlaylist(List<Episode> chapters) async {
@@ -85,7 +95,7 @@ class PageManager {
               id: song['id'] ?? '',
               album: song['album'] ?? '',
               title: song['title'] ?? '',
-              extras: {'url': song['url']},
+              extras: {'url': "$baseUrl${song['url']}"},
             ))
         .toList();
     _audioHandler.addQueueItems(mediaItems);

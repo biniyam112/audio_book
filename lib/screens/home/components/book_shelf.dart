@@ -39,7 +39,6 @@ class BookShelf extends StatelessWidget {
                       return Padding(
                         padding: EdgeInsets.symmetric(
                           horizontal: getProportionateScreenWidth(8),
-                          vertical: 6,
                         ),
                         child: BookTile(
                           book: books[index],

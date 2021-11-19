@@ -30,8 +30,8 @@ class FeaturedBooksTile extends StatelessWidget {
         );
       },
       child: Container(
-        height: getProportionateScreenHeight(260),
-        width: getProportionateScreenWidth(180),
+        height: getProportionateScreenHeight(280),
+        width: getProportionateScreenWidth(160),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: isDarkMode ? Colors.black : Colors.white,
@@ -60,7 +60,7 @@ class FeaturedBooksTile extends StatelessWidget {
             Align(
               alignment: Alignment.topCenter,
               child: Container(
-                height: getProportionateScreenHeight(200),
+                height: getProportionateScreenHeight(220),
                 decoration: BoxDecoration(
                   color: Colors.transparent,
                   borderRadius: BorderRadius.vertical(
@@ -71,6 +71,7 @@ class FeaturedBooksTile extends StatelessWidget {
                   borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
                   child: CachedNetworkImage(
                     imageUrl: '${book.coverArt}',
+                    width: getProportionateScreenWidth(160),
                     alignment: Alignment.center,
                     placeholder: (context, message) => Container(
                       height: 62,
@@ -91,7 +92,7 @@ class FeaturedBooksTile extends StatelessWidget {
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                width: getProportionateScreenWidth(180),
+                width: getProportionateScreenWidth(160),
                 height: getProportionateScreenHeight(140),
                 decoration: BoxDecoration(
                   color: isDarkMode ? Darktheme.containerColor : Colors.white,
@@ -123,7 +124,7 @@ class FeaturedBooksTile extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: getProportionateScreenHeight(8)),
+                      Spacer(flex: 2),
                       Text(
                         '${book.title}',
                         style: Theme.of(context).textTheme.headline6!.copyWith(
@@ -145,7 +146,7 @@ class FeaturedBooksTile extends StatelessWidget {
                           ),
                           horizontalSpacing(6),
                           SizedBox(
-                            width: getProportionateScreenWidth(100),
+                            width: getProportionateScreenWidth(90),
                             child: Text(
                               '${book.author}',
                               maxLines: 1,
@@ -179,7 +180,7 @@ class FeaturedBooksTile extends StatelessWidget {
                           ),
                           horizontalSpacing(6),
                           SizedBox(
-                            width: getProportionateScreenWidth(90),
+                            width: getProportionateScreenWidth(80),
                             child: Text(
                               '${book.narattor}',
                               maxLines: 1,

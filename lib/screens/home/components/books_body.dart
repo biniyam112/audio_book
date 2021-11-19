@@ -107,7 +107,7 @@ class BooksBody extends StatelessWidget {
                                         return Padding(
                                           padding: EdgeInsets.symmetric(
                                             horizontal:
-                                                getProportionateScreenWidth(12),
+                                                getProportionateScreenWidth(8),
                                             vertical: 6,
                                           ),
                                           child: FeaturedBooksTile(

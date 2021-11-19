@@ -39,7 +39,7 @@ class BookTile extends StatelessWidget {
               ? Darktheme.containerColor.withOpacity(.9)
               : Colors.white,
           borderRadius: BorderRadius.circular(
-            getProportionateScreenWidth(16),
+            getProportionateScreenWidth(12),
           ),
           boxShadow: [
             BoxShadow(
@@ -58,7 +58,7 @@ class BookTile extends StatelessWidget {
                 tag: '${book.id}',
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(
-                    getProportionateScreenWidth(16),
+                    getProportionateScreenWidth(12),
                   ),
                   child: NeumorphicBackground(
                     child: CachedNetworkImage(
@@ -82,7 +82,7 @@ class BookTile extends StatelessWidget {
             ),
             horizontalSpacing(8),
             Expanded(
-              flex: 4,
+              flex: 5,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Column(
