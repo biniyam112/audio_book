@@ -19,7 +19,7 @@ Future<void> setupServiceLocator() async {
     () => CreatePlayList(),
   );
   getIt.registerSingleton<http.Client>(http.Client());
-  getIt.registerSingleton<int>(0, instanceName: 'isFile');
+  getIt.registerSingleton<bool>(false, instanceName: 'isFile');
 
   // page state
   getIt.registerLazySingleton<PageManager>(() => PageManager());

@@ -66,6 +66,8 @@ class PlansFetchingFailed extends PaymentState {
   PlansFetchingFailed({required this.errorMessage});
 }
 
+
+
 // ?Register subsccribed User
 class UserSubscribed extends PaymentState {}
 

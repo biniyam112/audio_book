@@ -14,6 +14,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:provider/provider.dart';
 
 // import 'dart:math' as math;
 
@@ -192,12 +193,12 @@ class PodcastListCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
     Random random = Random();
     return GestureDetector(
-
       onTap: () {
-        bool isFile=getIt.get<bool>(instanceName: 'isFile');
-        isFile=false;
+        bool isFile = getIt.get<bool>(instanceName: 'isFile');
+        isFile = false;
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -212,7 +213,9 @@ class PodcastListCard extends StatelessWidget {
         padding: EdgeInsets.only(bottom: getProportionateScreenHeight(20)),
         child: Neumorphic(
           style: NeumorphicStyle(
-            color: Colors.white,
+            color: isDarkMode
+                ? Darktheme.containerColor
+                : LightTheme.backgroundColor,
             shadowLightColor: LightTheme.shadowColor.withOpacity(.3),
             shadowDarkColor: Darktheme.shadowColor.withOpacity(.5),
             intensity: 1,

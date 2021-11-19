@@ -35,26 +35,23 @@ class Body extends StatefulWidget {
     Key? key,
     this.book,
     this.episode,
-    this.podcast,
     this.downloadedBook,
     this.downloadedEpisode,
-    this.podcastEpisodes,
+    this.podcastEpisodes
   }) : super(key: key);
   final Book? book;
   final Episode? episode;
   final DownloadedBook? downloadedBook;
   final DownloadedEpisode? downloadedEpisode;
-  final Podcast? podcast;
   final List<APIPodcastEpisode>? podcastEpisodes;
 
   @override
   _BodyState createState() =>
-      _BodyState(book, episode, downloadedBook, downloadedEpisode,podcast);
+      _BodyState(book, episode, downloadedBook, downloadedEpisode);
 }
 
 class _BodyState extends State<Body> {
   final Book? bookWeb;
-  final Podcast? podcast;
   final Episode? episode;
   final DownloadedBook? downloadedBook;
   final DownloadedEpisode? downloadedEpisode;
@@ -62,9 +59,9 @@ class _BodyState extends State<Body> {
   late PageController _pageController;
 
   bool isFavorite = false;
-  late int isFile;
+  late bool isFile;
   _BodyState(
-      this.bookWeb, this.episode, this.downloadedBook, this.downloadedEpisode,this.podcast);
+      this.bookWeb, this.episode, this.downloadedBook, this.downloadedEpisode);
 
   @override
   void initState() {
@@ -72,8 +69,8 @@ class _BodyState extends State<Body> {
     _pageManager = getIt<PageManager>();
     _pageManager.play();
     _pageController = PageController();
-    isFile = getIt.get<int>(instanceName: 'isFile');
-    // isFile = bookWeb  == null;
+    isFile = getIt.get<bool>(instanceName: 'isFile');
+    isFile = bookWeb == null;
   }
 
   Future<Uint8List> fetchCoverImage({required String imagePath}) async {
@@ -161,7 +158,7 @@ class _BodyState extends State<Body> {
                                       Container(
                                         height: SizeConfig.screenWidth,
                                         width: SizeConfig.screenWidth,
-                                        child: isFile==0
+                                        child: isFile
                                             ? FutureBuilder<Uint8List>(
                                                 future: fetchCoverImage(
                                                   imagePath: downloadedBook!

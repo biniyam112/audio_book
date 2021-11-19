@@ -3,12 +3,16 @@ import 'package:audio_books/feature/payment/bloc/payment_state.dart';
 import 'package:audio_books/feature/payment/repository/amole_payment_repository.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
+import 'package:audio_books/services/helper_method.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
   PaymentBloc({required this.amolePaymentRepo}) : super(IdleState());
 
   final AmolePaymentRepo amolePaymentRepo;
+  static List<Subscribtion> subscriptionPlans = [];
+  static List<Subscribtion> userSubscriptions = [];
+  static String appVersion = "";
 
   @override
   Stream<PaymentState> mapEventToState(PaymentEvent event) async* {
@@ -59,6 +63,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
           userId: user.id!,
           token: user.token!,
         );
+        userSubscriptions = subscribtions;
         yield CheckSubCompleted(
           subscribtions: subscribtions,
           isEbook: event.isEbook,
@@ -71,9 +76,13 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       yield PlansFetching();
       try {
         var user = getIt.get<User>();
+        appVersion = await getAppVersion();
         var plans = await amolePaymentRepo.getAvailableSubscribtions(
           token: user.token!,
         );
+        print("SUBSCIBTION_PLANS****************$plans");
+        subscriptionPlans = plans;
+
         yield PlansFetched(plans: plans);
       } catch (e) {
         yield PlansFetchingFailed(errorMessage: e.toString());

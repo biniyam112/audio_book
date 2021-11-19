@@ -1,5 +1,6 @@
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/edit_user/edit_user.dart';
+import 'package:audio_books/screens/settings/components/subscription_setting.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:flutter/cupertino.dart';
@@ -21,9 +22,9 @@ class Body extends StatelessWidget {
       child: Column(
         children: [
           verticalSpacing(10),
-          Row(
+          Column(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CircleAvatar(
                 maxRadius: getProportionateScreenWidth(30),
@@ -37,11 +38,11 @@ class Body extends StatelessWidget {
                   ),
                 ),
               ),
-              horizontalSpacing(8),
+              verticalSpacing(10),
               Column(
                 children: [
                   Text(
-                    '${user.firstName} ${user.lastName}',
+                    '${user.firstName!.toUpperCase()} ${user.lastName!.toUpperCase()}',
                     style: Theme.of(context).textTheme.headline4,
                   ),
                   Text(
@@ -80,6 +81,7 @@ class Body extends StatelessWidget {
                   title: 'Dark theme',
                   child: ChangeThemeSwitch(),
                 ),
+                SubscriptionSetting()
               ],
             ),
           ),
