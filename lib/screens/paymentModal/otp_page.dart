@@ -30,7 +30,7 @@ class _OtpPageState extends State<OtpPage> {
   List<String> errors = [];
   int? selectedPlan;
   late List<Subscribtion> subscriptions;
-
+  
   @override
   void initState() {
     super.initState();

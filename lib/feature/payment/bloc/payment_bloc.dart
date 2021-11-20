@@ -3,6 +3,7 @@ import 'package:audio_books/feature/payment/bloc/payment_state.dart';
 import 'package:audio_books/feature/payment/repository/amole_payment_repository.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
+import 'package:audio_books/services/helper_method.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
@@ -15,7 +16,13 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
   }
 
   final AmolePaymentRepo amolePaymentRepo;
+<<<<<<< HEAD
   var user = getIt.get<User>();
+=======
+  static List<Subscribtion> subscriptionPlans = [];
+  static List<Subscribtion> userSubscriptions = [];
+  static String appVersion = "";
+>>>>>>> a28c952624ce5ef4efab4a343b41700212dade3c
 
   Future<void> _onOtpSend(
       SendOtp sendOtp, Emitter<PaymentState> emitter) async {
@@ -58,6 +65,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     } catch (e) {
       emitter(UserSubscribtionFailed());
     }
+<<<<<<< HEAD
   }
 
   Future<void> _onCheckSubscription(
@@ -72,6 +80,17 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       );
       emitter(
         CheckSubCompleted(
+=======
+    if (event is CheckSubscription) {
+      yield CheckSubOnprocess();
+      try {
+        var subscribtions = await amolePaymentRepo.checkPaymentSubscribtion(
+          userId: user.id!,
+          token: user.token!,
+        );
+        userSubscriptions = subscribtions;
+        yield CheckSubCompleted(
+>>>>>>> a28c952624ce5ef4efab4a343b41700212dade3c
           subscribtions: subscribtions,
           isEbook: checkSubscription.isEbook,
         ),
@@ -79,6 +98,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     } catch (e) {
       emitter(CheckSubFailed(errorMessage: e.toString()));
     }
+<<<<<<< HEAD
   }
 
   Future<void> _onFetchPlans(
@@ -92,6 +112,23 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       emitter(PlansFetched(plans: plans));
     } catch (e) {
       emitter(PlansFetchingFailed(errorMessage: e.toString()));
+=======
+    if (event is FetchPlans) {
+      yield PlansFetching();
+      try {
+        var user = getIt.get<User>();
+        appVersion = await getAppVersion();
+        var plans = await amolePaymentRepo.getAvailableSubscribtions(
+          token: user.token!,
+        );
+        print("SUBSCIBTION_PLANS****************$plans");
+        subscriptionPlans = plans;
+
+        yield PlansFetched(plans: plans);
+      } catch (e) {
+        yield PlansFetchingFailed(errorMessage: e.toString());
+      }
+>>>>>>> a28c952624ce5ef4efab4a343b41700212dade3c
     }
   }
 

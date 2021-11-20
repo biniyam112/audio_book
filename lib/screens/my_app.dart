@@ -1,3 +1,4 @@
+import 'package:audio_books/constants.dart';
 import 'package:audio_books/feature/author/bloc/author_bloc.dart';
 import 'package:audio_books/feature/author/repository/author_repository.dart';
 import 'package:audio_books/feature/authorize_user/bloc/authorize_user_bloc.dart';
@@ -24,6 +25,7 @@ import 'package:audio_books/feature/initialize_database/bloc/initialize_db_event
 import 'package:audio_books/feature/initialize_database/repository/init_db_repository.dart';
 import 'package:audio_books/feature/otp/otp.dart';
 import 'package:audio_books/feature/payment/bloc/payment_bloc.dart';
+import 'package:audio_books/feature/payment/bloc/payment_event.dart';
 import 'package:audio_books/feature/payment/repository/amole_payment_repository.dart';
 import 'package:audio_books/feature/podcast/bloc/bloc.dart';
 import 'package:audio_books/feature/podcast/bloc/podcast_bloc.dart';
@@ -218,7 +220,9 @@ class _MyAppState extends State<MyApp> {
                 BlocProvider(
                   create: (context) => PaymentBloc(
                     amolePaymentRepo: widget.amolePaymentRepo,
-                  ),
+                  )
+                    ..add(FetchPlans())
+                    ..add(CheckSubscription(isEbook: false)),
                 ),
                 BlocProvider(
                   create: (context) => AdvertisementBloc(
