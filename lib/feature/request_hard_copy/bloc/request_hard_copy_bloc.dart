@@ -7,25 +7,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class RequestHardBookBloc
     extends Bloc<RequestHardCopyEvent, RequestHardCopyState> {
   RequestHardBookBloc(this.requestHardCopyRepo)
-      : super(RequestHardCopyState.idleState);
-
+      : super(RequestHardCopyState.idleState) {
+    on<RequestHardCopyEvent>(_onRequestHardCopyEvent);
+  }
   final RequestHardCopyRepo requestHardCopyRepo;
-  @override
-  Stream<RequestHardCopyState> mapEventToState(
-      RequestHardCopyEvent event) async* {
-    if (event is RequestHardCopyEvent) {
-      yield RequestHardCopyState.requestHardcopySubmiting;
+
+  Future<void> _onRequestHardCopyEvent(
+      RequestHardCopyEvent requestHardCopyEvent,
+      Emitter<RequestHardCopyState> emitter) async {
+    if (RequestHardCopyEvent is RequestHardCopyEvent) {
+      emitter(RequestHardCopyState.requestHardcopySubmiting);
       try {
         var user = getIt.get<User>();
         await requestHardCopyRepo.requestHardCopy(
           userId: user.id!,
           token: user.token!,
-          bookId: event.book.id,
-          numberOfCopies: event.numberOfCopies,
+          bookId: requestHardCopyEvent.book.id,
+          numberOfCopies: requestHardCopyEvent.numberOfCopies,
         );
-        yield RequestHardCopyState.requestHardcopySubmitted;
+        emitter(RequestHardCopyState.requestHardcopySubmitted);
       } catch (e) {
-        yield RequestHardCopyState.requestHardcopySubmissionFailed;
+        emitter(RequestHardCopyState.requestHardcopySubmissionFailed);
       }
     }
   }

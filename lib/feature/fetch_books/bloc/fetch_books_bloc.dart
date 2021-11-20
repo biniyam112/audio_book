@@ -7,20 +7,22 @@ import 'fetch_books_event.dart';
 import 'fetch_books_state.dart';
 
 class FetchBooksBloc extends Bloc<FetchBooksEvent, FetchBooksState> {
-  FetchBooksBloc({required this.fetchBooksRepo}) : super(IdleState());
+  FetchBooksBloc({required this.fetchBooksRepo}) : super(IdleState()) {
+    on<FetchBooksEvent>(_onFetchBooksEvent);
+  }
   final FetchBooksRepo fetchBooksRepo;
 
-  @override
-  Stream<FetchBooksState> mapEventToState(FetchBooksEvent event) async* {
-    yield BooksFetchingState();
+  Future<void> _onFetchBooksEvent(
+      FetchBooksEvent fetchBooksEvent, Emitter<FetchBooksState> emitter) async {
+    emitter(BooksFetchingState());
     var books;
     try {
       var user = getIt.get<User>();
       books = await fetchBooksRepo.fetchAllBoks(user.token!);
-      yield BooksFetchedState(books: books);
+      emitter(BooksFetchedState(books: books));
     } catch (e) {
-      yield BooksFetchingFailedState(
-          errorMessage: 'this is book fetch error : $e\n $books');
+      emitter(BooksFetchingFailedState(
+          errorMessage: 'this is book fetch error : $e\n $books'));
     }
   }
 }

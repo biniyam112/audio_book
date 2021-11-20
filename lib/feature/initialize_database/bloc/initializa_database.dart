@@ -6,20 +6,24 @@ import 'package:audio_books/services/dataBase/database_handler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DatabaseBloc extends Bloc<DBEvent, InitializeDBState> {
-  DatabaseBloc({required this.initDBRepo}) : super(InitializeDBState.idleState);
+  DatabaseBloc({required this.initDBRepo})
+      : super(InitializeDBState.idleState) {
+    on<InitializeDBEvent>(_onInitializeDBEvent);
+  }
   final InitDBRepo initDBRepo;
 
-  @override
-  Stream<InitializeDBState> mapEventToState(DBEvent event) async* {
-    yield InitializeDBState.idleState;
+  Future<void> _onInitializeDBEvent(InitializeDBEvent initializeDBEvent,
+      Emitter<InitializeDBState> emitter) async {
+    emitter(InitializeDBState.idleState);
     try {
-      if (event is InitializeDBEvent) {
-        getIt.registerSingleton<DataBaseHandler>(event.dataBaseHandler);
+      if (initializeDBEvent is InitializeDBEvent) {
+        getIt.registerSingleton<DataBaseHandler>(
+            initializeDBEvent.dataBaseHandler);
         await initDBRepo.createDatabase();
-        yield InitializeDBState.initializedState;
+        emitter(InitializeDBState.initializedState);
       }
     } catch (e) {
-      yield InitializeDBState.initFailedState;
+      emitter(InitializeDBState.initFailedState);
     }
   }
 }

@@ -17,6 +17,8 @@ import 'package:audio_books/feature/fetch_chapters/bloc/fetch_chapters_bloc.dart
 import 'package:audio_books/feature/fetch_chapters/repository/fetch_chapters_repo.dart';
 import 'package:audio_books/feature/fetch_downloaded_book/bloc/fetch_down_book_bloc.dart';
 import 'package:audio_books/feature/fetch_downloaded_book/repository/fetch_down_books_repository.dart';
+import 'package:audio_books/feature/fetch_infinite_books/bloc/fetch_infinite_books_bloc.dart';
+import 'package:audio_books/feature/fetch_infinite_books/repository/fetch_infinite_books_repo.dart';
 import 'package:audio_books/feature/initialize_database/bloc/initializa_database.dart';
 import 'package:audio_books/feature/initialize_database/bloc/initialize_db_event.dart';
 import 'package:audio_books/feature/initialize_database/repository/init_db_repository.dart';
@@ -44,10 +46,11 @@ import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/dark_theme.dart';
 import 'package:audio_books/theme/light_theme.dart';
 import 'package:audio_books/theme/theme_colors.dart';
-import 'package:audio_books/theme/theme_provider.dart';
+import 'package:audio_books/theme/theme_provider.dart' as localTheme;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 
 import 'components/tab_view.dart';
 import 'onboarding/onboarding.dart';
@@ -71,6 +74,7 @@ class MyApp extends StatefulWidget {
   final AdvertisementRepo advertisementRepo;
   final FetchStoredEpisodesRepo fetchStoredEpisodesRepo;
   final FetchStoredEpisodeFileRepo fetchStoredEpisodeFileRepo;
+  final FetchInfiniteBooksRepo fetchInfiniteBooksRepo;
 
   const MyApp({
     Key? key,
@@ -92,6 +96,7 @@ class MyApp extends StatefulWidget {
     required this.advertisementRepo,
     required this.fetchStoredEpisodeFileRepo,
     required this.fetchStoredEpisodesRepo,
+    required this.fetchInfiniteBooksRepo,
   }) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
@@ -109,9 +114,10 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => ThemeProvider(),
+          create: (context) => localTheme.ThemeProvider(),
           builder: (context, _) {
-            final themeProvider = Provider.of<ThemeProvider>(context);
+            final themeProvider =
+                Provider.of<localTheme.ThemeProvider>(context);
 
             return MultiBlocProvider(
               providers: [
@@ -164,7 +170,7 @@ class _MyAppState extends State<MyApp> {
                   lazy: false,
                   create: (context) => CheckFirstTimeBloc()
                     ..add(
-                      CheckFirstTimeEvent.checkFirstTime,
+                      CheckFirstTime(),
                     ),
                 ),
                 BlocProvider(
@@ -235,18 +241,27 @@ class _MyAppState extends State<MyApp> {
                         widget.fetchStoredEpisodeFileRepo,
                   ),
                 ),
+                BlocProvider(
+                  create: (context) => FetchInfiniteBooksBloc(
+                    fetchInfiniteBooksRepo: widget.fetchInfiniteBooksRepo,
+                  ),
+                ),
               ],
-              child: MaterialApp(
-                title: 'Maraki',
-                // animationDuration: fastDuration,
-                // animationType: AnimationType.CIRCULAR_ANIMATED_THEME,
-                debugShowCheckedModeBanner: false,
-                themeMode: themeProvider.themeMode,
-                theme: lightTheme,
-                darkTheme: darkTheme,
-                initialRoute: LoadingTransition.pageRoute,
-                routes: routes(),
-              ),
+              child: ThemeProvider(
+                  initTheme: themeProvider.themeMode,
+                  builder: (context, snapshot) {
+                    return MaterialApp(
+                      title: 'Maraki',
+                      // animationDuration: fastDuration,
+                      // animationType: AnimationType.CIRCULAR_ANIMATED_THEME,
+                      debugShowCheckedModeBanner: false,
+                      themeMode: themeProvider.themeMode,
+                      theme: lightTheme,
+                      darkTheme: darkTheme,
+                      initialRoute: LoadingTransition.pageRoute,
+                      routes: routes(),
+                    );
+                  }),
             );
           },
         ),

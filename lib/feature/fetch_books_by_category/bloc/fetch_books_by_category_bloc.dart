@@ -9,25 +9,28 @@ import 'fetch_books_by_category_event.dart';
 class FetchBooksByCategoryBloc
     extends Bloc<FetchBooksByCategoryEvent, FetchBooksByCategoryState> {
   FetchBooksByCategoryBloc({required this.fetchBooksByCateRepo})
-      : super(IdleState());
+      : super(IdleState()) {
+    on<FetchBooksByCategoryEvent>(_onFetchBooksByCategoryEvent);
+  }
 
   final FetchBooksByCateRepo fetchBooksByCateRepo;
-  @override
-  Stream<FetchBooksByCategoryState> mapEventToState(
-      FetchBooksByCategoryEvent event) async* {
-    yield CategoryBooksFetchingState();
+
+  Future<void> _onFetchBooksByCategoryEvent(
+      FetchBooksByCategoryEvent fetchBooksByCategoryEvent,
+      Emitter<FetchBooksByCategoryState> emitter) async {
+    emitter(CategoryBooksFetchingState());
     try {
-      if (event is FetchBooksByCategoryEvent) {
+      if (fetchBooksByCategoryEvent is FetchBooksByCategoryEvent) {
         var user = getIt.get<User>();
         var books = await fetchBooksByCateRepo.fetchByCategory(
-          categoryId: event.category.id,
+          categoryId: fetchBooksByCategoryEvent.category.id,
           user: user,
         );
         print(books);
-        yield CategoryBooksFetchedState(books: books);
+        emitter(CategoryBooksFetchedState(books: books));
       }
     } catch (e) {
-      yield CategoryBooksFetchFailedState(errorMessage: e.toString());
+      emitter(CategoryBooksFetchFailedState(errorMessage: e.toString()));
     }
   }
 }

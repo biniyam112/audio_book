@@ -7,21 +7,21 @@ import 'featured_books_event.dart';
 import 'featured_books_state.dart';
 
 class FeaturedBooksBloc extends Bloc<FeaturedBooksEvent, FeaturedBooksState> {
-  FeaturedBooksBloc({required this.featuredBooksRepo}) : super(IdleState());
+  FeaturedBooksBloc({required this.featuredBooksRepo}) : super(IdleState()) {
+    on<FetchFeaturedBooks>(_onFetchFeaturedBooks);
+  }
   final FeaturedBooksRepo featuredBooksRepo;
 
-  @override
-  Stream<FeaturedBooksState> mapEventToState(FeaturedBooksEvent event) async* {
-    if (event is FetchFeaturedBooks) {
-      yield FeaturedBooksFetching();
-      try {
-        final user = getIt.get<User>();
-        var books = await featuredBooksRepo.fetchFeatureBooks(user.token!);
-        yield FeaturedBooksFetched(books: books);
-      } catch (e) {
-        print('the error is $e');
-        yield FeaturedBooksFetchingFailed(errorMessage: e.toString());
-      }
+  Future<void> _onFetchFeaturedBooks(FetchFeaturedBooks featuredBooks,
+      Emitter<FeaturedBooksState> emitter) async {
+    emitter(FeaturedBooksFetching());
+    try {
+      final user = getIt.get<User>();
+      var books = await featuredBooksRepo.fetchFeatureBooks(user.token!);
+      emitter(FeaturedBooksFetched(books: books));
+    } catch (e) {
+      print('the error is $e');
+      emitter(FeaturedBooksFetchingFailed(errorMessage: e.toString()));
     }
   }
 }

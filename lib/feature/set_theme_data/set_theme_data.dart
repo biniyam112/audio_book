@@ -4,12 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SetThemeDataBloc extends Bloc<SetThemeDataEvent, ThemeMode> {
-  SetThemeDataBloc() : super(ThemeMode.light);
+  SetThemeDataBloc() : super(ThemeMode.light) {
+    on<SetThemeDataEvent>(_onSetThemeDataEvent);
+  }
 
-  @override
-  Stream<ThemeMode> mapEventToState(SetThemeDataEvent event) async* {
+  Future<void> _onSetThemeDataEvent(
+      SetThemeDataEvent setThemeDataEvent, Emitter<ThemeMode> emitter) async {
     try {
-      await setThemeData(context: event.context);
+      await setThemeData(context: setThemeDataEvent.context);
     } catch (e) {
       print('error while settng theme');
     }

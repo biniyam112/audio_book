@@ -189,7 +189,7 @@ class _LoginFormState extends State<LoginForm> {
                             user.countryCode = _selectedCountry.callingCode;
                             _formKey.currentState!.save();
                             BlocProvider.of<AuthorizeUserBloc>(context)
-                                .add(AuthoriseUserEvent.authorizeUser);
+                                .add(AuthoriseUser());
                           }
                         },
                       ),

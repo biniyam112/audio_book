@@ -17,6 +17,8 @@ import 'package:audio_books/feature/fetch_chapters/dataprovider/fetch_chapters_d
 import 'package:audio_books/feature/fetch_chapters/repository/fetch_chapters_repo.dart';
 import 'package:audio_books/feature/fetch_downloaded_book/dataprovider/fetch_down_books_dataprovider.dart';
 import 'package:audio_books/feature/fetch_downloaded_book/repository/fetch_down_books_repository.dart';
+import 'package:audio_books/feature/fetch_infinite_books/dataprovider/fetch_infinite_books_dataprovider.dart';
+import 'package:audio_books/feature/fetch_infinite_books/repository/fetch_infinite_books_repo.dart';
 import 'package:audio_books/feature/initialize_database/data_provider/init_db_dataProvider.dart';
 import 'package:audio_books/feature/initialize_database/repository/init_db_repository.dart';
 import 'package:audio_books/feature/payment/dataprovider/amole_dataprovider.dart';
@@ -52,7 +54,10 @@ void main() async {
   Hive.registerAdapter(UserAdapter());
   await Hive.openBox<User>('user');
   await Firebase.initializeApp();
-  Bloc.observer = SimpleBlocObserver();
+  BlocOverrides.runZoned(
+    () {},
+    blocObserver: SimpleBlocObserver(),
+  );
   DataBaseHandler dataBaseHandler = DataBaseHandler();
   final StoreBookRepo storeBookRepo = StoreBookRepo(
     storeBookDP: StoreBookDP(
@@ -145,6 +150,11 @@ void main() async {
       dataBaseHandler: dataBaseHandler,
     ),
   );
+  final FetchInfiniteBooksRepo fetchInfiniteBooksRepo = FetchInfiniteBooksRepo(
+    fetchInfiniteBooksDP: FetchInfiniteBooksDP(
+      client: http.Client(),
+    ),
+  );
   await setupServiceLocator();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
     (value) => runApp(
@@ -167,6 +177,7 @@ void main() async {
         advertisementRepo: advertisementRepo,
         fetchStoredEpisodeFileRepo: fetchStoredEpisodeFileRepo,
         fetchStoredEpisodesRepo: fetchStoredEpisodesRepo,
+        fetchInfiniteBooksRepo: fetchInfiniteBooksRepo,
       ),
     ),
   );

@@ -10,8 +10,8 @@ import 'package:audio_books/feature/fetch_books_by_category/bloc/fetch_books_by_
 import 'package:audio_books/feature/fetch_books_by_category/dataprovider/fetch_by_category_dp.dart';
 import 'package:audio_books/feature/fetch_books_by_category/repository/fetch_by_category_repo.dart';
 import 'package:audio_books/feature/ping_site/bloc/ping_site_bloc.dart';
-import 'package:audio_books/screens/categoryallbooks/category_all_books.dart';
 import 'package:audio_books/screens/components/no_connection_widget.dart';
+import 'package:audio_books/screens/infinite_books_list/infinite_books_list.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
@@ -89,8 +89,8 @@ class BooksBody extends StatelessWidget {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => CategoryAllBooks(
-                                          category: 'Featured Books',
+                                        builder: (context) => InfiniteBooksList(
+                                          title: 'Featured Books',
                                         ),
                                       ),
                                     );
@@ -182,8 +182,8 @@ class BooksBody extends StatelessWidget {
                                                 context,
                                                 MaterialPageRoute(
                                                   builder: (context) =>
-                                                      CategoryAllBooks(
-                                                    category:
+                                                      InfiniteBooksList(
+                                                    title:
                                                         categories[index].name,
                                                   ),
                                                 ),

@@ -4,22 +4,24 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PingSiteBloc extends Bloc<PingSiteEvent, PingSiteState> {
-  PingSiteBloc() : super(PingSiteState.idle);
+  PingSiteBloc() : super(PingSiteState.idle) {
+    on<PingSiteEvent>(_onPingSiteEvent);
+  }
 
-  @override
-  Stream<PingSiteState> mapEventToState(PingSiteEvent event) async* {
-    yield PingSiteState.inProcess;
+  Future<void> _onPingSiteEvent(
+      PingSiteEvent pingSiteEvent, Emitter<PingSiteState> emitter) async {
+    emitter(PingSiteState.inProcess);
     try {
       final client = http.Client();
-      final result = await client.get(Uri.parse(event.address));
+      final result = await client.get(Uri.parse(pingSiteEvent.address));
 
       if (result.statusCode == 200) {
-        yield PingSiteState.success;
+        emitter(PingSiteState.success);
       }
     } on SocketException catch (_) {
-      yield PingSiteState.failed;
+      emitter(PingSiteState.failed);
     } catch (e) {
-      yield PingSiteState.failed;
+      emitter(PingSiteState.failed);
     }
   }
 }

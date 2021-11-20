@@ -7,25 +7,28 @@ import 'package:audio_books/services/hiveConfig/hive_config.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RegisterUserBloc extends Bloc<RegisterUserEvent, RegisterUserState> {
-  RegisterUserBloc({required this.registerUserRepo}) : super(IdleStateReg());
+  RegisterUserBloc({required this.registerUserRepo}) : super(IdleStateReg()) {
+    on<RegisterUserEvent>(_onRegisterUserEvent);
+  }
   final RegisterUserRepo registerUserRepo;
 
-  @override
-  Stream<RegisterUserState> mapEventToState(RegisterUserEvent event) async* {
-    yield RegsiteringUserState();
+  Future<void> _onRegisterUserEvent(RegisterUserEvent registerUserEvent,
+      Emitter<RegisterUserState> emitter) async {
+    emitter(RegsiteringUserState());
     try {
       await registerUserRepo.registerUser(
-        user: event.user,
+        user: registerUserEvent.user,
       );
       final userBox = HiveBoxes.getUserBox();
-      userBox.put(HiveBoxes.userKey, event.user);
+      userBox.put(HiveBoxes.userKey, registerUserEvent.user);
 
-      yield UserRegisteredState();
+      emitter(UserRegisteredState());
     } catch (error) {
       Map<String, dynamic> errorMessage = jsonDecode(
           error.toString().substring(error.toString().indexOf('\{')));
       if (errorMessage.containsKey('message')) {
-        yield RegsiteringUserFailedState(errorMessage: errorMessage['message']);
+        emitter(
+            RegsiteringUserFailedState(errorMessage: errorMessage['message']));
       }
     }
   }

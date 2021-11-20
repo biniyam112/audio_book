@@ -7,22 +7,22 @@ import 'fetch_chapters_event.dart';
 import 'fetch_chapters_state.dart';
 
 class FetchChaptersBloc extends Bloc<FetchChaptersEvent, FetchChaptersState> {
-  FetchChaptersBloc({required this.fetchChaptersRepo}) : super(IdleState());
+  FetchChaptersBloc({required this.fetchChaptersRepo}) : super(IdleState()) {
+    on<FetchChaptersEvent>(_onFetchChaptersEvent);
+  }
   final FetchChaptersRepo fetchChaptersRepo;
 
-  @override
-  Stream<FetchChaptersState> mapEventToState(FetchChaptersEvent event) async* {
-    if (event is FetchChaptersEvent) {
-      yield ChaptersFetchingState();
-      try {
-        var user = getIt.get<User>();
-        var book = event.book;
-        var chapters =
-            await fetchChaptersRepo.fetchBookChapters(book.id, user.token);
-        yield ChaptersFetchedState(chapters: chapters);
-      } catch (e) {
-        yield ChaptersFetchingFailedState(errorMessage: e.toString());
-      }
+  Future<void> _onFetchChaptersEvent(FetchChaptersEvent fetchChaptersEvent,
+      Emitter<FetchChaptersState> emitter) async {
+    emitter(ChaptersFetchingState());
+    try {
+      var user = getIt.get<User>();
+      var book = fetchChaptersEvent.book;
+      var chapters =
+          await fetchChaptersRepo.fetchBookChapters(book.id, user.token);
+      emitter(ChaptersFetchedState(chapters: chapters));
+    } catch (e) {
+      emitter(ChaptersFetchingFailedState(errorMessage: e.toString()));
     }
   }
 }
