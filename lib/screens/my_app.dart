@@ -1,4 +1,3 @@
-import 'package:audio_books/constants.dart';
 import 'package:audio_books/feature/author/bloc/author_bloc.dart';
 import 'package:audio_books/feature/author/repository/author_repository.dart';
 import 'package:audio_books/feature/authorize_user/bloc/authorize_user_bloc.dart';
@@ -52,7 +51,6 @@ import 'package:audio_books/theme/theme_provider.dart' as localTheme;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 
 import 'components/tab_view.dart';
 import 'onboarding/onboarding.dart';
@@ -251,21 +249,17 @@ class _MyAppState extends State<MyApp> {
                   ),
                 ),
               ],
-              child: ThemeProvider(
-                  initTheme: themeProvider.themeMode,
-                  builder: (context, snapshot) {
-                    return MaterialApp(
-                      title: 'Maraki',
-                      // animationDuration: fastDuration,
-                      // animationType: AnimationType.CIRCULAR_ANIMATED_THEME,
-                      debugShowCheckedModeBanner: false,
-                      themeMode: themeProvider.themeMode,
-                      theme: lightTheme,
-                      darkTheme: darkTheme,
-                      initialRoute: LoadingTransition.pageRoute,
-                      routes: routes(),
-                    );
-                  }),
+              child: MaterialApp(
+                title: 'Maraki',
+                // animationDuration: fastDuration,
+                // animationType: AnimationType.CIRCULAR_ANIMATED_THEME,
+                debugShowCheckedModeBanner: false,
+                themeMode: themeProvider.themeMode,
+                theme: lightTheme,
+                darkTheme: darkTheme,
+                initialRoute: LoadingTransition.pageRoute,
+                routes: routes(),
+              ),
             );
           },
         ),

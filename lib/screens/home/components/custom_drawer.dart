@@ -1,6 +1,7 @@
 import 'package:audio_books/feature/fetch_books/bloc/fetch_books_bloc.dart';
 import 'package:audio_books/feature/fetch_books/bloc/fetch_books_event.dart';
 import 'package:audio_books/models/user.dart';
+import 'package:audio_books/screens/feedback/feedback.dart';
 import 'package:audio_books/screens/home/components/user_info_area.dart';
 import 'package:audio_books/screens/login/login.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
@@ -9,6 +10,7 @@ import 'package:audio_books/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 import '../../../sizeConfig.dart';
@@ -57,7 +59,13 @@ class CustomDrawer extends StatelessWidget {
                 DrawerTile(
                   title: 'Feedback',
                   icon: Icons.feedback_rounded,
-                  onPress: () {},
+                  onPress: () {
+                    pushNewScreen(
+                      context,
+                      screen: FeedBackScreen(),
+                      withNavBar: false,
+                    );
+                  },
                 ),
                 DrawerTile(
                   title: 'Log out',

@@ -8,7 +8,6 @@ import 'package:audio_books/models/models.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
 import 'package:audio_books/services/dataBase/database_handler.dart';
 import 'package:audio_books/services/encryption/encryption_handler.dart';
-import 'package:audio_books/services/permission/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
@@ -57,7 +56,7 @@ class StoreBookDP {
 
   Future<String> storeEncryptedEpisode(Uint8List episodeByteFile,
       {required String bookTitle, required String chapterTitle}) async {
-    await PermissionHandler.requestStoragePermission();
+    // await PermissionHandler.requestStoragePermission();
     try {
       var directory = await getApplicationDocumentsDirectory();
       var bookDirectory = await Directory(path.join(
@@ -139,7 +138,7 @@ class StoreBookDP {
 
   Future<String> storeEncryptedPdf(Uint8List pdfByteFile,
       {required String bookTitle}) async {
-    await PermissionHandler.requestStoragePermission();
+    // await PermissionHandler.requestStoragePermission();
     try {
       var directory = await getApplicationDocumentsDirectory();
       var bookDirectory = await Directory(path.join(
@@ -177,7 +176,7 @@ class StoreBookDP {
     Uint8List coverImageFile, {
     required String bookId,
   }) async {
-    await PermissionHandler.requestStoragePermission();
+    // await PermissionHandler.requestStoragePermission();
     try {
       var directory = await getApplicationDocumentsDirectory();
       var bookDirectory = await Directory(path.join(

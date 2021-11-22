@@ -29,3 +29,5 @@ const String kAddressNullError = "Please Enter your address";
 const String kCommentUploadError = "Unable to send comment";
 const String kCommentFetchError = "Unable to get comments";
 const String kInfiniteListFetchingError = "Unable to fetch items";
+const String kFeedbackSubmitError = "Unable to submit feedback";
+const String kFeedbackEmptyError = "Please enter feedback first";

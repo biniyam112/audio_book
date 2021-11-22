@@ -1,8 +1,7 @@
 import 'package:audio_books/feature/payment/bloc/payment_bloc.dart';
 import 'package:audio_books/feature/payment/bloc/payment_event.dart';
 import 'package:audio_books/feature/payment/bloc/payment_state.dart';
-import 'package:audio_books/models/subscription.dart';
-import 'package:audio_books/screens/paymentModal/subscribtion_modal_card.dart';
+
 import 'package:audio_books/screens/settings/components/settings_bottom.dart';
 import 'package:audio_books/screens/settings/components/subscription_card.dart';
 import 'package:audio_books/sizeConfig.dart';
