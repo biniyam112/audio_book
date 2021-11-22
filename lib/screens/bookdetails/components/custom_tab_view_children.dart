@@ -1,3 +1,6 @@
+import 'package:audio_books/feature/comments/bloc/comments_bloc.dart';
+import 'package:audio_books/feature/comments/bloc/comments_state.dart';
+import 'package:audio_books/feature/comments/repository/comments_repository.dart';
 import 'package:audio_books/feature/fetch_chapters/bloc/fetch_chapters_bloc.dart';
 import 'package:audio_books/feature/fetch_chapters/bloc/fetch_chapters_state.dart';
 import 'package:audio_books/models/models.dart';
@@ -115,47 +118,77 @@ class CommentSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: (SizeConfig.screenHeight! / 2),
-      width: SizeConfig.screenWidth,
-      child: Column(
-        children: [
-          Expanded(
-            // child: SingleChildScrollView(),
-            child: Container(
-              color: Colors.green,
-            ),
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Expanded(
-                child: InputFieldContainer(
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      hintText: 'comment',
-                      hintStyle: Theme.of(context).textTheme.headline5,
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+    return BlocConsumer<CommentsBloc, CommentState>(
+        listener: (context, commentstate) {},
+        builder: (context, commentstate) {
+          return Container(
+            height: (SizeConfig.screenHeight! / 2),
+            width: SizeConfig.screenWidth,
+            child: Column(
+              children: [
+                if (commentstate is CommentsFetching)
+                  Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: Darktheme.primaryColor,
+                      ),
                     ),
                   ),
+                if (commentstate is CommentsFetchingFailed)
+                  Expanded(
+                    child: Center(
+                      child: Text('Unable to fetch comments'),
+                    ),
+                  ),
+                if (commentstate is CommentsFetched)
+                  Expanded(
+                    child: Container(
+                      child: (commentstate.comments.isEmpty)
+                          ? Center(child: Text('Unable to fetch comments'))
+                          : Column(
+                              children: [
+                                ListView.builder(
+                                  itemCount: commentstate.comments.length,
+                                  itemBuilder: (context, index) {
+                                    return Text(
+                                        commentstate.comments[index].message);
+                                  },
+                                ),
+                              ],
+                            ),
+                    ),
+                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(
+                      child: InputFieldContainer(
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            hintText: 'comment',
+                            hintStyle: Theme.of(context).textTheme.headline5,
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 12),
+                          ),
+                        ),
+                      ),
+                    ),
+                    horizontalSpacing(10),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.send_rounded,
+                        size: 32,
+                        color: Darktheme.primaryColor,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              horizontalSpacing(10),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.send_rounded,
-                  size: 32,
-                  color: Darktheme.primaryColor,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
+              ],
+            ),
+          );
+        });
   }
 }

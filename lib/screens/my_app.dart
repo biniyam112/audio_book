@@ -5,8 +5,12 @@ import 'package:audio_books/feature/authorize_user/repository/authorize_user_rep
 import 'package:audio_books/feature/categories/bloc/category_bloc.dart';
 import 'package:audio_books/feature/categories/repository/category_repo.dart';
 import 'package:audio_books/feature/check_first_time/check_first_time.dart';
+import 'package:audio_books/feature/comments/bloc/comments_bloc.dart';
+import 'package:audio_books/feature/comments/repository/comments_repository.dart';
 import 'package:audio_books/feature/featured_books/bloc/featured_books_bloc.dart';
 import 'package:audio_books/feature/featured_books/repository/featured_books_repository.dart';
+import 'package:audio_books/feature/feedback/bloc/feedback_bloc.dart';
+import 'package:audio_books/feature/feedback/repository/feedback_repository.dart';
 import 'package:audio_books/feature/fetch_advertisement/bloc/advertisement_bloc.dart';
 import 'package:audio_books/feature/fetch_advertisement/repository/advertisement_repo.dart';
 import 'package:audio_books/feature/fetch_books/bloc/fetch_books_bloc.dart';
@@ -75,6 +79,8 @@ class MyApp extends StatefulWidget {
   final FetchStoredEpisodesRepo fetchStoredEpisodesRepo;
   final FetchStoredEpisodeFileRepo fetchStoredEpisodeFileRepo;
   final FetchInfiniteBooksRepo fetchInfiniteBooksRepo;
+  final FeedbackRepo feedbackRepo;
+  final CommentsRepository commentsRepository;
 
   const MyApp({
     Key? key,
@@ -97,6 +103,8 @@ class MyApp extends StatefulWidget {
     required this.fetchStoredEpisodeFileRepo,
     required this.fetchStoredEpisodesRepo,
     required this.fetchInfiniteBooksRepo,
+    required this.feedbackRepo,
+    required this.commentsRepository,
   }) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
@@ -246,6 +254,16 @@ class _MyAppState extends State<MyApp> {
                 BlocProvider(
                   create: (context) => FetchInfiniteBooksBloc(
                     fetchInfiniteBooksRepo: widget.fetchInfiniteBooksRepo,
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) => FeedbackBloc(
+                    feedbackRepo: widget.feedbackRepo,
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) => CommentsBloc(
+                    commentsRepository: widget.commentsRepository,
                   ),
                 ),
               ],

@@ -1,5 +1,7 @@
 import 'package:audio_books/feature/author/bloc/author_bloc.dart';
 import 'package:audio_books/feature/author/bloc/author_event.dart';
+import 'package:audio_books/feature/comments/bloc/comments_bloc.dart';
+import 'package:audio_books/feature/comments/bloc/comments_event.dart';
 import 'package:audio_books/feature/fetch_chapters/bloc/fetch_chapters_bloc.dart';
 import 'package:audio_books/feature/fetch_chapters/bloc/fetch_chapters_event.dart';
 import 'package:audio_books/models/book.dart';
@@ -26,6 +28,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
     BlocProvider.of<FetchChaptersBloc>(context)
         .add(FetchChaptersEvent(book: widget.book));
     BlocProvider.of<AuthorBloc>(context).add(FetchAuthor(book: widget.book));
+    BlocProvider.of<CommentsBloc>(context).add(FetchAllComments());
   }
 
   @override

@@ -23,7 +23,7 @@ class FeedbackBloc extends Bloc<FeedbackEvent, FeedbackState> {
       );
       emitter(Submitted());
     } catch (e) {
-      emitter(SubmissionFailed());
+      emitter(SubmissionFailed(errorMessage: e.toString()));
     }
   }
 }
@@ -36,7 +36,11 @@ class Onprogress extends FeedbackState {}
 
 class Submitted extends FeedbackState {}
 
-class SubmissionFailed extends FeedbackState {}
+class SubmissionFailed extends FeedbackState {
+  final String errorMessage;
+
+  SubmissionFailed({required this.errorMessage});
+}
 
 class FeedbackEvent {}
 
