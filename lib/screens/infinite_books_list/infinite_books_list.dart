@@ -4,11 +4,12 @@ import 'package:audio_books/feature/fetch_infinite_books/bloc/fetch_infinite_boo
 import 'package:audio_books/feature/fetch_infinite_books/bloc/fetch_infinite_books_state.dart';
 import 'package:audio_books/models/category.dart';
 import 'package:audio_books/models/models.dart';
-import 'package:audio_books/screens/home/components/book_tile.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'components/infinite_book_tile.dart';
 
 class InfiniteBooksList extends StatelessWidget {
   const InfiniteBooksList({
@@ -23,20 +24,7 @@ class InfiniteBooksList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    if (category != null)
-      BlocProvider.of<FetchInfiniteBooksBloc>(context).add(
-        FetchInfiniteBooksEvent(
-          infiniteItemType: InfiniteItemType.bookCategory,
-          itemId: category!.id,
-        ),
-      );
-    if (author != null)
-      BlocProvider.of<FetchInfiniteBooksBloc>(context).add(
-        FetchInfiniteBooksEvent(
-          infiniteItemType: InfiniteItemType.author,
-          itemId: author!.id,
-        ),
-      );
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -71,6 +59,22 @@ class _BodyState extends State<Body> {
   @override
   void initState() {
     _scrollController.addListener(_onScroll);
+    BlocProvider.of<FetchInfiniteBooksBloc>(context).add(ClearBlocState());
+
+    if (widget.category != null)
+      BlocProvider.of<FetchInfiniteBooksBloc>(context).add(
+        FetchInfiniteBooksEvent(
+          infiniteItemType: InfiniteItemType.bookCategory,
+          itemId: widget.category!.id,
+        ),
+      );
+    if (widget.author != null)
+      BlocProvider.of<FetchInfiniteBooksBloc>(context).add(
+        FetchInfiniteBooksEvent(
+          infiniteItemType: InfiniteItemType.author,
+          itemId: widget.author!.id,
+        ),
+      );
     super.initState();
   }
 
@@ -130,25 +134,27 @@ class _BodyState extends State<Body> {
                     style: Theme.of(context).textTheme.headline4,
                   ),
                 );
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    ListView.builder(
-                      itemCount: state.hasReachedLimit
-                          ? state.books.length
-                          : state.books.length + 1,
-                      itemBuilder: (BuildContext context, int index) {
-                        return index >= state.books.length
-                            ? Center(
-                                child: CircularProgressIndicator(
-                                  color: Darktheme.primaryColor,
-                                ),
-                              )
-                            : BookTile(book: state.books[index]);
-                      },
-                    ),
-                  ],
+              return GridView.builder(
+                shrinkWrap: true,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: .9,
                 ),
+                itemCount: state.hasReachedLimit
+                    ? state.books.length
+                    : state.books.length + 1,
+                itemBuilder: (BuildContext context, int index) {
+                  return index >= state.books.length
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            color: Darktheme.primaryColor,
+                          ),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: InfiniteBookTile(book: state.books[index]),
+                        );
+                },
               );
           }
         },

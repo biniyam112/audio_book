@@ -10,7 +10,13 @@ class CommentsRepository {
     return await commentsDataProvider.fetchComments(token);
   }
 
-  Future<List<Comment>> uploadComment(Comment comment, String token) async {
-    return await commentsDataProvider.uploadComment(comment, token);
+  Future<List<Comment>> uploadComment(
+      Comment comment, String token, String userId, String episodeId) async {
+    return await commentsDataProvider.uploadComment(
+      comment,
+      token,
+      userId,
+      episodeId,
+    );
   }
 }

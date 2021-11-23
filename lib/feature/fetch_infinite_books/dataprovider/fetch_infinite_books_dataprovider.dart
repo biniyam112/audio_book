@@ -19,11 +19,11 @@ class FetchInfiniteBooksDP {
     late String uri;
     if (itemType == InfiniteItemType.author)
       uri =
-          'http://www.marakigebeya.com.et/api/Books/BooksByAuthor?authorId=$itemId';
+          'http://www.marakigebeya.com.et/api/Books/BooksByAuthor?authorId=$itemId&page=$page';
 
     if (itemType == InfiniteItemType.bookCategory)
       uri =
-          'http://www.marakigebeya.com.et/api/BooksByCategories?categoryId=$itemId';
+          'http://www.marakigebeya.com.et/api/BooksByCategories?categoryId=$itemId&page=$page';
 
     var response = await client.get(
       Uri.parse(uri),

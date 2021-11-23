@@ -1,4 +1,6 @@
-class FetchInfiniteBooksEvent {
+class InfiniteBooksEvent {}
+
+class FetchInfiniteBooksEvent extends InfiniteBooksEvent {
   final InfiniteItemType infiniteItemType;
   final String itemId;
 
@@ -12,3 +14,5 @@ enum InfiniteItemType {
   author,
   bookCategory,
 }
+
+class ClearBlocState extends InfiniteBooksEvent {}

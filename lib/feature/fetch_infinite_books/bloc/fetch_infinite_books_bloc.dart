@@ -7,16 +7,28 @@ import 'fetch_infinite_books_event.dart';
 import 'fetch_infinite_books_state.dart';
 
 class FetchInfiniteBooksBloc
-    extends Bloc<FetchInfiniteBooksEvent, InfiniteBooksState> {
+    extends Bloc<InfiniteBooksEvent, InfiniteBooksState> {
   FetchInfiniteBooksBloc({required this.fetchInfiniteBooksRepo})
       : super(InfiniteBooksState()) {
     on<FetchInfiniteBooksEvent>(_onFetchInfiniteBooksEvent);
+    on<ClearBlocState>(_onClearBlocState);
   }
 
   final FetchInfiniteBooksRepo fetchInfiniteBooksRepo;
 
   var user = getIt.get<User>();
-  int pageCounter = 1;
+
+  Future<void> _onClearBlocState(ClearBlocState clearBlocState,
+      Emitter<InfiniteBooksState> emitter) async {
+    emitter(
+      InfiniteBooksState(
+        books: [],
+        hasReachedLimit: false,
+        pageCounter: 1,
+        status: FetchingStatus.initial,
+      ),
+    );
+  }
 
   Future<void> _onFetchInfiniteBooksEvent(
       FetchInfiniteBooksEvent fetchInfiniteBooksEvent,
@@ -26,21 +38,24 @@ class FetchInfiniteBooksBloc
       if (state.status == FetchingStatus.initial) {
         final books = await fetchInfiniteBooksRepo.fetchBooks(
           token: user.token!,
-          page: 1,
+          page: state.pageCounter,
           itemId: fetchInfiniteBooksEvent.itemId,
           itemType: fetchInfiniteBooksEvent.infiniteItemType,
         );
-        pageCounter++;
-        return emitter(
+
+        emitter(
           InfiniteBooksState(
+            status: FetchingStatus.success,
             books: books,
             hasReachedLimit: false,
+            pageCounter: state.pageCounter + 1,
           ),
         );
       }
+
       final books = await fetchInfiniteBooksRepo.fetchBooks(
         token: user.token!,
-        page: pageCounter,
+        page: state.pageCounter,
         itemId: fetchInfiniteBooksEvent.itemId,
         itemType: fetchInfiniteBooksEvent.infiniteItemType,
       );
@@ -52,6 +67,7 @@ class FetchInfiniteBooksBloc
                 status: FetchingStatus.success,
                 books: List.of(state.books)..addAll(books),
                 hasReachedLimit: false,
+                pageCounter: state.pageCounter + 1,
               ),
             );
     } catch (e) {

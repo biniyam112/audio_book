@@ -58,10 +58,7 @@ void main() async {
   Hive.registerAdapter(UserAdapter());
   await Hive.openBox<User>('user');
   await Firebase.initializeApp();
-  BlocOverrides.runZoned(
-    () {},
-    blocObserver: SimpleBlocObserver(),
-  );
+
   DataBaseHandler dataBaseHandler = DataBaseHandler();
   final StoreBookRepo storeBookRepo = StoreBookRepo(
     storeBookDP: StoreBookDP(
@@ -170,33 +167,37 @@ void main() async {
     ),
   );
   await setupServiceLocator();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
-    (value) => runApp(
-      MyApp(
-        storeBookRepo: storeBookRepo,
-        fetchStoredBooksRepo: fetchStoredBooksRepo,
-        fetchStoredBookFileRepo: fetchStoredBookFileRepo,
-        registerUserRepo: registerUserRepo,
-        dataBaseHandler: dataBaseHandler,
-        initDBRepo: initDBRepo,
-        authorizeUserRepo: authorizeUserRepo,
-        fetchBooksRepo: fetchBooksRepo,
-        fetchBooksByCateRepo: fetchBooksByCateRepo,
-        fetchChaptersRepo: fetchChaptersRepo,
-        categoryRepo: categoryRepo,
-        featuredBooksRepo: featuredBooksRepo,
-        authorRepo: authorRepo,
-        requestHardCopyRepo: requestHardCopyRepo,
-        amolePaymentRepo: amolePaymentRepo,
-        advertisementRepo: advertisementRepo,
-        fetchStoredEpisodeFileRepo: fetchStoredEpisodeFileRepo,
-        fetchStoredEpisodesRepo: fetchStoredEpisodesRepo,
-        fetchInfiniteBooksRepo: fetchInfiniteBooksRepo,
-        feedbackRepo: feedbackRepo,
-        commentsRepository: commentsRepository,
-      ),
-    ),
-  );
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((value) => BlocOverrides.runZoned(
+            () {
+              runApp(
+                MyApp(
+                  storeBookRepo: storeBookRepo,
+                  fetchStoredBooksRepo: fetchStoredBooksRepo,
+                  fetchStoredBookFileRepo: fetchStoredBookFileRepo,
+                  registerUserRepo: registerUserRepo,
+                  dataBaseHandler: dataBaseHandler,
+                  initDBRepo: initDBRepo,
+                  authorizeUserRepo: authorizeUserRepo,
+                  fetchBooksRepo: fetchBooksRepo,
+                  fetchBooksByCateRepo: fetchBooksByCateRepo,
+                  fetchChaptersRepo: fetchChaptersRepo,
+                  categoryRepo: categoryRepo,
+                  featuredBooksRepo: featuredBooksRepo,
+                  authorRepo: authorRepo,
+                  requestHardCopyRepo: requestHardCopyRepo,
+                  amolePaymentRepo: amolePaymentRepo,
+                  advertisementRepo: advertisementRepo,
+                  fetchStoredEpisodeFileRepo: fetchStoredEpisodeFileRepo,
+                  fetchStoredEpisodesRepo: fetchStoredEpisodesRepo,
+                  fetchInfiniteBooksRepo: fetchInfiniteBooksRepo,
+                  feedbackRepo: feedbackRepo,
+                  commentsRepository: commentsRepository,
+                ),
+              );
+            },
+            blocObserver: SimpleBlocObserver(),
+          ));
 }
 
 class MyHttpOverrides extends HttpOverrides {

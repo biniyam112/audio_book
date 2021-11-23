@@ -183,6 +183,7 @@ class BooksBody extends StatelessWidget {
                                                 MaterialPageRoute(
                                                   builder: (context) =>
                                                       InfiniteBooksList(
+                                                    category: categories[index],
                                                     title:
                                                         categories[index].name,
                                                   ),
