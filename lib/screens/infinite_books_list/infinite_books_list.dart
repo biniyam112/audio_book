@@ -6,8 +6,10 @@ import 'package:audio_books/models/category.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import 'components/infinite_book_tile.dart';
 
@@ -24,9 +26,18 @@ class InfiniteBooksList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-
+    bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(
+            CupertinoIcons.arrow_left,
+            color: isDarkMode ? Colors.white : Colors.black,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
         title: Text(
           '$title',
           style: Theme.of(context).textTheme.headline4,

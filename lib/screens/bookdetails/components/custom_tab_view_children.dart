@@ -1,9 +1,11 @@
 import 'package:audio_books/feature/comments/bloc/comments_bloc.dart';
+import 'package:audio_books/feature/comments/bloc/comments_event.dart';
 import 'package:audio_books/feature/comments/bloc/comments_state.dart';
 import 'package:audio_books/feature/fetch_chapters/bloc/fetch_chapters_bloc.dart';
 import 'package:audio_books/feature/fetch_chapters/bloc/fetch_chapters_state.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/components/input_field_container.dart';
+import 'package:audio_books/services/audio/service_locator.dart';
 import 'package:audio_books/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -113,81 +115,91 @@ class CustomTabViewChildren extends StatelessWidget {
 }
 
 class CommentSection extends StatelessWidget {
-  const CommentSection({Key? key}) : super(key: key);
+  CommentSection({Key? key}) : super(key: key);
+
+  final TextEditingController _controller = TextEditingController();
+  var user = getIt.get<User>();
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CommentsBloc, CommentState>(
-        listener: (context, commentstate) {},
-        builder: (context, commentstate) {
-          return Container(
-            height: (SizeConfig.screenHeight! / 2),
-            width: SizeConfig.screenWidth,
-            child: Column(
-              children: [
+    return Container(
+      height: (SizeConfig.screenHeight! / 2),
+      width: SizeConfig.screenWidth,
+      child: Column(
+        children: [
+          Expanded(
+            child: BlocConsumer<CommentsBloc, CommentState>(
+              builder: (context, commentstate) {
                 if (commentstate is CommentsFetching)
-                  Expanded(
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        color: Darktheme.primaryColor,
-                      ),
+                  Center(
+                    child: CircularProgressIndicator(
+                      color: Darktheme.primaryColor,
                     ),
-                  ),
+                  );
                 if (commentstate is CommentsFetchingFailed)
-                  Expanded(
-                    child: Center(
-                      child: Text('Unable to fetch comments'),
-                    ),
-                  ),
+                  Center(
+                    child: Text('Unable to fetch comments'),
+                  );
                 if (commentstate is CommentsFetched)
-                  Expanded(
-                    child: Container(
-                      child: (commentstate.comments.isEmpty)
-                          ? Center(child: Text('Unable to fetch comments'))
-                          : Column(
-                              children: [
-                                ListView.builder(
-                                  itemCount: commentstate.comments.length,
-                                  itemBuilder: (context, index) {
-                                    return Text(
-                                        commentstate.comments[index].message);
-                                  },
-                                ),
-                              ],
-                            ),
+                  Container(
+                    child: (commentstate.comments.isEmpty)
+                        ? Center(child: Text('Unable to fetch comments'))
+                        : Column(
+                            children: [
+                              ListView.builder(
+                                itemCount: commentstate.comments.length,
+                                itemBuilder: (context, index) {
+                                  return Text(
+                                      commentstate.comments[index].message);
+                                },
+                              ),
+                            ],
+                          ),
+                  );
+                return Container();
+              },
+              listener: (context, state) {},
+            ),
+          ),
+          Row(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              Expanded(
+                child: InputFieldContainer(
+                  child: TextFormField(
+                    controller: _controller,
+                    decoration: InputDecoration(
+                      hintText: 'comment',
+                      hintStyle: Theme.of(context).textTheme.headline5,
+                      contentPadding:
+                          EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                     ),
                   ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Expanded(
-                      child: InputFieldContainer(
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: 'comment',
-                            hintStyle: Theme.of(context).textTheme.headline5,
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 12, horizontal: 12),
-                          ),
-                        ),
-                      ),
-                    ),
-                    horizontalSpacing(10),
-                    IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.send_rounded,
-                        size: 32,
-                        color: Darktheme.primaryColor,
-                      ),
-                    ),
-                  ],
                 ),
-              ],
-            ),
-          );
-        });
+              ),
+              horizontalSpacing(10),
+              IconButton(
+                onPressed: () {
+                  BlocProvider.of<CommentsBloc>(context).add(
+                    SubmitComment(
+                      content: _controller.text,
+                      user: user,
+                      rating: 3,
+                    ),
+                  );
+                },
+                icon: Icon(
+                  Icons.send_rounded,
+                  size: 32,
+                  color: Darktheme.primaryColor,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
