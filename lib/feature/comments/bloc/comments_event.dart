@@ -1,17 +1,19 @@
-import 'package:audio_books/models/models.dart';
+import 'package:audio_books/models/comment.dart';
 
 class CommentEvent {}
 
-class FetchAllComments extends CommentEvent {}
+class FetchAllComments extends CommentEvent {
+  final String itemId;
+
+  FetchAllComments({required this.itemId});
+}
 
 class SubmitComment extends CommentEvent {
-  final String content;
-  final User user;
-  final int rating;
+  final Comment comment;
+  final String itemId;
 
   SubmitComment({
-    required this.content,
-    required this.user,
-    required this.rating,
+    required this.itemId,
+    required this.comment,
   });
 }

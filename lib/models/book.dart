@@ -13,7 +13,7 @@ class Book {
       description,
       publishmentYear,
       resourceType;
-  final int? price;
+  final String? priceEtb, priceUSD;
   final List<Uint8List>? episodes;
 
   Book({
@@ -29,7 +29,8 @@ class Book {
     required this.publishmentYear,
     required this.description,
     required this.resourceType,
-    required this.price,
+    required this.priceEtb,
+    required this.priceUSD,
     this.episodes,
   });
 
@@ -48,6 +49,7 @@ class Book {
         publishmentYear: json['publicationYear'] ?? '?',
         description: json['description'] ?? 'No description yet',
         resourceType: json['resourceType'] ?? 'not specified',
-        price: null,
+        priceEtb: json['priceEtb'] != 0 ? json['priceEtb'].toString() : 'Free',
+        priceUSD: json['priceUSD'] != 0 ? json['priceUSD'].toString() : 'Free',
       );
 }

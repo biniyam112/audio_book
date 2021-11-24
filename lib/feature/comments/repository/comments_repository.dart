@@ -6,17 +6,17 @@ class CommentsRepository {
 
   CommentsRepository({required this.commentsDataProvider});
 
-  Future<List<Comment>> fetchComments(String token) async {
-    return await commentsDataProvider.fetchComments(token);
+  Future<List<Comment>> fetchComments(String token, String itemId) async {
+    return await commentsDataProvider.fetchComments(token, itemId);
   }
 
-  Future<List<Comment>> uploadComment(
-      Comment comment, String token, String userId, String episodeId) async {
+  Future<void> uploadComment(
+    Comment comment,
+    String token,
+    String userId,
+    String itemId,
+  ) async {
     return await commentsDataProvider.uploadComment(
-      comment,
-      token,
-      userId,
-      episodeId,
-    );
+        comment, token, userId, itemId);
   }
 }

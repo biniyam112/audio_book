@@ -1,19 +1,14 @@
 class Comment {
-  final String userName, message;
-  final int rating;
+  final String content;
   final DateTime uploadDate;
 
   Comment({
-    required this.rating,
-    required this.userName,
-    required this.message,
+    required this.content,
     required this.uploadDate,
   });
 
   factory Comment.fromMap(Map<String, dynamic> json) => Comment(
-        userName: json['userName'],
-        rating: json['rating'],
-        message: json['message'],
-        uploadDate: json['uploadDate'],
+        content: json['content'],
+        uploadDate: DateTime.tryParse(json['commentDate']) ?? DateTime.now(),
       );
 }

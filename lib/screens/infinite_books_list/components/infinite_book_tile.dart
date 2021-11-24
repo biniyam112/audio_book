@@ -1,5 +1,6 @@
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/bookdetails/book_details.dart';
+import 'package:audio_books/services/audio/service_locator.dart';
 import 'package:audio_books/theme/theme.dart';
 import 'package:audio_books/theme/theme_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -17,6 +18,11 @@ class InfiniteBookTile extends StatelessWidget {
     required this.book,
   }) : super(key: key);
   final Book book;
+
+  bool _isFromEthiopia() {
+    var user = getIt.get<User>();
+    return user.countryCode == '+251';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -178,7 +184,9 @@ class InfiniteBookTile extends StatelessWidget {
                                     ),
                           ),
                           TextSpan(
-                            text: '${book.price}',
+                            text: _isFromEthiopia()
+                                ? '${book.priceEtb} ETB'
+                                : '${book.priceUSD} USD',
                             style:
                                 Theme.of(context).textTheme.headline5!.copyWith(
                                       fontWeight: FontWeight.bold,

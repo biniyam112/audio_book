@@ -3,6 +3,7 @@ import 'package:audio_books/feature/comments/bloc/comments_event.dart';
 import 'package:audio_books/feature/comments/bloc/comments_state.dart';
 import 'package:audio_books/feature/fetch_chapters/bloc/fetch_chapters_bloc.dart';
 import 'package:audio_books/feature/fetch_chapters/bloc/fetch_chapters_state.dart';
+import 'package:audio_books/models/comment.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/components/input_field_container.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 import '../../../sizeConfig.dart';
 import 'chapter_tile.dart';
@@ -107,18 +109,31 @@ class CustomTabViewChildren extends StatelessWidget {
       );
     }
     if (index == 2) {
-      return CommentSection();
+      return CommentSection(book: book);
     } else {
       return Container();
     }
   }
 }
 
-class CommentSection extends StatelessWidget {
-  CommentSection({Key? key}) : super(key: key);
+class CommentSection extends StatefulWidget {
+  CommentSection({Key? key, required this.book}) : super(key: key);
+  final Book book;
 
+  @override
+  State<CommentSection> createState() => _CommentSectionState();
+}
+
+class _CommentSectionState extends State<CommentSection> {
   final TextEditingController _controller = TextEditingController();
-  var user = getIt.get<User>();
+  final user = getIt.get<User>();
+
+  @override
+  void initState() {
+    BlocProvider.of<CommentsBloc>(context)
+        .add(FetchAllComments(itemId: widget.book.id));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,37 +143,96 @@ class CommentSection extends StatelessWidget {
       child: Column(
         children: [
           Expanded(
-            child: BlocConsumer<CommentsBloc, CommentState>(
-              builder: (context, commentstate) {
-                if (commentstate is CommentsFetching)
-                  Center(
-                    child: CircularProgressIndicator(
-                      color: Darktheme.primaryColor,
-                    ),
-                  );
-                if (commentstate is CommentsFetchingFailed)
-                  Center(
-                    child: Text('Unable to fetch comments'),
-                  );
-                if (commentstate is CommentsFetched)
-                  Container(
-                    child: (commentstate.comments.isEmpty)
-                        ? Center(child: Text('Unable to fetch comments'))
-                        : Column(
-                            children: [
-                              ListView.builder(
-                                itemCount: commentstate.comments.length,
-                                itemBuilder: (context, index) {
-                                  return Text(
-                                      commentstate.comments[index].message);
-                                },
-                              ),
-                            ],
-                          ),
-                  );
-                return Container();
+            child: RefreshIndicator(
+              onRefresh: () async {
+                BlocProvider.of<CommentsBloc>(context).add(
+                  FetchAllComments(itemId: widget.book.id),
+                );
               },
-              listener: (context, state) {},
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(
+                    parent: BouncingScrollPhysics()),
+                child: BlocConsumer<CommentsBloc, CommentState>(
+                  builder: (context, state) {
+                    if (state.commentsStatus == CommentsStatus.initial) {
+                      return SizedBox(
+                        height: SizeConfig.screenHeight! * .3,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: Darktheme.primaryColor,
+                          ),
+                        ),
+                      );
+                    }
+
+                    if (state.commentsStatus == CommentsStatus.fetchingFailed) {
+                      return SizedBox(
+                        height: SizeConfig.screenHeight! * .3,
+                        child: Center(
+                          child: Text('Unable to fetch comments'),
+                        ),
+                      );
+                    }
+
+                    if (state.commentsStatus == CommentsStatus.fetched ||
+                        state.commentsStatus == CommentsStatus.submited) {
+                      return (state.comments.isEmpty)
+                          ? SizedBox(
+                              height: SizeConfig.screenHeight! * .3,
+                              child: Center(
+                                child: Text('No comments available'),
+                              ),
+                            )
+                          : Column(
+                              children: [
+                                ListView.builder(
+                                  itemCount: state.comments.length,
+                                  itemBuilder: (context, index) {
+                                    return Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          state.comments[index].content,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline4,
+                                        ),
+                                        Opacity(
+                                          opacity: .8,
+                                          child: Text(
+                                            DateFormat('yyyy-MM-dd').format(
+                                              state.comments[index].uploadDate,
+                                            ),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline6,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ],
+                            );
+                    }
+                    return Container();
+                  },
+                  listener: (bloccontext, state) {
+                    if (state.commentsStatus == CommentsStatus.submited) {
+                      _controller.text = '';
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'You\'re comment has been submitted',
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
+                        ),
+                      );
+                    }
+                  },
+                ),
+              ),
             ),
           ),
           Row(
@@ -181,15 +255,22 @@ class CommentSection extends StatelessWidget {
               ),
               horizontalSpacing(10),
               IconButton(
-                onPressed: () {
-                  BlocProvider.of<CommentsBloc>(context).add(
-                    SubmitComment(
-                      content: _controller.text,
-                      user: user,
-                      rating: 3,
-                    ),
-                  );
-                },
+                onPressed: (_controller.text.isNotEmpty)
+                    ? () {
+                        BlocProvider.of<CommentsBloc>(context).add(
+                          SubmitComment(
+                            comment: Comment(
+                              content: _controller.text,
+                              uploadDate: DateTime.now(),
+                            ),
+                            itemId: widget.book.id,
+                          ),
+                        );
+                      }
+                    : () {
+                        print(_controller.text);
+                        print(_controller.text.isNotEmpty);
+                      },
                 icon: Icon(
                   Icons.send_rounded,
                   size: 32,

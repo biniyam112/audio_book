@@ -9,42 +9,35 @@ class CommentsDataProvider {
 
   CommentsDataProvider({required this.client});
 
-  Future<List<Comment>> uploadComment(
+  Future<void> uploadComment(
     Comment comment,
     String token,
     String userId,
-    String episodeId,
+    String itemId,
   ) async {
     var response = await client.post(
-      Uri.parse('http://www.marakigebeya.com.et/api/api/Comments'),
+      Uri.parse(
+          'http://www.marakigebeya.com.et/api/Comments?episodeID=$itemId&subscriberID=$userId&content=$comment'),
       headers: {
         'Authorization': token,
       },
-      body: jsonEncode(
-        <String, dynamic>{
-          'content': comment.message,
-          'rating': 5,
-          'subscriberId': userId,
-          'episodeId': episodeId,
-        },
-      ),
     );
-    if (response.statusCode == 200) {
-      return await fetchComments(token);
-    } else {
+    if (response.statusCode != 200) {
       throw Exception(kCommentUploadError);
     }
   }
 
-  Future<List<Comment>> fetchComments(String token) async {
+  Future<List<Comment>> fetchComments(String token, String itemId) async {
     var response = await client.get(
-      Uri.parse('uri'),
+      Uri.parse(
+        'http://www.marakigebeya.com.et/api/Comments/GetAllComments?Page=1&episodeId=$itemId',
+      ),
       headers: {
         'Authorization': token,
       },
     );
     if (response.statusCode == 200) {
-      var commentsJson = jsonDecode(response.body) as List;
+      var commentsJson = jsonDecode(response.body)['items'] as List;
       return commentsJson.map((comment) => Comment.fromMap(comment)).toList();
     } else {
       throw Exception(kCommentFetchError);

@@ -1,4 +1,6 @@
 import 'package:audio_books/models/book.dart';
+import 'package:audio_books/models/models.dart';
+import 'package:audio_books/services/audio/service_locator.dart';
 import 'package:audio_books/theme/theme_colors.dart';
 import 'package:audio_books/theme/theme_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -16,6 +18,11 @@ class FeaturedBooksTile extends StatelessWidget {
     required this.book,
   }) : super(key: key);
   final Book book;
+
+  bool _isFromEthiopia() {
+    var user = getIt.get<User>();
+    return user.countryCode == '+251';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -199,7 +206,7 @@ class FeaturedBooksTile extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Spacer(),
+                      Spacer(flex: 2),
                       Row(
                         children: [
                           Icon(
@@ -212,9 +219,19 @@ class FeaturedBooksTile extends StatelessWidget {
                             maxLines: 1,
                             style: Theme.of(context).textTheme.headline6,
                           ),
+                          Spacer(),
+                          Text(
+                            _isFromEthiopia()
+                                ? '${book.priceEtb} ETB'
+                                : '${book.priceEtb} USD',
+                            style:
+                                Theme.of(context).textTheme.headline6!.copyWith(
+                                      color: Colors.blueGrey[800],
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                          ),
                         ],
                       ),
-                      SizedBox(height: getProportionateScreenHeight(4)),
                     ],
                   ),
                 ),

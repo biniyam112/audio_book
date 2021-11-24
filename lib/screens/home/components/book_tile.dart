@@ -1,4 +1,6 @@
 import 'package:audio_books/models/book.dart';
+import 'package:audio_books/models/models.dart';
+import 'package:audio_books/services/audio/service_locator.dart';
 import 'package:audio_books/theme/theme_colors.dart';
 import 'package:audio_books/theme/theme_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -18,6 +20,11 @@ class BookTile extends StatelessWidget {
     required this.book,
   }) : super(key: key);
   final Book book;
+
+  bool _isFromEthiopia() {
+    var user = getIt.get<User>();
+    return user.countryCode == '+251';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -186,6 +193,39 @@ class BookTile extends StatelessWidget {
                           ),
                           TextSpan(
                             text: '${book.category}',
+                            style:
+                                Theme.of(context).textTheme.headline5!.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                      color: isDarkMode
+                                          ? Colors.white70
+                                          : Colors.black.withOpacity(.6),
+                                    ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    RichText(
+                      overflow: TextOverflow.ellipsis,
+                      text: TextSpan(
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 14,
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: 'price  ',
+                            style:
+                                Theme.of(context).textTheme.headline5!.copyWith(
+                                      color: isDarkMode
+                                          ? Colors.white60
+                                          : Colors.black45,
+                                    ),
+                          ),
+                          TextSpan(
+                            text: _isFromEthiopia()
+                                ? '${book.priceEtb} ETB'
+                                : '${book.priceUSD} USD',
                             style:
                                 Theme.of(context).textTheme.headline5!.copyWith(
                                       fontWeight: FontWeight.bold,

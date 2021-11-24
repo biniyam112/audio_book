@@ -1,15 +1,29 @@
 import 'package:audio_books/models/comment.dart';
 
-class CommentState {}
-
-class InitCommentState extends CommentState {}
-
-class CommentsFetched extends CommentState {
+class CommentState {
+  final CommentsStatus commentsStatus;
   final List<Comment> comments;
 
-  CommentsFetched({required this.comments});
+  CommentState({
+    this.commentsStatus = CommentsStatus.initial,
+    this.comments = const <Comment>[],
+  });
+
+  CommentState copyWith({
+    CommentsStatus? commentsStatus,
+    List<Comment>? comments,
+  }) {
+    return CommentState(
+      commentsStatus: commentsStatus ?? this.commentsStatus,
+      comments: comments ?? this.comments,
+    );
+  }
 }
 
-class CommentsFetching extends CommentState {}
-
-class CommentsFetchingFailed extends CommentState {}
+enum CommentsStatus {
+  initial,
+  submited,
+  fetching,
+  fetched,
+  fetchingFailed,
+}
