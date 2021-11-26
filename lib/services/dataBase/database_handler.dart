@@ -100,4 +100,28 @@ class DataBaseHandler {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
+
+  Future<List<DownloadedBook>> searchEBooks(String searchKey) async {
+    final db = dataBase;
+    final List<Map<String, dynamic>> maps = await db
+        .query('EBooks', where: '"bookTitle = ?', whereArgs: [searchKey]);
+    return List.generate(
+      maps.length,
+      (index) => DownloadedBook.fromMap(
+        maps[index],
+      ),
+    );
+  }
+
+  Future<List<DownloadedBook>> searchAudioBooks(String searchKey) async {
+    final db = dataBase;
+    final List<Map<String, dynamic>> maps = await db
+        .query('AudioBooks', where: '"bookTitle = ?', whereArgs: [searchKey]);
+    return List.generate(
+      maps.length,
+      (index) => DownloadedBook.fromMap(
+        maps[index],
+      ),
+    );
+  }
 }

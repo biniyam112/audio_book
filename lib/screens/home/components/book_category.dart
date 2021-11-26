@@ -10,7 +10,7 @@ class BookCategory extends StatelessWidget {
   }) : super(key: key);
 
   final String categoryName;
-  final GestureTapCallback onPressed;
+  final GestureTapCallback? onPressed;
 
   @override
   Widget build(BuildContext context) {

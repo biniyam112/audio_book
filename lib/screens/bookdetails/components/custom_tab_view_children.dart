@@ -81,11 +81,15 @@ class CustomTabViewChildren extends StatelessWidget {
                 );
               }
               if (state is ChaptersFetchingState) {
-                return Container(
-                  height: 40,
-                  width: 40,
-                  child: CircularProgressIndicator(
-                    color: Darktheme.primaryColor,
+                return SizedBox(
+                  width: SizeConfig.screenWidth,
+                  height: SizeConfig.screenHeight! * .4,
+                  child: Container(
+                    height: 40,
+                    width: 40,
+                    child: CircularProgressIndicator(
+                      color: Darktheme.primaryColor,
+                    ),
                   ),
                 );
               }

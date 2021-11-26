@@ -28,9 +28,9 @@ double getProportionateScreenWidth(double inputWidth) {
 }
 
 Widget verticalSpacing(double spacing) {
-  return SizedBox(height: getProportionateScreenHeight(spacing));
+  return SizedBox(height: spacing);
 }
 
 Widget horizontalSpacing(double spacing) {
-  return SizedBox(width: getProportionateScreenWidth(spacing));
+  return SizedBox(width: spacing);
 }

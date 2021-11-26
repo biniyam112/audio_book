@@ -19,9 +19,13 @@ class FeaturedBooksTile extends StatelessWidget {
   }) : super(key: key);
   final Book book;
 
-  bool _isFromEthiopia() {
+  String _displayMoney() {
+    if (book.priceEtb == 0) {
+      return 'Free';
+    }
     var user = getIt.get<User>();
-    return user.countryCode == '+251';
+    bool isFromEth = user.countryCode == '+251';
+    return isFromEth ? '${book.priceEtb} ETB' : '${book.priceUSD} USD';
   }
 
   @override
@@ -134,6 +138,8 @@ class FeaturedBooksTile extends StatelessWidget {
                       Spacer(flex: 2),
                       Text(
                         '${book.title}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6!.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
@@ -221,9 +227,7 @@ class FeaturedBooksTile extends StatelessWidget {
                           ),
                           Spacer(),
                           Text(
-                            _isFromEthiopia()
-                                ? '${book.priceEtb} ETB'
-                                : '${book.priceEtb} USD',
+                            _displayMoney(),
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
                                       color: Colors.blueGrey[800],

@@ -10,7 +10,7 @@ class FetchInfiniteBooksRepo {
   Future<List<Book>> fetchBooks({
     required String token,
     required int page,
-    required String itemId,
+    required String? itemId,
     required InfiniteItemType itemType,
   }) async {
     return await fetchInfiniteBooksDP.fetchBooks(token, page, itemId, itemType);

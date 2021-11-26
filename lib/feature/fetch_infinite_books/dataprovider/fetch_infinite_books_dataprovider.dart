@@ -13,10 +13,14 @@ class FetchInfiniteBooksDP {
   Future<List<Book>> fetchBooks(
     String token,
     int page,
-    String itemId,
+    String? itemId,
     InfiniteItemType itemType,
   ) async {
     late String uri;
+    if (itemType == InfiniteItemType.featured) {
+      uri =
+          'http://www.marakigebeya.com.et/api/Books/GetFeaturedBooks?page=$page';
+    }
     if (itemType == InfiniteItemType.author)
       uri =
           'http://www.marakigebeya.com.et/api/Books/BooksByAuthor?authorId=$itemId&page=$page';

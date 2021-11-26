@@ -1,7 +1,10 @@
+import 'package:audio_books/feature/search_downloaded_books/bloc/search_downloaded_book_bloc.dart';
+import 'package:audio_books/feature/search_downloaded_books/bloc/search_downloaded_books_event.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme_colors.dart';
 import 'package:audio_books/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:provider/provider.dart';
 
@@ -54,6 +57,12 @@ class _SearchBarState extends State<SearchBar> {
               value.length == 0
                   ? _visibilityNotifier.value = false
                   : _visibilityNotifier.value = true;
+              BlocProvider.of<SearchDownloadedBookBloc>(context).add(
+                SearchDownloadedBookEvent(
+                  bookType: BookType.eBook,
+                  searchQuery: value,
+                ),
+              );
             },
             decoration: InputDecoration(
               enabledBorder: InputBorder.none,
@@ -78,6 +87,13 @@ class _SearchBarState extends State<SearchBar> {
                           onPressed: () => {
                             _controller.value = TextEditingValue.empty,
                             _visibilityNotifier.value = false,
+                            BlocProvider.of<SearchDownloadedBookBloc>(context)
+                                .add(
+                              SearchDownloadedBookEvent(
+                                bookType: BookType.eBook,
+                                searchQuery: '',
+                              ),
+                            ),
                           },
                         ),
                       )),

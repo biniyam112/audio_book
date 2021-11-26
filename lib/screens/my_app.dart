@@ -28,7 +28,6 @@ import 'package:audio_books/feature/initialize_database/bloc/initialize_db_event
 import 'package:audio_books/feature/initialize_database/repository/init_db_repository.dart';
 import 'package:audio_books/feature/otp/otp.dart';
 import 'package:audio_books/feature/payment/bloc/payment_bloc.dart';
-import 'package:audio_books/feature/payment/bloc/payment_event.dart';
 import 'package:audio_books/feature/payment/repository/amole_payment_repository.dart';
 import 'package:audio_books/feature/podcast/bloc/bloc.dart';
 import 'package:audio_books/feature/podcast/bloc/podcast_bloc.dart';
@@ -37,6 +36,8 @@ import 'package:audio_books/feature/register_user/bloc/register_user_bloc.dart';
 import 'package:audio_books/feature/register_user/repository/register_user_repository.dart';
 import 'package:audio_books/feature/request_hard_copy/bloc/request_hard_copy_bloc.dart';
 import 'package:audio_books/feature/request_hard_copy/repository/request_hard_copy_repository.dart';
+import 'package:audio_books/feature/search_downloaded_books/bloc/search_downloaded_book_bloc.dart';
+import 'package:audio_books/feature/search_downloaded_books/repository/search_downloaded_books_repository.dart';
 import 'package:audio_books/feature/set_theme_data/set_theme_data.dart';
 import 'package:audio_books/feature/store_book/bloc/store_book_bloc.dart';
 import 'package:audio_books/feature/store_book/repository/store_book_repository.dart';
@@ -82,6 +83,8 @@ class MyApp extends StatefulWidget {
   final FeedbackRepo feedbackRepo;
   final CommentsRepository commentsRepository;
 
+  final SearchDownBooksRepo searchDownBooksRepo;
+
   const MyApp({
     Key? key,
     required this.storeBookRepo,
@@ -105,6 +108,7 @@ class MyApp extends StatefulWidget {
     required this.fetchInfiniteBooksRepo,
     required this.feedbackRepo,
     required this.commentsRepository,
+    required this.searchDownBooksRepo,
   }) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
@@ -196,8 +200,11 @@ class _MyAppState extends State<MyApp> {
                 ),
                 BlocProvider(create: (context) => OtpBloc()),
                 BlocProvider(
-                    create: (context) =>
-                        PodcastBloc()..add(FetchPodcasts(page: 1))),
+                  create: (context) => PodcastBloc()
+                    ..add(
+                      FetchPodcasts(page: 1),
+                    ),
+                ),
                 BlocProvider(
                   create: (context) => FetchChaptersBloc(
                     fetchChaptersRepo: widget.fetchChaptersRepo,
@@ -226,9 +233,7 @@ class _MyAppState extends State<MyApp> {
                 BlocProvider(
                   create: (context) => PaymentBloc(
                     amolePaymentRepo: widget.amolePaymentRepo,
-                  )
-                    ..add(FetchPlans())
-                    ..add(CheckSubscription(isEbook: false)),
+                  ),
                 ),
                 BlocProvider(
                   create: (context) => AdvertisementBloc(
@@ -265,6 +270,10 @@ class _MyAppState extends State<MyApp> {
                   create: (context) => CommentsBloc(
                     commentsRepository: widget.commentsRepository,
                   ),
+                ),
+                BlocProvider(
+                  create: (context) =>
+                      SearchDownloadedBookBloc(widget.searchDownBooksRepo),
                 ),
               ],
               child: MaterialApp(

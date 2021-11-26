@@ -8,8 +8,21 @@ import 'package:audio_books/sizeConfig.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class SubscriptionSetting extends StatelessWidget {
+class SubscriptionSetting extends StatefulWidget {
   const SubscriptionSetting({Key? key}) : super(key: key);
+
+  @override
+  State<SubscriptionSetting> createState() => _SubscriptionSettingState();
+}
+
+class _SubscriptionSettingState extends State<SubscriptionSetting> {
+  @override
+  void initState() {
+    BlocProvider.of<PaymentBloc>(context)
+      ..add(FetchPlans())
+      ..add(CheckSubscription(isEbook: false));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

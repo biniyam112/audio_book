@@ -29,6 +29,8 @@ import 'package:audio_books/feature/register_user/data_provider/register_user_da
 import 'package:audio_books/feature/register_user/repository/register_user_repository.dart';
 import 'package:audio_books/feature/request_hard_copy/dataprovider/request_hard_copy_dataprovider.dart';
 import 'package:audio_books/feature/request_hard_copy/repository/request_hard_copy_repository.dart';
+import 'package:audio_books/feature/search_downloaded_books/dataprovider/search_downloaded_books_dataprovider.dart';
+import 'package:audio_books/feature/search_downloaded_books/repository/search_downloaded_books_repository.dart';
 import 'package:audio_books/models/user.dart';
 import 'package:audio_books/services/dataBase/database_handler.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -166,6 +168,10 @@ void main() async {
       client: http.Client(),
     ),
   );
+  final SearchDownBooksRepo searchDownBooksRepo = SearchDownBooksRepo(
+      searchDownBooksDP: SearchDownBooksDP(
+    dataBaseHandler: dataBaseHandler,
+  ));
   await setupServiceLocator();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) => BlocOverrides.runZoned(
@@ -193,6 +199,7 @@ void main() async {
                   fetchInfiniteBooksRepo: fetchInfiniteBooksRepo,
                   feedbackRepo: feedbackRepo,
                   commentsRepository: commentsRepository,
+                  searchDownBooksRepo: searchDownBooksRepo,
                 ),
               );
             },

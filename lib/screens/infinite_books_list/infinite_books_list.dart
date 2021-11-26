@@ -19,10 +19,12 @@ class InfiniteBooksList extends StatelessWidget {
     required this.title,
     this.category,
     this.author,
+    this.isFeatured = false,
   }) : super(key: key);
   final String title;
   final Category? category;
   final Author? author;
+  final bool isFeatured;
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -46,6 +48,7 @@ class InfiniteBooksList extends StatelessWidget {
       body: Body(
         author: author,
         category: category,
+        isFeatured: isFeatured,
       ),
     );
   }
@@ -56,9 +59,11 @@ class Body extends StatefulWidget {
     Key? key,
     this.category,
     this.author,
+    this.isFeatured = false,
   }) : super(key: key);
   final Category? category;
   final Author? author;
+  final bool isFeatured;
 
   @override
   State<Body> createState() => _BodyState();
@@ -72,20 +77,28 @@ class _BodyState extends State<Body> {
     _scrollController.addListener(_onScroll);
     BlocProvider.of<FetchInfiniteBooksBloc>(context).add(ClearBlocState());
 
-    if (widget.category != null)
+    if (widget.isFeatured) {
       BlocProvider.of<FetchInfiniteBooksBloc>(context).add(
         FetchInfiniteBooksEvent(
-          infiniteItemType: InfiniteItemType.bookCategory,
-          itemId: widget.category!.id,
+          infiniteItemType: InfiniteItemType.featured,
         ),
       );
-    if (widget.author != null)
-      BlocProvider.of<FetchInfiniteBooksBloc>(context).add(
-        FetchInfiniteBooksEvent(
-          infiniteItemType: InfiniteItemType.author,
-          itemId: widget.author!.id,
-        ),
-      );
+    } else {
+      if (widget.category != null)
+        BlocProvider.of<FetchInfiniteBooksBloc>(context).add(
+          FetchInfiniteBooksEvent(
+            infiniteItemType: InfiniteItemType.bookCategory,
+            itemId: widget.category!.id,
+          ),
+        );
+      if (widget.author != null)
+        BlocProvider.of<FetchInfiniteBooksBloc>(context).add(
+          FetchInfiniteBooksEvent(
+            infiniteItemType: InfiniteItemType.author,
+            itemId: widget.author!.id,
+          ),
+        );
+    }
     super.initState();
   }
 
@@ -149,7 +162,7 @@ class _BodyState extends State<Body> {
                 shrinkWrap: true,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: .9,
+                  childAspectRatio: .8,
                 ),
                 itemCount: state.hasReachedLimit
                     ? state.books.length

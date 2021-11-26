@@ -86,16 +86,23 @@ class DetailsTopSection extends StatelessWidget {
                       children: [
                         PurchaseButton(
                           text: 'Get E-book',
-                          onPress: (book.resourceType == 'Ebook')
+                          onPress: (book.resourceType == 'Ebook' ||
+                                  book.resourceType == 'Both')
                               ? () {
-                                  BlocProvider.of<PaymentBloc>(context)
-                                      .add(CheckSubscription(isEbook: true));
+                                  if (book.priceEtb! == 0) {
+                                    BlocProvider.of<StoreBookBloc>(context)
+                                        .add(StoreEBookEvent(book: book));
+                                  } else {
+                                    BlocProvider.of<PaymentBloc>(context)
+                                        .add(CheckSubscription(isEbook: true));
+                                  }
                                 }
                               : null,
                         ),
                         PurchaseButton(
                           text: 'Get Audio book',
-                          onPress: (book.resourceType == 'AudioBook')
+                          onPress: (book.resourceType == 'AudioBook' ||
+                                  book.resourceType == 'Both')
                               ? () {
                                   BlocProvider.of<PaymentBloc>(context)
                                       .add(CheckSubscription(isEbook: false));
@@ -232,7 +239,7 @@ class TopDetailsRightSection extends StatelessWidget {
         AuthorDisplay(
           authorName: book.author,
         ),
-        verticalSpacing(4),
+        verticalSpacing(6),
         Container(
           color: Colors.transparent,
           child: TextButton(

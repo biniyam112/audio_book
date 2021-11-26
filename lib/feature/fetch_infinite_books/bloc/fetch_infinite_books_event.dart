@@ -2,10 +2,10 @@ class InfiniteBooksEvent {}
 
 class FetchInfiniteBooksEvent extends InfiniteBooksEvent {
   final InfiniteItemType infiniteItemType;
-  final String itemId;
+  final String? itemId;
 
   FetchInfiniteBooksEvent({
-    required this.itemId,
+    this.itemId,
     required this.infiniteItemType,
   });
 }
@@ -13,6 +13,7 @@ class FetchInfiniteBooksEvent extends InfiniteBooksEvent {
 enum InfiniteItemType {
   author,
   bookCategory,
+  featured,
 }
 
 class ClearBlocState extends InfiniteBooksEvent {}

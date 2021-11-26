@@ -13,7 +13,7 @@ class Book {
       description,
       publishmentYear,
       resourceType;
-  final String? priceEtb, priceUSD;
+  final double? priceEtb, priceUSD;
   final List<Uint8List>? episodes;
 
   Book({
@@ -49,7 +49,7 @@ class Book {
         publishmentYear: json['publicationYear'] ?? '?',
         description: json['description'] ?? 'No description yet',
         resourceType: json['resourceType'] ?? 'not specified',
-        priceEtb: json['priceEtb'] != 0 ? json['priceEtb'].toString() : 'Free',
-        priceUSD: json['priceUSD'] != 0 ? json['priceUSD'].toString() : 'Free',
+        priceEtb: json['priceEtb'].toDouble() ?? 0,
+        priceUSD: json['priceUSD'].toDouble() ?? 0,
       );
 }

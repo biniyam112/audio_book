@@ -15,7 +15,7 @@ class AuthorDisplay extends StatelessWidget {
   const AuthorDisplay({
     Key? key,
     required this.authorName,
-    this.radius = 30,
+    this.radius = 26,
   }) : super(key: key);
   final String authorName;
   final double radius;
@@ -45,6 +45,7 @@ class AuthorDisplay extends StatelessWidget {
                   radius: radius,
                   foregroundImage: CachedNetworkImageProvider(
                     '${authorState.author.authorImage}',
+                    errorListener: null,
                   ),
                 ),
               if (authorState is AuthorsFetchingFailedState)
