@@ -89,7 +89,8 @@ class CustomTabViewChildren extends StatelessWidget {
                           state.chapters.length,
                           (index) => EpisodeTile(
                             book: book,
-                            isPaidFor: paymentstate.subscribtions.isNotEmpty,
+                            isPaidFor: paymentstate.subscribtions.isNotEmpty ||
+                                book.priceEtb == 0,
                             episode: state.chapters[index],
                             chapterNumber: index + 1,
                           ),

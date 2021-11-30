@@ -104,8 +104,13 @@ class DetailsTopSection extends StatelessWidget {
                           onPress: (book.resourceType == 'AudioBook' ||
                                   book.resourceType == 'Both')
                               ? () {
-                                  BlocProvider.of<PaymentBloc>(context)
-                                      .add(CheckSubscription(isEbook: false));
+                                  if (book.priceEtb == 0) {
+                                    DetailsBottomPartState.tabController
+                                        .animateTo(1);
+                                  } else {
+                                    BlocProvider.of<PaymentBloc>(context)
+                                        .add(CheckSubscription(isEbook: false));
+                                  }
                                 }
                               : null,
                         ),
