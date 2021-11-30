@@ -3,6 +3,8 @@ import 'package:audio_books/feature/comments/bloc/comments_event.dart';
 import 'package:audio_books/feature/comments/bloc/comments_state.dart';
 import 'package:audio_books/feature/fetch_chapters/bloc/fetch_chapters_bloc.dart';
 import 'package:audio_books/feature/fetch_chapters/bloc/fetch_chapters_state.dart';
+import 'package:audio_books/feature/payment/bloc/payment_bloc.dart';
+import 'package:audio_books/feature/payment/bloc/payment_state.dart';
 import 'package:audio_books/models/comment.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/components/input_field_container.dart';
@@ -14,6 +16,7 @@ import 'package:flutter/painting.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 import '../../../sizeConfig.dart';
 import 'chapter_tile.dart';
@@ -50,67 +53,90 @@ class CustomTabViewChildren extends StatelessWidget {
       );
     }
     if (index == 1) {
-      return SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            BlocBuilder<FetchChaptersBloc, FetchChaptersState>(
-                builder: (blocontext, state) {
-              if (state is ChaptersFetchedState) {
-                if (state.chapters.isEmpty)
-                  return SizedBox(
-                    height: SizeConfig.screenHeight! * .36,
-                    child: Center(
-                      child: Text(
-                        'No items avilable',
-                        style: Theme.of(context).textTheme.headline4,
+      return BlocBuilder<PaymentBloc, PaymentState>(
+          builder: (context, paymentstate) {
+        if (paymentstate is CheckSubOnprocess) {
+          return Center(
+            child: CircularProgressIndicator(
+              color: Darktheme.primaryColor,
+            ),
+          );
+        }
+
+        if (paymentstate is CheckSubCompleted) {
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                BlocBuilder<FetchChaptersBloc, FetchChaptersState>(
+                    builder: (blocontext, state) {
+                  if (state is ChaptersFetchedState) {
+                    if (state.chapters.isEmpty)
+                      return SizedBox(
+                        height: SizeConfig.screenHeight! * .36,
+                        width: SizeConfig.screenWidth,
+                        child: Center(
+                          child: Text(
+                            'No items avilable',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
+                        ),
+                      );
+                    return Column(
+                      children: [
+                        ...List.generate(
+                          state.chapters.length,
+                          (index) => EpisodeTile(
+                            book: book,
+                            isPaidFor: paymentstate.subscribtions.isNotEmpty,
+                            episode: state.chapters[index],
+                            chapterNumber: index + 1,
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+                  if (state is ChaptersFetchingState) {
+                    return SizedBox(
+                      width: SizeConfig.screenWidth,
+                      height: SizeConfig.screenHeight! * .4,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: Darktheme.primaryColor,
+                        ),
                       ),
-                    ),
-                  );
-                return Column(
-                  children: [
-                    ...List.generate(
-                      state.chapters.length,
-                      (index) => EpisodeTile(
-                        book: book,
-                        episode: state.chapters[index],
-                        chapterNumber: index + 1,
+                    );
+                  }
+                  if (state is ChaptersFetchingFailedState) {
+                    return SizedBox(
+                      width: SizeConfig.screenWidth,
+                      height: SizeConfig.screenHeight! * .4,
+                      child: Center(
+                        child: Opacity(
+                          opacity: .8,
+                          child: Text(
+                            'Unable to fetch chapters',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.headline4,
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                );
-              }
-              if (state is ChaptersFetchingState) {
-                return SizedBox(
-                  width: SizeConfig.screenWidth,
-                  height: SizeConfig.screenHeight! * .4,
-                  child: Container(
-                    height: 40,
-                    width: 40,
-                    child: CircularProgressIndicator(
-                      color: Darktheme.primaryColor,
-                    ),
-                  ),
-                );
-              }
-              if (state is ChaptersFetchingFailedState) {
-                return Padding(
-                  padding:
-                      EdgeInsets.only(top: getProportionateScreenHeight(20)),
-                  child: Opacity(
-                    opacity: .8,
-                    child: Text(
-                      'Unable to fetch chapters',
-                      style: Theme.of(context).textTheme.headline4,
-                    ),
-                  ),
-                );
-              }
-              return Text('Unstable reality');
-            }),
-          ],
-        ),
-      );
+                    );
+                  }
+                  return Text('Unstable reality');
+                }),
+              ],
+            ),
+          );
+        }
+        if (paymentstate is CheckSubFailed) {
+          return Center(
+            child: Text('unable to fetch items,\n Try again!'),
+          );
+        }
+        return Container();
+      });
     }
     if (index == 2) {
       return CommentSection(book: book);
@@ -133,13 +159,6 @@ class _CommentSectionState extends State<CommentSection> {
   final user = getIt.get<User>();
 
   @override
-  void initState() {
-    BlocProvider.of<CommentsBloc>(context)
-        .add(FetchAllComments(itemId: widget.book.id));
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Container(
       height: (SizeConfig.screenHeight! / 2),
@@ -148,6 +167,7 @@ class _CommentSectionState extends State<CommentSection> {
         children: [
           Expanded(
             child: RefreshIndicator(
+              color: Darktheme.primaryColor,
               onRefresh: () async {
                 BlocProvider.of<CommentsBloc>(context).add(
                   FetchAllComments(itemId: widget.book.id),
@@ -155,10 +175,12 @@ class _CommentSectionState extends State<CommentSection> {
               },
               child: SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(
-                    parent: BouncingScrollPhysics()),
+                  parent: BouncingScrollPhysics(),
+                ),
                 child: BlocConsumer<CommentsBloc, CommentState>(
                   builder: (context, state) {
-                    if (state.commentsStatus == CommentsStatus.initial) {
+                    if (state.commentsStatus == CommentsStatus.initial ||
+                        state.commentsStatus == CommentsStatus.fetching) {
                       return SizedBox(
                         height: SizeConfig.screenHeight! * .3,
                         child: Center(
@@ -190,30 +212,14 @@ class _CommentSectionState extends State<CommentSection> {
                           : Column(
                               children: [
                                 ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: ClampingScrollPhysics(),
                                   itemCount: state.comments.length,
                                   itemBuilder: (context, index) {
-                                    return Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          state.comments[index].content,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .headline4,
-                                        ),
-                                        Opacity(
-                                          opacity: .8,
-                                          child: Text(
-                                            DateFormat('yyyy-MM-dd').format(
-                                              state.comments[index].uploadDate,
-                                            ),
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .headline6,
-                                          ),
-                                        ),
-                                      ],
+                                    return CommentCard(
+                                      content: state.comments[index].content,
+                                      uploadDate:
+                                          state.comments[index].uploadDate,
                                     );
                                   },
                                 ),
@@ -223,13 +229,19 @@ class _CommentSectionState extends State<CommentSection> {
                     return Container();
                   },
                   listener: (bloccontext, state) {
+                    bool isDarkMode =
+                        Provider.of<ThemeProvider>(context).isDarkMode;
                     if (state.commentsStatus == CommentsStatus.submited) {
                       _controller.text = '';
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
+                          backgroundColor: isDarkMode
+                              ? Darktheme.containerColor
+                              : Colors.white,
+                          elevation: 4,
                           content: Text(
                             'You\'re comment has been submitted',
-                            style: Theme.of(context).textTheme.headline4,
+                            style: Theme.of(context).textTheme.headline5,
                           ),
                         ),
                       );
@@ -282,6 +294,45 @@ class _CommentSectionState extends State<CommentSection> {
                 ),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CommentCard extends StatelessWidget {
+  const CommentCard({
+    Key? key,
+    required this.content,
+    required this.uploadDate,
+  }) : super(key: key);
+  final String content;
+  final DateTime uploadDate;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            content,
+            style: Theme.of(context).textTheme.headline5!.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black87,
+                ),
+          ),
+          verticalSpacing(6),
+          Opacity(
+            opacity: .8,
+            child: Text(
+              DateFormat('dd MMM  yyyy').format(
+                uploadDate,
+              ),
+              style: Theme.of(context).textTheme.headline6,
+            ),
           ),
         ],
       ),

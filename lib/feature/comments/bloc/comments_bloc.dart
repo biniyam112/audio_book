@@ -44,7 +44,7 @@ class CommentsBloc extends Bloc<CommentEvent, CommentState> {
 
   Future<void> _onFetchAllComments(
       FetchAllComments fetchAllComments, Emitter<CommentState> emitter) async {
-    emitter(state.copyWith());
+    emitter(state.copyWith(commentsStatus: CommentsStatus.fetching));
     try {
       var comments = await commentsRepository.fetchComments(
         user.token!,

@@ -76,27 +76,27 @@ class _SearchBarState extends State<SearchBar> {
               ),
               focusColor: Colors.orange,
               suffixIcon: ValueListenableBuilder(
-                  valueListenable: _visibilityNotifier,
-                  builder: (_, bool value, __) => Visibility(
-                        visible: value,
-                        child: IconButton(
-                          icon: Icon(
-                            Icons.cancel,
-                            color: Colors.orange,
-                          ),
-                          onPressed: () => {
-                            _controller.value = TextEditingValue.empty,
-                            _visibilityNotifier.value = false,
-                            BlocProvider.of<SearchDownloadedBookBloc>(context)
-                                .add(
-                              SearchDownloadedBookEvent(
-                                bookType: BookType.eBook,
-                                searchQuery: '',
-                              ),
-                            ),
-                          },
+                valueListenable: _visibilityNotifier,
+                builder: (_, bool value, __) => Visibility(
+                  visible: value,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.cancel,
+                      color: Colors.orange,
+                    ),
+                    onPressed: () => {
+                      _controller.value = TextEditingValue.empty,
+                      _visibilityNotifier.value = false,
+                      BlocProvider.of<SearchDownloadedBookBloc>(context).add(
+                        SearchDownloadedBookEvent(
+                          bookType: BookType.eBook,
+                          searchQuery: '',
                         ),
-                      )),
+                      ),
+                    },
+                  ),
+                ),
+              ),
               border: InputBorder.none,
               hintText: "Search",
               hintStyle: Theme.of(context).textTheme.headline6!.copyWith(

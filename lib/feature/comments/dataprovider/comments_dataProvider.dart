@@ -17,7 +17,7 @@ class CommentsDataProvider {
   ) async {
     var response = await client.post(
       Uri.parse(
-          'http://www.marakigebeya.com.et/api/Comments?episodeID=$itemId&subscriberID=$userId&content=$comment'),
+          'http://www.marakigebeya.com.et/api/Comments/CommentBook?bookID=$itemId&subscriberID=$userId&content=${comment.content}'),
       headers: {
         'Authorization': token,
       },
@@ -30,7 +30,7 @@ class CommentsDataProvider {
   Future<List<Comment>> fetchComments(String token, String itemId) async {
     var response = await client.get(
       Uri.parse(
-        'http://www.marakigebeya.com.et/api/Comments/GetAllComments?Page=1&episodeId=$itemId',
+        'http://www.marakigebeya.com.et/api/Comments/GetAllBookComments?bookID=$itemId',
       ),
       headers: {
         'Authorization': token,

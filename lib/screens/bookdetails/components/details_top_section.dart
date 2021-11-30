@@ -5,7 +5,6 @@ import 'package:audio_books/feature/store_book/bloc/store_book_bloc.dart';
 import 'package:audio_books/feature/store_book/bloc/store_book_event.dart';
 import 'package:audio_books/feature/store_book/bloc/store_book_state.dart';
 import 'package:audio_books/models/book.dart';
-import 'package:audio_books/models/episode.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/bookdetails/components/get_books_madal_view.dart';
 import 'package:audio_books/screens/bookdetails/components/purchase_button.dart';
@@ -20,6 +19,7 @@ import 'package:provider/provider.dart';
 
 import '../../../sizeConfig.dart';
 import 'book_genere_card.dart';
+import 'details_bottom_part.dart';
 
 class DetailsTopSection extends StatelessWidget {
   const DetailsTopSection({
@@ -137,19 +137,7 @@ class DetailsTopSection extends StatelessWidget {
                   }
                   if (checksubstate.subscribtions.isNotEmpty &&
                       !checksubstate.isEbook) {
-                    BlocProvider.of<StoreBookBloc>(context).add(
-                      StoreAudioBookEvent(
-                        book: book,
-                        episode: Episode(
-                          id: "306d186f-e0dd-4784-bf5a-924b086123d6",
-                          bookTitle: "",
-                          chapterTitle: "ምዕራፍ 1 ",
-                          length: '00:43:23',
-                          fileUrl:
-                              "/mabdocuments/audio_e_books/b099846c-c54e-4e5e-9441-6535b9b3a9a7..mp3",
-                        ),
-                      ),
-                    );
+                    DetailsBottomPartState.tabController.animateTo(1);
                   }
                 }
               },
