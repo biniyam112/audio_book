@@ -8,6 +8,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:provider/provider.dart';
 
+import '../screens.dart';
+
 class SearchBar extends StatefulWidget {
   @override
   _SearchBarState createState() => _SearchBarState();
@@ -57,12 +59,22 @@ class _SearchBarState extends State<SearchBar> {
               value.length == 0
                   ? _visibilityNotifier.value = false
                   : _visibilityNotifier.value = true;
-              BlocProvider.of<SearchDownloadedBookBloc>(context).add(
-                SearchDownloadedBookEvent(
-                  bookType: BookType.eBook,
-                  searchQuery: value,
-                ),
-              );
+              if (LibraryBodyState.libraryTabController.index == 0) {
+                BlocProvider.of<SearchDownloadedBookBloc>(context).add(
+                  SearchDownloadedBookEvent(
+                    bookType: BookType.eBook,
+                    searchQuery: value,
+                  ),
+                );
+              }
+              if (LibraryBodyState.libraryTabController.index == 1) {
+                BlocProvider.of<SearchDownloadedBookBloc>(context).add(
+                  SearchDownloadedBookEvent(
+                    bookType: BookType.audioBook,
+                    searchQuery: value,
+                  ),
+                );
+              }
             },
             decoration: InputDecoration(
               enabledBorder: InputBorder.none,

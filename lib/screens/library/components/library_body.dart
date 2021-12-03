@@ -12,13 +12,20 @@ class LibraryBody extends StatefulWidget {
   const LibraryBody({Key? key}) : super(key: key);
 
   @override
-  _LibraryBodyState createState() => _LibraryBodyState();
+  LibraryBodyState createState() => LibraryBodyState();
 }
 
-class _LibraryBodyState extends State<LibraryBody> {
+class LibraryBodyState extends State<LibraryBody>
+    with TickerProviderStateMixin {
+  static late TabController libraryTabController;
+
   @override
   void initState() {
     super.initState();
+    libraryTabController = TabController(
+      length: 2,
+      vsync: this,
+    );
     BlocProvider.of<FetchDownEBooksBloc>(context).add(FetchDownEBooksEvent());
     BlocProvider.of<FetchDownAudioBooksBloc>(context)
         .add(FetchDownAudioBooksEvent());
@@ -30,6 +37,7 @@ class _LibraryBodyState extends State<LibraryBody> {
       children: [
         LibraryHeader(),
         TabBar(
+          controller: libraryTabController,
           indicatorColor: Darktheme.primaryColor,
           indicatorPadding: EdgeInsets.zero,
           indicator: UnderlineTabIndicator(
@@ -61,6 +69,7 @@ class _LibraryBodyState extends State<LibraryBody> {
         verticalSpacing(12),
         Expanded(
           child: TabBarView(
+            controller: libraryTabController,
             children: [
               EBookLibrary(),
               AudioBookLibrary(),

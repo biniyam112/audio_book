@@ -41,8 +41,8 @@ class FeaturedBooksTile extends StatelessWidget {
         );
       },
       child: Container(
-        height: getProportionateScreenHeight(280),
-        width: getProportionateScreenWidth(160),
+        height: 280,
+        width: 200,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: isDarkMode ? Colors.black : Colors.white,

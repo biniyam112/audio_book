@@ -16,11 +16,11 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
         super(OtpInit()) {
     on<VerifyOtp>(_mapVerifyOtpToState);
     on<SendOtp>(_mapSendOtpToState);
-    on((event, emit) {
-      if (event is OtpSendEvent) emit(OtpSent(phoneNumber: event.phoneNumber));
+    on((OtpSendEvent event, emit) {
+      emit(OtpSent(phoneNumber: event.phoneNumber));
     });
-    on((event, emit) {
-      if (event is OtpExceptionEvent) emit(OtpFailure());
+    on((OtpExceptionEvent event, emit) {
+      emit(OtpFailure());
     });
   }
 

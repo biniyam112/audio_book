@@ -104,7 +104,7 @@ class DataBaseHandler {
   Future<List<DownloadedBook>> searchEBooks(String searchKey) async {
     final db = dataBase;
     final List<Map<String, dynamic>> maps = await db
-        .query('EBooks', where: '"bookTitle = ?', whereArgs: [searchKey]);
+        .rawQuery("select * from EBooks where title like '%$searchKey%'");
     return List.generate(
       maps.length,
       (index) => DownloadedBook.fromMap(
@@ -116,7 +116,9 @@ class DataBaseHandler {
   Future<List<DownloadedBook>> searchAudioBooks(String searchKey) async {
     final db = dataBase;
     final List<Map<String, dynamic>> maps = await db
-        .query('AudioBooks', where: '"bookTitle = ?', whereArgs: [searchKey]);
+        .rawQuery("select * from AudioBooks where title like '%$searchKey%'");
+    print(searchKey);
+    print('\n${maps.length}\n');
     return List.generate(
       maps.length,
       (index) => DownloadedBook.fromMap(

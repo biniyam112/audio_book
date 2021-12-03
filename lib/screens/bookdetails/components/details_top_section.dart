@@ -192,7 +192,8 @@ class TopDetailsRightSection extends StatelessWidget {
       children: [
         Text(
           '${book.title}',
-          maxLines: 2,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: Theme.of(context).textTheme.headline5!.copyWith(
                 fontWeight: FontWeight.w600,
               ),
@@ -203,7 +204,9 @@ class TopDetailsRightSection extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           text: TextSpan(
             style: Theme.of(context).textTheme.headline6!.copyWith(
-                  color: isDarkMode ? Colors.white70 : Colors.black45,
+                  color: isDarkMode
+                      ? Colors.white70
+                      : Colors.black.withOpacity(.7),
                 ),
             children: [
               TextSpan(text: 'Author  '),
@@ -216,7 +219,9 @@ class TopDetailsRightSection extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           text: TextSpan(
             style: Theme.of(context).textTheme.headline6!.copyWith(
-                  color: isDarkMode ? Colors.white70 : Colors.black45,
+                  color: isDarkMode
+                      ? Colors.white70
+                      : Colors.black.withOpacity(.7),
                 ),
             children: [
               TextSpan(text: 'Narattor  '),
@@ -232,7 +237,7 @@ class TopDetailsRightSection extends StatelessWidget {
         AuthorDisplay(
           authorName: book.author,
         ),
-        verticalSpacing(6),
+        Spacer(),
         Container(
           color: Colors.transparent,
           child: TextButton(

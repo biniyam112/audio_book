@@ -1,4 +1,5 @@
 import 'package:audio_books/screens/components/custom_appbar.dart';
+import 'package:audio_books/screens/login/login.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:flutter/material.dart';
 
@@ -17,12 +18,18 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return Scaffold(
-      appBar: customAppBar(
-        title: 'Sign up',
-        context: context,
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.popAndPushNamed(context, LoginScreen.pageRoute);
+        return true;
+      },
+      child: Scaffold(
+        appBar: customAppBar(
+          title: 'Sign up',
+          context: context,
+        ),
+        body: Body(),
       ),
-      body: Body(),
     );
   }
 }
