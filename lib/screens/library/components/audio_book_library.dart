@@ -1,6 +1,9 @@
 import 'package:audio_books/feature/fetch_downloaded_book/bloc/fetch_down_book_bloc.dart';
 import 'package:audio_books/feature/fetch_downloaded_book/bloc/fetch_down_book_event.dart';
 import 'package:audio_books/feature/fetch_downloaded_book/bloc/fetch_down_book_state.dart';
+import 'package:audio_books/feature/search_downloaded_books/bloc/search_downloaded_book_bloc.dart';
+import 'package:audio_books/feature/search_downloaded_books/bloc/search_downloaded_books_event.dart';
+import 'package:audio_books/feature/search_downloaded_books/bloc/search_downloaded_books_state.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
@@ -14,37 +17,94 @@ class AudioBookLibrary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
-      child: RefreshIndicator(
-        onRefresh: () async {
-          var fetchBloc = BlocProvider.of<FetchDownAudioBooksBloc>(context);
-          fetchBloc.add(FetchDownAudioBooksEvent());
-        },
+    return RefreshIndicator(
+      onRefresh: () async {
+        var fetchBloc = BlocProvider.of<FetchDownAudioBooksBloc>(context);
+        fetchBloc.add(FetchDownAudioBooksEvent());
+        BlocProvider.of<SearchDownloadedBookBloc>(context).add(
+          SearchDownloadedBookEvent(
+            bookType: BookType.audioBook,
+            searchQuery: '',
+          ),
+        );
+      },
+      child: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
         child: BlocBuilder<FetchDownAudioBooksBloc, FetchDownBooksState>(
           builder: (context, state) {
             if (state is DownBooksFetchedState) {
-              return Container(
-                height: SizeConfig.screenHeight! * .6,
-                width: SizeConfig.screenWidth,
-                child: GridView.builder(
-                  itemCount: state.downloadedBooks.length,
-                  padding: EdgeInsets.symmetric(
-                    vertical: getProportionateScreenHeight(20),
-                    horizontal: getProportionateScreenWidth(30),
-                  ),
-                  gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 200,
-                    childAspectRatio: SizeConfig.screenWidth! /
-                        (SizeConfig.screenHeight! / 1.2),
-                    crossAxisSpacing: getProportionateScreenWidth(20),
-                    mainAxisSpacing: getProportionateScreenHeight(20),
-                  ),
-                  itemBuilder: (context, index) {
-                    return AudioBookLibraryItem(
-                        downloadedBook: state.downloadedBooks[index]);
-                  },
-                ),
+              var downloadedBooks = state.downloadedBooks;
+              return BlocConsumer<SearchDownloadedBookBloc,
+                  SearchDownlaodedBookState>(
+                listener: (context, searchstate) {
+                  if (searchstate.searchState == SearchState.done)
+                    downloadedBooks = searchstate.downloadedBooks;
+                  if (searchstate.searchState == SearchState.initial)
+                    downloadedBooks = state.downloadedBooks;
+                },
+                builder: (context, searchstate) {
+                  if (searchstate.searchState == SearchState.searching) {
+                    return SizedBox(
+                      height: SizeConfig.screenHeight! * .6,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: Darktheme.primaryColor,
+                        ),
+                      ),
+                    );
+                  }
+                  if (searchstate.searchState == SearchState.done ||
+                      searchstate.searchState == SearchState.initial) {
+                    return Container(
+                      height: SizeConfig.screenHeight! * .6,
+                      width: SizeConfig.screenWidth,
+                      child: GridView.builder(
+                        itemCount: downloadedBooks.length,
+                        padding: EdgeInsets.symmetric(
+                          vertical: getProportionateScreenHeight(20),
+                          horizontal: getProportionateScreenWidth(30),
+                        ),
+                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 200,
+                          childAspectRatio: SizeConfig.screenWidth! /
+                              (SizeConfig.screenHeight! / 1.2),
+                          crossAxisSpacing: getProportionateScreenWidth(20),
+                          mainAxisSpacing: getProportionateScreenHeight(20),
+                        ),
+                        itemBuilder: (context, index) {
+                          return AudioBookLibraryItem(
+                            downloadedBook: downloadedBooks[index],
+                          );
+                        },
+                      ),
+                    );
+                  }
+                  return SizedBox(
+                    height: SizeConfig.screenHeight! * .6,
+                    width: SizeConfig.screenWidth,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Opacity(
+                          opacity: .9,
+                          child: SvgPicture.asset(
+                            'assets/icons/item_not_found.svg',
+                            height: SizeConfig.screenHeight! * .2,
+                          ),
+                        ),
+                        verticalSpacing(6),
+                        Opacity(
+                          opacity: .8,
+                          child: Text(
+                            'No items available with this name',
+                            textAlign: TextAlign.center,
+                            style: Theme.of(context).textTheme.headline5,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               );
             }
             if (state is FetchingDownBooksState) {

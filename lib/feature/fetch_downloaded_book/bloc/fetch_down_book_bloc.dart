@@ -6,41 +6,44 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class FetchDownEBooksBloc
     extends Bloc<FetchDownEBooksEvent, FetchDownBooksState> {
   FetchDownEBooksBloc({required this.fetchStoredBooksRepo})
-      : super(IdleState());
+      : super(IdleState()) {
+    on<FetchDownEBooksEvent>(_onFetchDownEBooksEvent);
+  }
   final FetchStoredBooksRepo fetchStoredBooksRepo;
 
-  @override
-  Stream<FetchDownBooksState> mapEventToState(
-      FetchDownEBooksEvent event) async* {
-    if (event is FetchDownEBooksEvent) {
-      yield FetchingDownBooksState();
-      try {
-        final fetchedBooks = await fetchStoredBooksRepo.fetchDownloadedEBooks();
+  Future<void> _onFetchDownEBooksEvent(
+      FetchDownEBooksEvent fetchDownEBooksEvent,
+      Emitter<FetchDownBooksState> emitter) async {
+    emitter(FetchingDownBooksState());
+    try {
+      final fetchedBooks = await fetchStoredBooksRepo.fetchDownloadedEBooks();
 
-        yield DownBooksFetchedState(downloadedBooks: fetchedBooks);
-      } catch (e) {
-        yield FetchingDownBooksFailedState(errorMessage: e.toString());
-      }
+      emitter(DownBooksFetchedState(downloadedBooks: fetchedBooks));
+    } catch (e) {
+      emitter(FetchingDownBooksFailedState(errorMessage: e.toString()));
     }
   }
 }
 
 class FetchBookFileBloc extends Bloc<FetchBookFileEvent, FetchBookFileState> {
   FetchBookFileBloc({required this.fetchStoredBookFileRepo})
-      : super(BookDataFetchingState());
+      : super(BookDataFetchingState()) {
+    on<FetchBookFileEvent>(_onFetchBookFileEvent);
+  }
   final FetchStoredBookFileRepo fetchStoredBookFileRepo;
 
-  @override
-  Stream<FetchBookFileState> mapEventToState(FetchBookFileEvent event) async* {
-    yield BookDataFetchingState();
+  Future<void> _onFetchBookFileEvent(FetchBookFileEvent fetchBookFileEvent,
+      Emitter<FetchBookFileState> emitter) async {
+    emitter(BookDataFetchingState());
     try {
       final bookFile = fetchStoredBookFileRepo
-          .decryptStoredPdf(event.downloadedBook.bookFilePath!);
-      event.downloadedBook.setBookFile = bookFile;
+          .decryptStoredPdf(fetchBookFileEvent.downloadedBook.bookFilePath!);
+      fetchBookFileEvent.downloadedBook.setBookFile = bookFile;
       print('length after decription is ${bookFile.length}');
-      yield BookDataFetchedState(downloadedBook: event.downloadedBook);
+      emitter(BookDataFetchedState(
+          downloadedBook: fetchBookFileEvent.downloadedBook));
     } catch (e) {
-      yield FetchingBookDataFailedState(errorMessage: e.toString());
+      emitter(FetchingBookDataFailedState(errorMessage: e.toString()));
     }
   }
 }
@@ -49,21 +52,21 @@ class FetchBookFileBloc extends Bloc<FetchBookFileEvent, FetchBookFileState> {
 class FetchDownAudioBooksBloc
     extends Bloc<FetchDownAudioBooksEvent, FetchDownBooksState> {
   FetchDownAudioBooksBloc({required this.fetchStoredBooksRepo})
-      : super(IdleState());
+      : super(IdleState()) {
+    on<FetchDownAudioBooksEvent>(_onFetchDownAudioBooksEvent);
+  }
   final FetchStoredBooksRepo fetchStoredBooksRepo;
 
-  @override
-  Stream<FetchDownBooksState> mapEventToState(
-      FetchDownAudioBooksEvent event) async* {
-    if (event is FetchDownAudioBooksEvent) {
-      yield FetchingDownBooksState();
-      try {
-        final fetchedBooks =
-            await fetchStoredBooksRepo.fetchDownloadedAudioBooks();
-        yield DownBooksFetchedState(downloadedBooks: fetchedBooks);
-      } catch (e) {
-        yield FetchingDownBooksFailedState(errorMessage: e.toString());
-      }
+  Future<void> _onFetchDownAudioBooksEvent(
+      FetchDownAudioBooksEvent fetchDownAudioBooksEvent,
+      Emitter<FetchDownBooksState> emitter) async {
+    emitter(FetchingDownBooksState());
+    try {
+      final fetchedBooks =
+          await fetchStoredBooksRepo.fetchDownloadedAudioBooks();
+      emitter(DownBooksFetchedState(downloadedBooks: fetchedBooks));
+    } catch (e) {
+      emitter(FetchingDownBooksFailedState(errorMessage: e.toString()));
     }
   }
 }
@@ -72,21 +75,23 @@ class FetchDownAudioBooksBloc
 class FetchBookEpisodesBloc
     extends Bloc<FetchEpisodesListEvent, FetchEpisodesState> {
   FetchBookEpisodesBloc({required this.fetchStoredEpisodesRepo})
-      : super(EpisodesFetchingState());
+      : super(EpisodesFetchingState()) {
+    on<FetchEpisodesListEvent>(_onFetchEpisodesListEvent);
+  }
 
   final FetchStoredEpisodesRepo fetchStoredEpisodesRepo;
 
-  @override
-  Stream<FetchEpisodesState> mapEventToState(
-      FetchEpisodesListEvent event) async* {
-    yield EpisodesFetchingState();
+  Future<void> _onFetchEpisodesListEvent(
+      FetchEpisodesListEvent fetchEpisodesListEvent,
+      Emitter<FetchEpisodesState> emitter) async {
+    emitter(EpisodesFetchingState());
     try {
       var episodes = await fetchStoredEpisodesRepo
-          .fetchDownloadedEpisodesList(event.downloadedBook);
+          .fetchDownloadedEpisodesList(fetchEpisodesListEvent.downloadedBook);
 
-      yield EpisodesFetchedState(downloadedEpisodes: episodes);
+      emitter(EpisodesFetchedState(downloadedEpisodes: episodes));
     } catch (e) {
-      yield EpisodesFetchingFailedState(errorMessage: e.toString());
+      emitter(EpisodesFetchingFailedState(errorMessage: e.toString()));
     }
   }
 }
@@ -95,21 +100,28 @@ class FetchBookEpisodesBloc
 class FetchDownloadedEpisodeFileBloc
     extends Bloc<FetchDownlaodedEpisodeFileEvent, FetchBookFileState> {
   FetchDownloadedEpisodeFileBloc({required this.fetchStoredEpisodeFileRepo})
-      : super(BookDataFetchingState());
+      : super(BookDataFetchingState()) {
+    on<FetchDownlaodedEpisodeFileEvent>(_onFetchDownlaodedEpisodeFileEvent);
+  }
   final FetchStoredEpisodeFileRepo fetchStoredEpisodeFileRepo;
-  @override
-  Stream<FetchBookFileState> mapEventToState(
-      FetchDownlaodedEpisodeFileEvent event) async* {
-    yield BookDataFetchingState();
+
+  Future<void> _onFetchDownlaodedEpisodeFileEvent(
+      FetchDownlaodedEpisodeFileEvent fetchDownlaodedEpisodeFileEvent,
+      Emitter<FetchBookFileState> emitter) async {
+    emitter(BookDataFetchingState());
     try {
-      var episodeFile = fetchStoredEpisodeFileRepo
-          .fetchDownloadedEpisedeFile(event.downloadedEpisode.episodeFilePath!);
-      event.downloadedEpisode.setEpisodeFile = episodeFile;
-      yield BookDataFetchedState(
-          downloadedEpisodes: event.downloadedEpisode,
-          downloadedBook: event.downloadedBook);
+      var episodeFile = fetchStoredEpisodeFileRepo.fetchDownloadedEpisedeFile(
+          fetchDownlaodedEpisodeFileEvent.downloadedEpisode.episodeFilePath!);
+      fetchDownlaodedEpisodeFileEvent.downloadedEpisode.setEpisodeFile =
+          episodeFile;
+      emitter(
+        BookDataFetchedState(
+          downloadedEpisodes: fetchDownlaodedEpisodeFileEvent.downloadedEpisode,
+          downloadedBook: fetchDownlaodedEpisodeFileEvent.downloadedBook,
+        ),
+      );
     } catch (e) {
-      yield FetchingBookDataFailedState(errorMessage: e.toString());
+      emitter(FetchingBookDataFailedState(errorMessage: e.toString()));
     }
   }
 }

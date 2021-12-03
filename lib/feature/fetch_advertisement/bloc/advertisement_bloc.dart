@@ -6,21 +6,21 @@ import 'package:audio_books/models/models.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
 
 class AdvertisementBloc extends Bloc<AdvertisementEvent, AdvertisementState> {
-  AdvertisementBloc({required this.advertisementRepo}) : super(IdleState());
+  AdvertisementBloc({required this.advertisementRepo}) : super(IdleState()) {
+    on<FetchAdvertEvent>(_onFetchAdvertEvent);
+  }
 
   final AdvertisementRepo advertisementRepo;
 
-  @override
-  Stream<AdvertisementState> mapEventToState(AdvertisementEvent event) async* {
-    if (event is FetchAdvertEvent) {
-      yield AdvertFetching();
-      try {
-        var user = getIt.get<User>();
-        var ads = await advertisementRepo.fetchAdverts(user.token!);
-        yield AdvertFetched(ads: ads);
-      } catch (e) {
-        yield AdvertFetchingFailed(errorMessage: e.toString());
-      }
+  Future<void> _onFetchAdvertEvent(FetchAdvertEvent fetchAdvertEvent,
+      Emitter<AdvertisementState> emitter) async {
+    emitter(AdvertFetching());
+    try {
+      var user = getIt.get<User>();
+      var ads = await advertisementRepo.fetchAdverts(user.token!);
+      emitter(AdvertFetched(ads: ads));
+    } catch (e) {
+      emitter(AdvertFetchingFailed(errorMessage: e.toString()));
     }
   }
 }

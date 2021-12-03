@@ -1,4 +1,3 @@
-import 'package:audio_books/constants.dart';
 import 'package:audio_books/feature/author/bloc/author_bloc.dart';
 import 'package:audio_books/feature/author/repository/author_repository.dart';
 import 'package:audio_books/feature/authorize_user/bloc/authorize_user_bloc.dart';
@@ -6,8 +5,12 @@ import 'package:audio_books/feature/authorize_user/repository/authorize_user_rep
 import 'package:audio_books/feature/categories/bloc/category_bloc.dart';
 import 'package:audio_books/feature/categories/repository/category_repo.dart';
 import 'package:audio_books/feature/check_first_time/check_first_time.dart';
+import 'package:audio_books/feature/comments/bloc/comments_bloc.dart';
+import 'package:audio_books/feature/comments/repository/comments_repository.dart';
 import 'package:audio_books/feature/featured_books/bloc/featured_books_bloc.dart';
 import 'package:audio_books/feature/featured_books/repository/featured_books_repository.dart';
+import 'package:audio_books/feature/feedback/bloc/feedback_bloc.dart';
+import 'package:audio_books/feature/feedback/repository/feedback_repository.dart';
 import 'package:audio_books/feature/fetch_advertisement/bloc/advertisement_bloc.dart';
 import 'package:audio_books/feature/fetch_advertisement/repository/advertisement_repo.dart';
 import 'package:audio_books/feature/fetch_books/bloc/fetch_books_bloc.dart';
@@ -18,12 +21,13 @@ import 'package:audio_books/feature/fetch_chapters/bloc/fetch_chapters_bloc.dart
 import 'package:audio_books/feature/fetch_chapters/repository/fetch_chapters_repo.dart';
 import 'package:audio_books/feature/fetch_downloaded_book/bloc/fetch_down_book_bloc.dart';
 import 'package:audio_books/feature/fetch_downloaded_book/repository/fetch_down_books_repository.dart';
+import 'package:audio_books/feature/fetch_infinite_books/bloc/fetch_infinite_books_bloc.dart';
+import 'package:audio_books/feature/fetch_infinite_books/repository/fetch_infinite_books_repo.dart';
 import 'package:audio_books/feature/initialize_database/bloc/initializa_database.dart';
 import 'package:audio_books/feature/initialize_database/bloc/initialize_db_event.dart';
 import 'package:audio_books/feature/initialize_database/repository/init_db_repository.dart';
 import 'package:audio_books/feature/otp/otp.dart';
 import 'package:audio_books/feature/payment/bloc/payment_bloc.dart';
-import 'package:audio_books/feature/payment/bloc/payment_event.dart';
 import 'package:audio_books/feature/payment/repository/amole_payment_repository.dart';
 import 'package:audio_books/feature/podcast/bloc/bloc.dart';
 import 'package:audio_books/feature/podcast/bloc/podcast_bloc.dart';
@@ -32,6 +36,8 @@ import 'package:audio_books/feature/register_user/bloc/register_user_bloc.dart';
 import 'package:audio_books/feature/register_user/repository/register_user_repository.dart';
 import 'package:audio_books/feature/request_hard_copy/bloc/request_hard_copy_bloc.dart';
 import 'package:audio_books/feature/request_hard_copy/repository/request_hard_copy_repository.dart';
+import 'package:audio_books/feature/search_downloaded_books/bloc/search_downloaded_book_bloc.dart';
+import 'package:audio_books/feature/search_downloaded_books/repository/search_downloaded_books_repository.dart';
 import 'package:audio_books/feature/set_theme_data/set_theme_data.dart';
 import 'package:audio_books/feature/store_book/bloc/store_book_bloc.dart';
 import 'package:audio_books/feature/store_book/repository/store_book_repository.dart';
@@ -46,7 +52,7 @@ import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/dark_theme.dart';
 import 'package:audio_books/theme/light_theme.dart';
 import 'package:audio_books/theme/theme_colors.dart';
-import 'package:audio_books/theme/theme_provider.dart';
+import 'package:audio_books/theme/theme_provider.dart' as localTheme;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -73,6 +79,11 @@ class MyApp extends StatefulWidget {
   final AdvertisementRepo advertisementRepo;
   final FetchStoredEpisodesRepo fetchStoredEpisodesRepo;
   final FetchStoredEpisodeFileRepo fetchStoredEpisodeFileRepo;
+  final FetchInfiniteBooksRepo fetchInfiniteBooksRepo;
+  final FeedbackRepo feedbackRepo;
+  final CommentsRepository commentsRepository;
+
+  final SearchDownBooksRepo searchDownBooksRepo;
 
   const MyApp({
     Key? key,
@@ -94,6 +105,10 @@ class MyApp extends StatefulWidget {
     required this.advertisementRepo,
     required this.fetchStoredEpisodeFileRepo,
     required this.fetchStoredEpisodesRepo,
+    required this.fetchInfiniteBooksRepo,
+    required this.feedbackRepo,
+    required this.commentsRepository,
+    required this.searchDownBooksRepo,
   }) : super(key: key);
   @override
   _MyAppState createState() => _MyAppState();
@@ -111,9 +126,10 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (context) => ThemeProvider(),
+          create: (context) => localTheme.ThemeProvider(),
           builder: (context, _) {
-            final themeProvider = Provider.of<ThemeProvider>(context);
+            final themeProvider =
+                Provider.of<localTheme.ThemeProvider>(context);
 
             return MultiBlocProvider(
               providers: [
@@ -166,7 +182,7 @@ class _MyAppState extends State<MyApp> {
                   lazy: false,
                   create: (context) => CheckFirstTimeBloc()
                     ..add(
-                      CheckFirstTimeEvent.checkFirstTime,
+                      CheckFirstTime(),
                     ),
                 ),
                 BlocProvider(
@@ -184,8 +200,11 @@ class _MyAppState extends State<MyApp> {
                 ),
                 BlocProvider(create: (context) => OtpBloc()),
                 BlocProvider(
-                    create: (context) =>
-                        PodcastBloc()..add(FetchPodcasts(page: 1))),
+                  create: (context) => PodcastBloc()
+                    ..add(
+                      FetchPodcasts(page: 1),
+                    ),
+                ),
                 BlocProvider(
                   create: (context) => FetchChaptersBloc(
                     fetchChaptersRepo: widget.fetchChaptersRepo,
@@ -214,9 +233,7 @@ class _MyAppState extends State<MyApp> {
                 BlocProvider(
                   create: (context) => PaymentBloc(
                     amolePaymentRepo: widget.amolePaymentRepo,
-                  )
-                    ..add(FetchPlans())
-                    ..add(CheckSubscription(isEbook: false)),
+                  ),
                 ),
                 BlocProvider(
                   create: (context) => AdvertisementBloc(
@@ -238,6 +255,25 @@ class _MyAppState extends State<MyApp> {
                     fetchStoredEpisodeFileRepo:
                         widget.fetchStoredEpisodeFileRepo,
                   ),
+                ),
+                BlocProvider(
+                  create: (context) => FetchInfiniteBooksBloc(
+                    fetchInfiniteBooksRepo: widget.fetchInfiniteBooksRepo,
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) => FeedbackBloc(
+                    feedbackRepo: widget.feedbackRepo,
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) => CommentsBloc(
+                    commentsRepository: widget.commentsRepository,
+                  ),
+                ),
+                BlocProvider(
+                  create: (context) =>
+                      SearchDownloadedBookBloc(widget.searchDownBooksRepo),
                 ),
               ],
               child: MaterialApp(

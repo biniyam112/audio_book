@@ -1,5 +1,6 @@
 import 'package:audio_books/feature/author/bloc/author_bloc.dart';
 import 'package:audio_books/feature/author/bloc/author_event.dart';
+
 import 'package:audio_books/feature/fetch_chapters/bloc/fetch_chapters_bloc.dart';
 import 'package:audio_books/feature/fetch_chapters/bloc/fetch_chapters_event.dart';
 import 'package:audio_books/models/book.dart';

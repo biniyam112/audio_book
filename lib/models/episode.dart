@@ -14,6 +14,6 @@ class Episode {
         chapterTitle: json['title'],
         bookTitle: json['book'],
         fileUrl: Uri.http('www.marakigebeya.com.et', json['path']).toString(),
-        length: json['length'],
+        length: json['length'] ?? "0:00",
       );
 }

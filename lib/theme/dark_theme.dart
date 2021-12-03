@@ -29,7 +29,7 @@ ThemeData darkTheme = ThemeData(
   ),
   appBarTheme: AppBarTheme(
     backgroundColor: Colors.black,
-    elevation: 0,
+    elevation: 4,
     centerTitle: true,
     titleTextStyle: TextStyle(
       color: Colors.white,

@@ -1,4 +1,6 @@
 import 'package:audio_books/models/book.dart';
+import 'package:audio_books/models/models.dart';
+import 'package:audio_books/services/audio/service_locator.dart';
 import 'package:audio_books/theme/theme_colors.dart';
 import 'package:audio_books/theme/theme_provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -17,6 +19,15 @@ class FeaturedBooksTile extends StatelessWidget {
   }) : super(key: key);
   final Book book;
 
+  String _displayMoney() {
+    if (book.priceEtb == 0) {
+      return 'Free';
+    }
+    var user = getIt.get<User>();
+    bool isFromEth = user.countryCode == '+251';
+    return isFromEth ? '${book.priceEtb} ETB' : '${book.priceUSD} USD';
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
@@ -30,8 +41,8 @@ class FeaturedBooksTile extends StatelessWidget {
         );
       },
       child: Container(
-        height: getProportionateScreenHeight(280),
-        width: getProportionateScreenWidth(160),
+        height: 280,
+        width: 200,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: isDarkMode ? Colors.black : Colors.white,
@@ -127,6 +138,8 @@ class FeaturedBooksTile extends StatelessWidget {
                       Spacer(flex: 2),
                       Text(
                         '${book.title}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                         style: Theme.of(context).textTheme.headline6!.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
@@ -199,7 +212,7 @@ class FeaturedBooksTile extends StatelessWidget {
                           ),
                         ],
                       ),
-                      Spacer(),
+                      Spacer(flex: 2),
                       Row(
                         children: [
                           Icon(
@@ -212,9 +225,17 @@ class FeaturedBooksTile extends StatelessWidget {
                             maxLines: 1,
                             style: Theme.of(context).textTheme.headline6,
                           ),
+                          Spacer(),
+                          Text(
+                            _displayMoney(),
+                            style:
+                                Theme.of(context).textTheme.headline6!.copyWith(
+                                      color: Colors.blueGrey[800],
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                          ),
                         ],
                       ),
-                      SizedBox(height: getProportionateScreenHeight(4)),
                     ],
                   ),
                 ),

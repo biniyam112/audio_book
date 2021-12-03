@@ -1,3 +1,4 @@
+import 'package:audio_books/screens/terms_and_conditions/terms_and_conditions.dart';
 import 'package:flutter/material.dart';
 
 import '../../../sizeConfig.dart';
@@ -38,6 +39,23 @@ class Body extends StatelessWidget {
                         color: Colors.black.withOpacity(.7),
                       ),
                   textAlign: TextAlign.center,
+                ),
+              ),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, TermsAndConditions.pageRoute);
+                  },
+                  child: Text(
+                    'Terms and Conditions',
+                    style: Theme.of(context).textTheme.headline5!.copyWith(
+                          decoration: TextDecoration.underline,
+                          decorationThickness: 2,
+                          decorationColor: Colors.indigo,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.indigo,
+                        ),
+                  ),
                 ),
               ),
               SizedBox(height: getProportionateScreenHeight(4)),

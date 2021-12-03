@@ -1,9 +1,12 @@
+import 'package:audio_books/feature/store_book/bloc/store_book_bloc.dart';
+import 'package:audio_books/feature/store_book/bloc/store_book_event.dart';
 import 'package:audio_books/models/episode.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/audioplayer/audio_player.dart';
 import 'package:audio_books/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 import '../../../sizeConfig.dart';
@@ -14,10 +17,12 @@ class EpisodeTile extends StatelessWidget {
     required this.chapterNumber,
     required this.episode,
     required this.book,
+    this.isPaidFor = false,
   }) : super(key: key);
   final Book book;
   final Episode episode;
   final int chapterNumber;
+  final bool isPaidFor;
 
   @override
   Widget build(BuildContext context) {
@@ -27,88 +32,121 @@ class EpisodeTile extends StatelessWidget {
         horizontal: getProportionateScreenWidth(10),
         vertical: getProportionateScreenHeight(10),
       ),
-      child: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return AudioPlayerScreen(
-                  isFile: false,
-                  book: book,
-                  episodes: [episode],
-                );
-              },
-            ),
-          );
-        },
-        child: Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: isDarkMode ? Colors.black : Colors.white,
+      child: Column(
+        children: [
+          InkWell(
+            splashColor: isDarkMode ? Colors.white10 : Colors.black12,
             borderRadius: BorderRadius.circular(
               getProportionateScreenWidth(10),
             ),
-            boxShadow: [
-              BoxShadow(
-                offset: Offset(0, 4),
-                color: isDarkMode
-                    ? Darktheme.shadowColor.withOpacity(.06)
-                    : LightTheme.shadowColor.withOpacity(.06),
-                spreadRadius: .4,
-                blurRadius: 6,
+            onTap: isPaidFor
+                ? () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return AudioPlayerScreen(
+                            isFile: false,
+                            book: book,
+                            episodes: [episode],
+                          );
+                        },
+                      ),
+                    );
+                  }
+                : () {},
+            child: Container(
+              width: double.infinity,
+              padding: EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: isDarkMode ? Colors.black : Colors.white,
+                borderRadius: BorderRadius.circular(
+                  getProportionateScreenWidth(10),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    offset: Offset(0, 4),
+                    color: isDarkMode
+                        ? Darktheme.shadowColor.withOpacity(.06)
+                        : LightTheme.shadowColor.withOpacity(.06),
+                    spreadRadius: .4,
+                    blurRadius: 6,
+                  ),
+                  BoxShadow(
+                    color: isDarkMode
+                        ? Darktheme.shadowColor.withOpacity(.06)
+                        : LightTheme.shadowColor.withOpacity(.06),
+                    spreadRadius: .4,
+                    blurRadius: 4,
+                  ),
+                ],
               ),
-              BoxShadow(
-                color: isDarkMode
-                    ? Darktheme.shadowColor.withOpacity(.06)
-                    : LightTheme.shadowColor.withOpacity(.06),
-                spreadRadius: .4,
-                blurRadius: 4,
-              ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                flex: 10,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Episode $chapterNumber',
-                      style: Theme.of(context).textTheme.headline6!.copyWith(
-                            fontWeight: FontWeight.w600,
-                          ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    flex: 10,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Episode $chapterNumber',
+                          style:
+                              Theme.of(context).textTheme.headline6!.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                        ),
+                        SizedBox(height: getProportionateScreenHeight(4)),
+                        Text(
+                          episode.chapterTitle,
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      ],
                     ),
-                    SizedBox(height: getProportionateScreenHeight(4)),
-                    Text(
-                      episode.chapterTitle,
-                      style: Theme.of(context).textTheme.headline6,
+                  ),
+                  Spacer(flex: 2),
+                  Text(
+                    episode.length,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
                     ),
-                  ],
-                ),
+                  ),
+                  Spacer(),
+                  Padding(
+                    padding: EdgeInsets.only(left: 3),
+                    child: Icon(
+                      isPaidFor
+                          ? CupertinoIcons.play_fill
+                          : CupertinoIcons.lock,
+                      size: 20,
+                      color:
+                          isDarkMode ? Colors.grey : LightTheme.secondaryColor,
+                    ),
+                  ),
+                ],
               ),
-              Spacer(flex: 2),
-              Text(
-                episode.length,
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-              Spacer(),
-              Padding(
-                padding: EdgeInsets.only(left: 3),
-                child: Icon(
-                  CupertinoIcons.play_fill,
-                  size: 20,
-                  color: isDarkMode ? Colors.grey : LightTheme.secondaryColor,
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          TextButton(
+            onPressed: isPaidFor
+                ? () {
+                    BlocProvider.of<StoreBookBloc>(context).add(
+                      StoreAudioBookEvent(book: book, episode: episode),
+                    );
+                  }
+                : null,
+            child: Row(
+              children: [
+                Icon(Icons.download),
+                horizontalSpacing(8),
+                Text(
+                  'Download',
+                  style: Theme.of(context).textTheme.headline5!.copyWith(),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

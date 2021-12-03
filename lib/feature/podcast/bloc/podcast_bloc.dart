@@ -14,6 +14,7 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
 
   PodcastBloc()
       : _podcastRepository = getIt<PodcastRepository>(),
+<<<<<<< HEAD
         super(PodcastInitState());
 
   @override
@@ -25,21 +26,28 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
     if (event is FetchPodcastEpisodes)
       yield* _mapFetchPodcastEpisodesToState(event);
     if (event is UnsubscribePodcast) yield* _mapUnsubscribeEventToState(event);
+=======
+        super(PodcastInitState()) {
+    on<FetchPodcasts>(_mapFetchPodcastEventToState);
+    on<SubscribePodcast>(_mapSubscribeForPodcast);
+    on<FetchSubscribedPodcasts>(_mapFetchSubscribedPodcastsToState);
+    on<FetchPodcastEpisodes>(_mapFetchPodcastEpisodesToState);
+>>>>>>> c6c347589f4b3cfc7de52744e0b33bd455db65ff
   }
 
-  Stream<PodcastState> _mapFetchPodcastEventToState(
-      FetchPodcasts event) async* {
-    yield PodcastInProgress();
+  Future<void> _mapFetchPodcastEventToState(
+      FetchPodcasts event, Emitter<PodcastState> emitter) async {
+    emitter(PodcastInProgress());
     podcastPage = event.page;
     try {
       final apiDataResponse = await _podcastRepository.getPodcasts(event.page);
       print(apiDataResponse);
 
       if (apiDataResponse.items == null) {
-        print('**********************PODCAST FAILURE**************');
-        yield PodcastFailure();
+        print('PODCAST FAILURE');
+        emitter(PodcastFailure());
       } else {
-        print('************************PODCAST SUCCESS**************');
+        print('PODCAST SUCCESS');
         final items = apiDataResponse.items as List;
         print(items);
         // APIPodcast pod=APIPodcast()
@@ -48,34 +56,35 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
 
         allPodcasts.addAll(podcasts.where(
             (podcast) => allPodcasts.every((pdcst) => pdcst.id != podcast.id)));
-        yield PodcastLoadSuccess(podcasts: podcasts);
+        emitter(PodcastLoadSuccess(podcasts: podcasts));
       }
     } catch (e) {
-      print('**********************PODCAST FAILURE************** $e');
-      yield PodcastFailure();
+      print('PODCAST FAILURE $e');
+      emitter(PodcastFailure());
     }
   }
 
-  Stream<PodcastState> _mapSubscribeForPodcast(SubscribePodcast event) async* {
-    yield PodcastInProgress();
+  Future<void> _mapSubscribeForPodcast(
+      SubscribePodcast event, Emitter<PodcastState> emitter) async {
+    emitter(PodcastInProgress());
 
     try {
       final apiSubscribePodcast =
           await _podcastRepository.subsribeForPodcast(event.podcastId);
 
       if (apiSubscribePodcast.message != null) {
-        yield PodcastFailure();
+        emitter(PodcastFailure());
       } else {
-        yield PodcastSuccess();
+        emitter(PodcastSuccess());
       }
     } catch (e) {
-      yield PodcastFailure();
+      emitter(PodcastFailure());
     }
   }
 
-  Stream<PodcastState> _mapFetchSubscribedPodcastsToState(
-      FetchSubscribedPodcasts event) async* {
-    yield PodcastSubscribeProgress();
+  Future<void> _mapFetchSubscribedPodcastsToState(
+      FetchSubscribedPodcasts event, Emitter<PodcastState> emitter) async {
+    emitter(PodcastSubscribeProgress());
     podcastPage = event.page;
     try {
       final apiDataResponse =
@@ -83,9 +92,9 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
       print(apiDataResponse);
 
       if (apiDataResponse.items == null) {
-        yield PodcastSubscribeFailure();
+        emitter(PodcastSubscribeFailure());
       } else {
-        // print('************************PODCAST SUCCESS**************');
+        // print('PODCAST SUCCESS');
         final items = apiDataResponse.items as List;
         print(items);
         // APIPodcast pod=APIPodcast()
@@ -94,31 +103,42 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
         subscribedPodcasats = [];
         subscribedPodcasats.addAll(podcasts.where((podcast) =>
             subscribedPodcasats.every((pdcst) => pdcst.id != podcast.id)));
-        yield PodcastLoadSuccess(podcasts: podcasts);
+        emitter(PodcastLoadSuccess(podcasts: podcasts));
       }
     } catch (e) {
-      print('**********************PODCAST FAILURE************** $e');
-      yield PodcastFailure();
+      print('PODCAST FAILURE $e');
+      emitter(PodcastFailure());
     }
   }
 
+<<<<<<< HEAD
   Stream<PodcastState> _mapFetchPodcastEpisodesToState(
       FetchPodcastEpisodes event) async* {
     yield PodcastEpisodeFetchInProgress();
+=======
+  Future<void> _mapFetchPodcastEpisodesToState(
+      FetchPodcastEpisodes event, Emitter<PodcastState> emitter) async {
+    emitter(PodcastInProgress());
+>>>>>>> c6c347589f4b3cfc7de52744e0b33bd455db65ff
     try {
       final apiDataResponse =
           await _podcastRepository.getEpisodes(event.podcastId);
       if (apiDataResponse.items == null) {
+<<<<<<< HEAD
         yield PodcastEpisodeFetchFailure();
+=======
+        emitter(PodcastFailure());
+>>>>>>> c6c347589f4b3cfc7de52744e0b33bd455db65ff
       } else {
         final items = apiDataResponse.items as List;
         final apiPodcastEpisodes = items
             .map((podcastEpisode) => APIPodcastEpisode.fromJson(podcastEpisode))
             .toList();
         podcastEpisodes = apiPodcastEpisodes;
-        yield PodcastEpisodeLoadSuccess(podcastEpisodes: apiPodcastEpisodes);
+        emitter(PodcastEpisodeLoadSuccess(podcastEpisodes: apiPodcastEpisodes));
       }
     } catch (e) {
+<<<<<<< HEAD
       print('**********************PODCAST FAILURE************** $e');
       yield PodcastEpisodeFetchFailure();
     }
@@ -140,6 +160,10 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
     } catch (e) {
       print('**********************PODCAST FAILURE************** $e');
       yield PodcastUnsubscirbeFailure();
+=======
+      print('PODCAST FAILURE $e');
+      emitter(PodcastFailure());
+>>>>>>> c6c347589f4b3cfc7de52744e0b33bd455db65ff
     }
   }
 }

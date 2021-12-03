@@ -39,8 +39,7 @@ class _SignUpFormState extends State<SignUpForm> {
       if (authState is UserAuthorizedState) {
         Navigator.popAndPushNamed(context, TabViewPage.pageRoute);
         if (authState is UserAuthorizationFailedState) {
-          BlocProvider.of<AuthorizeUserBloc>(context)
-              .add(AuthoriseUserEvent.authorizeUser);
+          BlocProvider.of<AuthorizeUserBloc>(context).add(AuthoriseUser());
         }
       }
     }, builder: (context, authState) {
@@ -51,8 +50,7 @@ class _SignUpFormState extends State<SignUpForm> {
             errors.remove(kConnectionError);
           }
           if (state is UserRegisteredState) {
-            BlocProvider.of<AuthorizeUserBloc>(context)
-                .add(AuthoriseUserEvent.authorizeUser);
+            BlocProvider.of<AuthorizeUserBloc>(context).add(AuthoriseUser());
           }
           if (state is RegsiteringUserFailedState) {
             setState(() {

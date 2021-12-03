@@ -6,8 +6,10 @@ import 'package:audio_books/feature/authorize_user/data_provider/authorize_user_
 import 'package:audio_books/feature/authorize_user/repository/authorize_user_repo.dart';
 import 'package:audio_books/feature/categories/dataprovider/category_dataprovider.dart';
 import 'package:audio_books/feature/categories/repository/category_repo.dart';
+import 'package:audio_books/feature/comments/repository/comments_repository.dart';
 import 'package:audio_books/feature/featured_books/dataprovider/featured_books_dataprovider.dart';
 import 'package:audio_books/feature/featured_books/repository/featured_books_repository.dart';
+import 'package:audio_books/feature/feedback/repository/feedback_repository.dart';
 import 'package:audio_books/feature/fetch_advertisement/repository/advertisement_repo.dart';
 import 'package:audio_books/feature/fetch_books/data_provider/fetch_books_dataprovider.dart';
 import 'package:audio_books/feature/fetch_books/repository/fetch_books_repo.dart';
@@ -17,6 +19,8 @@ import 'package:audio_books/feature/fetch_chapters/dataprovider/fetch_chapters_d
 import 'package:audio_books/feature/fetch_chapters/repository/fetch_chapters_repo.dart';
 import 'package:audio_books/feature/fetch_downloaded_book/dataprovider/fetch_down_books_dataprovider.dart';
 import 'package:audio_books/feature/fetch_downloaded_book/repository/fetch_down_books_repository.dart';
+import 'package:audio_books/feature/fetch_infinite_books/dataprovider/fetch_infinite_books_dataprovider.dart';
+import 'package:audio_books/feature/fetch_infinite_books/repository/fetch_infinite_books_repo.dart';
 import 'package:audio_books/feature/initialize_database/data_provider/init_db_dataProvider.dart';
 import 'package:audio_books/feature/initialize_database/repository/init_db_repository.dart';
 import 'package:audio_books/feature/payment/dataprovider/amole_dataprovider.dart';
@@ -25,6 +29,8 @@ import 'package:audio_books/feature/register_user/data_provider/register_user_da
 import 'package:audio_books/feature/register_user/repository/register_user_repository.dart';
 import 'package:audio_books/feature/request_hard_copy/dataprovider/request_hard_copy_dataprovider.dart';
 import 'package:audio_books/feature/request_hard_copy/repository/request_hard_copy_repository.dart';
+import 'package:audio_books/feature/search_downloaded_books/dataprovider/search_downloaded_books_dataprovider.dart';
+import 'package:audio_books/feature/search_downloaded_books/repository/search_downloaded_books_repository.dart';
 import 'package:audio_books/models/user.dart';
 import 'package:audio_books/services/dataBase/database_handler.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -38,6 +44,8 @@ import 'package:http/http.dart' as http;
 
 import 'bloc_observer.dart';
 
+import 'feature/comments/dataprovider/comments_dataProvider.dart';
+import 'feature/feedback/dataProvider/feedback_dataprovider.dart';
 import 'feature/fetch_advertisement/data_provider/advertisement_data_provider.dart';
 import 'feature/store_book/dataprovider/store_book_data_provider.dart';
 import 'feature/store_book/repository/store_book_repository.dart';
@@ -52,7 +60,7 @@ void main() async {
   Hive.registerAdapter(UserAdapter());
   await Hive.openBox<User>('user');
   await Firebase.initializeApp();
-  Bloc.observer = SimpleBlocObserver();
+
   DataBaseHandler dataBaseHandler = DataBaseHandler();
   final StoreBookRepo storeBookRepo = StoreBookRepo(
     storeBookDP: StoreBookDP(
@@ -145,31 +153,58 @@ void main() async {
       dataBaseHandler: dataBaseHandler,
     ),
   );
-  await setupServiceLocator();
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]).then(
-    (value) => runApp(
-      MyApp(
-        storeBookRepo: storeBookRepo,
-        fetchStoredBooksRepo: fetchStoredBooksRepo,
-        fetchStoredBookFileRepo: fetchStoredBookFileRepo,
-        registerUserRepo: registerUserRepo,
-        dataBaseHandler: dataBaseHandler,
-        initDBRepo: initDBRepo,
-        authorizeUserRepo: authorizeUserRepo,
-        fetchBooksRepo: fetchBooksRepo,
-        fetchBooksByCateRepo: fetchBooksByCateRepo,
-        fetchChaptersRepo: fetchChaptersRepo,
-        categoryRepo: categoryRepo,
-        featuredBooksRepo: featuredBooksRepo,
-        authorRepo: authorRepo,
-        requestHardCopyRepo: requestHardCopyRepo,
-        amolePaymentRepo: amolePaymentRepo,
-        advertisementRepo: advertisementRepo,
-        fetchStoredEpisodeFileRepo: fetchStoredEpisodeFileRepo,
-        fetchStoredEpisodesRepo: fetchStoredEpisodesRepo,
-      ),
+  final FetchInfiniteBooksRepo fetchInfiniteBooksRepo = FetchInfiniteBooksRepo(
+    fetchInfiniteBooksDP: FetchInfiniteBooksDP(
+      client: http.Client(),
     ),
   );
+  final FeedbackRepo feedbackRepo = FeedbackRepo(
+    feedBackDP: FeedBackDP(
+      client: http.Client(),
+    ),
+  );
+  final CommentsRepository commentsRepository = CommentsRepository(
+    commentsDataProvider: CommentsDataProvider(
+      client: http.Client(),
+    ),
+  );
+  final SearchDownBooksRepo searchDownBooksRepo = SearchDownBooksRepo(
+      searchDownBooksDP: SearchDownBooksDP(
+    dataBaseHandler: dataBaseHandler,
+  ));
+  await setupServiceLocator();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((value) => BlocOverrides.runZoned(
+            () {
+              runApp(
+                MyApp(
+                  storeBookRepo: storeBookRepo,
+                  fetchStoredBooksRepo: fetchStoredBooksRepo,
+                  fetchStoredBookFileRepo: fetchStoredBookFileRepo,
+                  registerUserRepo: registerUserRepo,
+                  dataBaseHandler: dataBaseHandler,
+                  initDBRepo: initDBRepo,
+                  authorizeUserRepo: authorizeUserRepo,
+                  fetchBooksRepo: fetchBooksRepo,
+                  fetchBooksByCateRepo: fetchBooksByCateRepo,
+                  fetchChaptersRepo: fetchChaptersRepo,
+                  categoryRepo: categoryRepo,
+                  featuredBooksRepo: featuredBooksRepo,
+                  authorRepo: authorRepo,
+                  requestHardCopyRepo: requestHardCopyRepo,
+                  amolePaymentRepo: amolePaymentRepo,
+                  advertisementRepo: advertisementRepo,
+                  fetchStoredEpisodeFileRepo: fetchStoredEpisodeFileRepo,
+                  fetchStoredEpisodesRepo: fetchStoredEpisodesRepo,
+                  fetchInfiniteBooksRepo: fetchInfiniteBooksRepo,
+                  feedbackRepo: feedbackRepo,
+                  commentsRepository: commentsRepository,
+                  searchDownBooksRepo: searchDownBooksRepo,
+                ),
+              );
+            },
+            blocObserver: SimpleBlocObserver(),
+          ));
 }
 
 class MyHttpOverrides extends HttpOverrides {

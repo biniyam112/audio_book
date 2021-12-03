@@ -1,6 +1,6 @@
 import 'package:audio_books/feature/author/bloc/author_bloc.dart';
 import 'package:audio_books/feature/author/bloc/author_state.dart';
-import 'package:audio_books/screens/categoryallbooks/category_all_books.dart';
+import 'package:audio_books/screens/infinite_books_list/infinite_books_list.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
 import 'package:audio_books/theme/theme_provider.dart';
@@ -15,7 +15,7 @@ class AuthorDisplay extends StatelessWidget {
   const AuthorDisplay({
     Key? key,
     required this.authorName,
-    this.radius = 30,
+    this.radius = 26,
   }) : super(key: key);
   final String authorName;
   final double radius;
@@ -32,7 +32,7 @@ class AuthorDisplay extends StatelessWidget {
               context,
               MaterialPageRoute(
                 builder: (context) {
-                  return CategoryAllBooks(category: '$authorName');
+                  return InfiniteBooksList(title: '$authorName');
                 },
               ),
             );
@@ -45,6 +45,7 @@ class AuthorDisplay extends StatelessWidget {
                   radius: radius,
                   foregroundImage: CachedNetworkImageProvider(
                     '${authorState.author.authorImage}',
+                    errorListener: null,
                   ),
                 ),
               if (authorState is AuthorsFetchingFailedState)

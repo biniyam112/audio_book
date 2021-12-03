@@ -5,6 +5,7 @@ import 'package:audio_books/screens/onboarding/onboarding.dart';
 import 'package:audio_books/screens/otp/otp.dart';
 import 'package:audio_books/screens/phone_registration/phone_registration.dart';
 import 'package:audio_books/screens/signup/signup_screen.dart';
+import 'package:audio_books/screens/terms_and_conditions/terms_and_conditions.dart';
 import 'package:flutter/material.dart';
 
 Map<String, Widget Function(BuildContext context)> routes() {
@@ -16,5 +17,6 @@ Map<String, Widget Function(BuildContext context)> routes() {
     OTPScreen.pageRoute: (context) => OTPScreen(),
     LoginScreen.pageRoute: (context) => LoginScreen(),
     SignupScreen.pageRoute: (context) => SignupScreen(),
+    TermsAndConditions.pageRoute: (conext) => TermsAndConditions(),
   };
 }

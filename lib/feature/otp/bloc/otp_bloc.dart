@@ -13,37 +13,41 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
   StreamSubscription? subscription;
   OtpBloc()
       : _otpRepository = getIt<OtpRepository>(),
-        super(OtpInit());
-
-  @override
-  Stream<OtpState> mapEventToState(event) async* {
-    if (event is VerifyOtp) yield* _mapVerifyOtpToState(event);
-    if (event is SendOtp) yield* _mapSendOtpToState(event);
-    if (event is OtpSendEvent) yield OtpSent(phoneNumber: event.phoneNumber);
-    if (event is OtpExceptionEvent) yield OtpFailure();
+        super(OtpInit()) {
+    on<VerifyOtp>(_mapVerifyOtpToState);
+    on<SendOtp>(_mapSendOtpToState);
+    on((OtpSendEvent event, emit) {
+      emit(OtpSent(phoneNumber: event.phoneNumber));
+    });
+    on((OtpExceptionEvent event, emit) {
+      emit(OtpFailure());
+    });
   }
 
-  Stream<OtpState> _mapVerifyOtpToState(VerifyOtp event) async* {
-    yield OtpInProgress();
-
+  Future<void> _mapVerifyOtpToState(
+    VerifyOtp event,
+    Emitter<OtpState> emitter,
+  ) async {
+    emitter(OtpInProgress());
     try {
       if (this.verificationId != null) {
         final authCredential =
             await _otpRepository.verifyCode(this.verificationId!, event.otp);
         if (authCredential.user != null) {
           print(authCredential.user);
-          yield OtpVerified();
+          emitter(OtpVerified());
         } else {
-          yield OtpValidationError();
+          emitter(OtpValidationError());
         }
       }
     } catch (e) {
-      yield OtpValidationError();
+      emitter(OtpValidationError());
     }
   }
 
-  Stream<OtpState> _mapSendOtpToState(SendOtp event) async* {
-    yield OtpInProgress();
+  Future<void> _mapSendOtpToState(
+      SendOtp event, Emitter<OtpState> emitter) async {
+    emitter(OtpInProgress());
     subscription = _sendOtp(event.phoneNumber).listen((event) {
       add(event);
     });
