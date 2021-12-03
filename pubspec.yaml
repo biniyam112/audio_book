@@ -59,11 +59,9 @@ dependencies:
   carousel_slider: ^4.0.0
   uuid: ^3.0.5
   palette_generator: ^0.3.2
-<<<<<<< HEAD
   package_info_plus: ^1.3.0
-=======
   animated_theme_switcher: ^2.0.1
->>>>>>> f83e56f44091346744173685e5c360b378dae3c0
+  flash: ^2.0.3
 
 dev_dependencies:
   flutter_test:

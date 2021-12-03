@@ -9,11 +9,17 @@ abstract class PodcastState extends Equatable {
 
 class PodcastInitState extends PodcastState {}
 
+class PodcastSubscribeProgress extends PodcastState {}
+
+class PodcastSubscribeFailure extends PodcastState {}
+
+class PodcastUnsubscirbeInProgress extends PodcastState {}
+
+class PodcastUnsubscirbeFailure extends PodcastState {}
+
+class PodcastUnsubscribedSuccess extends PodcastState {}
+
 class PodcastInProgress extends PodcastState {}
-
-class PodcastSubscribeProgress extends PodcastState{}
-
-class PodcastSubscribeFailure extends PodcastState{}
 
 class PodcastFailure extends PodcastState {}
 
@@ -27,6 +33,10 @@ class PodcastLoadSuccess extends PodcastState {
   @override
   List<Object?> get props => [this.podcasts];
 }
+
+class PodcastEpisodeFetchFailure extends PodcastState {}
+
+class PodcastEpisodeFetchInProgress extends PodcastState {}
 
 class PodcastEpisodeLoadSuccess extends PodcastState {
   final List<APIPodcastEpisode> podcastEpisodes;

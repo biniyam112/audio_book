@@ -24,6 +24,7 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
       yield* _mapFetchSubscribedPodcastsToState(event);
     if (event is FetchPodcastEpisodes)
       yield* _mapFetchPodcastEpisodesToState(event);
+    if (event is UnsubscribePodcast) yield* _mapUnsubscribeEventToState(event);
   }
 
   Stream<PodcastState> _mapFetchPodcastEventToState(
@@ -90,6 +91,7 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
         // APIPodcast pod=APIPodcast()
         final podcasts =
             items.map((podcast) => APIPodcast.fromJson(podcast)).toList();
+        subscribedPodcasats = [];
         subscribedPodcasats.addAll(podcasts.where((podcast) =>
             subscribedPodcasats.every((pdcst) => pdcst.id != podcast.id)));
         yield PodcastLoadSuccess(podcasts: podcasts);
@@ -102,12 +104,12 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
 
   Stream<PodcastState> _mapFetchPodcastEpisodesToState(
       FetchPodcastEpisodes event) async* {
-    yield PodcastInProgress();
+    yield PodcastEpisodeFetchInProgress();
     try {
       final apiDataResponse =
           await _podcastRepository.getEpisodes(event.podcastId);
       if (apiDataResponse.items == null) {
-        yield PodcastFailure();
+        yield PodcastEpisodeFetchFailure();
       } else {
         final items = apiDataResponse.items as List;
         final apiPodcastEpisodes = items
@@ -118,7 +120,26 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
       }
     } catch (e) {
       print('**********************PODCAST FAILURE************** $e');
-      yield PodcastFailure();
+      yield PodcastEpisodeFetchFailure();
+    }
+  }
+
+  Stream<PodcastState> _mapUnsubscribeEventToState(
+      UnsubscribePodcast event) async* {
+    yield PodcastUnsubscirbeInProgress();
+    try {
+      final apiDataResponse =
+          await _podcastRepository.unsubscribePodcast(event.subscriptionId);
+
+      if (apiDataResponse.items == null) {
+        print('**********************PODCAST FAILURE************** ');
+        yield PodcastUnsubscirbeFailure();
+      } else {
+        yield PodcastUnsubscribedSuccess();
+      }
+    } catch (e) {
+      print('**********************PODCAST FAILURE************** $e');
+      yield PodcastUnsubscirbeFailure();
     }
   }
 }

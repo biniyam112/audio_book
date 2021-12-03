@@ -107,4 +107,31 @@ class PodcastDataProvider {
           currentPage: 0, items: null, totalItems: 0, totalPages: 0);
     }
   }
+
+  Future<APIPagedData> unsubscribePodcast(String subscriptionId) async {
+    try {
+      final user = HiveBoxes.getUserBox().get(HiveBoxes.userKey);
+      final token = user!.token;
+      final unsubscribePodcastUrl =
+          Uri.parse("$unsubscribePodcastEndpoint?subscriptionId=$subscriptionId");
+
+      final response = await _httpClient
+          .post(unsubscribePodcastUrl, headers: {'Authorization': token!});
+
+      if (response.statusCode == 200) {
+        return APIPagedData(
+            currentPage: 0,
+            items: [response.body],
+            totalItems: 0,
+            totalPages: 0);
+      }
+
+      return APIPagedData(
+          currentPage: 0, items: null, totalItems: 0, totalPages: 0);
+    } catch (e) {
+      print("PODCAST_UNSUBSCRIBE_ERROR***************$e");
+      return APIPagedData(
+          currentPage: 0, items: null, totalItems: 0, totalPages: 0);
+    }
+  }
 }

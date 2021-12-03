@@ -30,7 +30,7 @@ class PodcastCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     var isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
+    var isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -39,7 +39,10 @@ class PodcastCard extends StatelessWidget {
             builder: (context) {
               BlocProvider.of<PodcastBloc>(context)
                   .add(FetchPodcastEpisodes(podcastId: podcast.id));
-              return PodcastDetails(podcast: podcast);
+              return PodcastDetails(
+                podcast: podcast,
+                isSubscribed: isSubscribed,
+              );
             },
           ),
         );
@@ -62,9 +65,9 @@ class PodcastCard extends StatelessWidget {
           width: SizeConfig.screenWidth! * .5,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10),
-            color:  isDarkMode
-              ? Darktheme.containerColor
-              : LightTheme.backgroundColor,
+            color: isDarkMode
+                ? Darktheme.containerColor
+                : LightTheme.backgroundColor,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,6 +99,7 @@ class PodcastCard extends StatelessWidget {
                         style: Theme.of(context).textTheme.headline4,
                       ),
                       Spacer(),
+                      
                       Opacity(
                         opacity: .9,
                         child: Text(

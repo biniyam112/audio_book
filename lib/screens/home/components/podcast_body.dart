@@ -56,46 +56,53 @@ class PodcastBody extends StatelessWidget {
                               style: Theme.of(context).textTheme.headline4,
                             ),
                             verticalSpacing(4),
-                            PodcastBloc.subscribedPodcasats.length == 0
-                                ? Container(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical:
-                                            getProportionateScreenHeight(30)),
-                                    child: Center(
-                                      child: Text(
-                                          "You have No subscribed podcasts yet!"),
-                                    ),
-                                  )
-                                : SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        ...List.generate(
-                                          PodcastBloc
-                                              .subscribedPodcasats.length,
-                                          (index) {
-                                            return Container(
-                                              width:
-                                                  SizeConfig.screenWidth! * .47,
-                                              child: AspectRatio(
-                                                  aspectRatio: .8,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: PodcastCard(
-                                                        podcast: PodcastBloc
-                                                                .subscribedPodcasats[
-                                                            index]),
-                                                  )),
-                                            );
-                                          },
+                            BlocProvider.of<PodcastBloc>(context).state
+                                    is PodcastSubscribeFailure
+                                ? NoConnectionWidget()
+                                : PodcastBloc.subscribedPodcasats.length == 0
+                                    ? Container(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical:
+                                                getProportionateScreenHeight(
+                                                    30)),
+                                        child: Center(
+                                          child: Text(
+                                              "there is not Subscribed Podcast yet! "),
                                         ),
-                                      ],
-                                    ),
-                                  ),
+                                      )
+                                    : SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            ...List.generate(
+                                              PodcastBloc
+                                                  .subscribedPodcasats.length,
+                                              (index) {
+                                                return Container(
+                                                  width:
+                                                      SizeConfig.screenWidth! *
+                                                          .47,
+                                                  child: AspectRatio(
+                                                      aspectRatio: .8,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(8.0),
+                                                        child: PodcastCard(
+                                                          podcast: PodcastBloc
+                                                                  .subscribedPodcasats[
+                                                              index],
+                                                          isSubscribed: true,
+                                                        ),
+                                                      )),
+                                                );
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
                           ],
                         ),
                       ),
@@ -110,37 +117,45 @@ class PodcastBody extends StatelessWidget {
                               style: Theme.of(context).textTheme.headline4,
                             ),
                             verticalSpacing(4),
-                            PodcastBloc.allPodcasts.length == 0
+                            BlocProvider.of<PodcastBloc>(context).state
+                                    is PodcastFailure
                                 ? Container(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical:
-                                            getProportionateScreenHeight(40)),
-                                    child: Center(
-                                      child: Text(
-                                          "There is no podcasts added yet!"),
-                                    ),
+                                    child: NoConnectionWidget(),
+                                    height: getProportionateScreenHeight(30),
                                   )
-                                : GridView.builder(
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      childAspectRatio: .8,
-                                      crossAxisSpacing:
-                                          getProportionateScreenWidth(12),
-                                      mainAxisSpacing:
-                                          getProportionateScreenWidth(20),
-                                    ),
-                                    itemCount: PodcastBloc.allPodcasts.length,
-                                    padding: EdgeInsets.all(4),
-                                    shrinkWrap: true,
-                                    physics: BouncingScrollPhysics(
-                                        parent: BouncingScrollPhysics()),
-                                    itemBuilder: (context, index) {
-                                      return PodcastCard(
-                                          podcast:
-                                              PodcastBloc.allPodcasts[index]);
-                                    },
-                                  ),
+                                : PodcastBloc.allPodcasts.length == 0
+                                    ? Container(
+                                        padding: EdgeInsets.symmetric(
+                                            vertical:
+                                                getProportionateScreenHeight(
+                                                    40)),
+                                        child: Center(
+                                          child: Text(
+                                              "Failed to fetch podcasts"),
+                                        ),
+                                      )
+                                    : GridView.builder(
+                                        gridDelegate:
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                          crossAxisCount: 2,
+                                          childAspectRatio: .8,
+                                          crossAxisSpacing:
+                                              getProportionateScreenWidth(12),
+                                          mainAxisSpacing:
+                                              getProportionateScreenWidth(20),
+                                        ),
+                                        itemCount:
+                                            PodcastBloc.allPodcasts.length,
+                                        padding: EdgeInsets.all(4),
+                                        shrinkWrap: true,
+                                        physics: BouncingScrollPhysics(
+                                            parent: BouncingScrollPhysics()),
+                                        itemBuilder: (context, index) {
+                                          return PodcastCard(
+                                              podcast: PodcastBloc
+                                                  .allPodcasts[index]);
+                                        },
+                                      ),
                           ],
                         ),
                       ),

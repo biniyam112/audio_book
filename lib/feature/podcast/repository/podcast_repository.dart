@@ -32,4 +32,10 @@ class PodcastRepository {
 
     return podcastEpisodes;
   }
+
+  Future<APIPagedData> unsubscribePodcast(String subscriptionId) async {
+    final apiReponse =
+        await _podcastDataProvider.unsubscribePodcast(subscriptionId);
+    return apiReponse;
+  }
 }
