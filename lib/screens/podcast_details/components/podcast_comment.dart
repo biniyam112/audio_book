@@ -57,41 +57,36 @@ class PodcastComment extends StatelessWidget {
                       );
                     }
 
-                    if (state is PodcastCommentLoadSuccess) {
-                      return (podcastComments.length == 0)
-                          ? SizedBox(
-                              height: SizeConfig.screenHeight! * .3,
-                              child: Center(
-                                child: Text('No comments available'),
+                    return (podcastComments.length == 0)
+                        ? SizedBox(
+                            height: SizeConfig.screenHeight! * .3,
+                            child: Center(
+                              child: Text('No comments available'),
+                            ),
+                          )
+                        : Column(
+                            children: [
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: ClampingScrollPhysics(),
+                                itemCount: podcastComments.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal:
+                                            getProportionateScreenWidth(10)),
+                                    child: CommentCard(
+                                      content: podcastComments[index].content,
+                                      uploadDate:
+                                          podcastComments[index].commentDate,
+                                    ),
+                                  );
+                                },
                               ),
-                            )
-                          : Column(
-                              children: [
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: ClampingScrollPhysics(),
-                                  itemCount: podcastComments.length,
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal:
-                                              getProportionateScreenWidth(10)),
-                                      child: CommentCard(
-                                        content: podcastComments[index].content,
-                                        uploadDate:
-                                            podcastComments[index].commentDate,
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            );
-                    }
-                    return Container();
+                            ],
+                          );
                   },
-                  listener: (bloccontext, state) {
-                   
-                  },
+                  listener: (bloccontext, state) {},
                 ),
               ),
             ),

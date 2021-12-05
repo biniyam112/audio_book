@@ -2,6 +2,7 @@ import 'package:audio_books/feature/podcast/bloc/bloc.dart';
 import 'package:audio_books/feature/podcast/podcast.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
+import 'package:audio_books/services/hiveConfig/hive_config.dart';
 
 class PodcastCommentBloc
     extends Bloc<PodcastCommentEvent, PodcastCommentState> {
@@ -59,8 +60,14 @@ class PodcastCommentBloc
         emitter(PodcastCommentSubmitFailure());
       } else {
         print('PODCAST SUCCESS  ');
-        final items = apiDataResponse.items as List;
-
+        // final items = apiDataResponse.items as List;
+        final user = HiveBoxes.getUserBox().get(HiveBoxes.userKey);
+        APIPodcastComment podcastComment = APIPodcastComment(
+            id: '',
+            commentBy: '${user!.firstName} ${user.lastName}',
+            content: event.podcastPostModel.content,
+            commentDate: DateTime.now());
+        podcastComments.add(podcastComment);
         // APIPodcast pod=APIPodcast()
 
         emitter(PodcastCommentSubmittedSuccess());

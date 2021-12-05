@@ -26,8 +26,9 @@ class _PodcastCommentFieldState extends State<PodcastCommentField> {
         bool isDarkMode =
             Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
         if (state is PodcastCommentSubmittedSuccess) {
-          BlocProvider.of<PodcastCommentBloc>(context)
-              .add(FetchPodcastComments(podcastId: widget.podcastId));
+          _controller.text = '';
+          // BlocProvider.of<PodcastCommentBloc>(context)
+          //     .add(FetchPodcastComments(podcastId: widget.podcastId));
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               backgroundColor:
@@ -40,7 +41,7 @@ class _PodcastCommentFieldState extends State<PodcastCommentField> {
             ),
           );
         }
-      },  
+      },
       builder: (context, state) {
         return Padding(
           padding: EdgeInsets.symmetric(
@@ -55,6 +56,9 @@ class _PodcastCommentFieldState extends State<PodcastCommentField> {
                 child: InputFieldContainer(
                   child: TextFormField(
                     controller: _controller,
+                    onChanged: (value) {
+                      setState(() {});
+                    },
                     decoration: InputDecoration(
                       hintText: 'comment',
                       hintStyle: Theme.of(context).textTheme.headline5,
@@ -66,36 +70,80 @@ class _PodcastCommentFieldState extends State<PodcastCommentField> {
                 ),
               ),
               horizontalSpacing(10),
-              IconButton(
-                onPressed: (_controller.text.isNotEmpty)
-                    ? () {
-                        print("POST COMMENT");
-                        BlocProvider.of<PodcastCommentBloc>(context).add(
-                          PostPodcastComment(
-                            podcastPostModel: PodcastPostModel(
-                                content: _controller.text,
-                                podcastId: widget.podcastId),
-                          ),
-                        );
-                      }
-                    : () {
-                        print(_controller.text);
-                        print(_controller.text.isNotEmpty);
-                      },
-                icon: state is PodcastCommentSubmitInProgress
-                    ? CircularProgressIndicator(
-                        color: Colors.orange,
-                      )
-                    : Icon(
-                        Icons.send_rounded,
-                        size: 32,
+
+              state is PodcastCommentSubmitInProgress
+                  ? Center(
+                      child: CircularProgressIndicator(
                         color: Darktheme.primaryColor,
                       ),
-              ),
+                    )
+                  : ElevatedButton(
+                      style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all(
+                            Darktheme.primaryColor.withOpacity(.8),
+                          ),
+                          shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10))),
+                          padding: MaterialStateProperty.all(
+                              EdgeInsets.symmetric(vertical: 10))),
+                      onPressed: (_controller.text.isNotEmpty)
+                          ? () {
+                              print("PODCAST COMMENT CONTENT");
+                              BlocProvider.of<PodcastCommentBloc>(context).add(
+                                PostPodcastComment(
+                                  podcastPostModel: PodcastPostModel(
+                                      content: _controller.text,
+                                      podcastId: widget.podcastId),
+                                ),
+                              );
+                            }
+                          : null,
+                      child: Center(
+                        child: Icon(
+                          Icons.send_rounded,
+                          size: 28,
+                          color: Colors.white,
+                        ),
+                      ),
+                    )
+
+              // IconButton(
+              //   onPressed: (_controller.text.isNotEmpty)
+              //       ? () {
+              //           print("POST COMMENT");
+              //           BlocProvider.of<PodcastCommentBloc>(context).add(
+              //             PostPodcastComment(
+              //               podcastPostModel: PodcastPostModel(
+              //                   content: _controller.text,
+              //                   podcastId: widget.podcastId),
+              //             ),
+              //           );
+              //         }
+              //       : () {
+              //           print(_controller.text);
+              //           print(_controller.text.isNotEmpty);
+              //         },
+              //   icon: state is PodcastCommentSubmitInProgress
+              //       ? CircularProgressIndicator(
+              //           color: Colors.orange,
+              //         )
+              //       : Icon(
+              //           Icons.send_rounded,
+              //           size: 32,
+              //           color: Darktheme.primaryColor,
+              //         ),
+              // ),
             ],
           ),
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.clear();
+    super.dispose();
   }
 }
