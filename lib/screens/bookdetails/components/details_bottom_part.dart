@@ -1,5 +1,9 @@
 import 'package:audio_books/feature/comments/bloc/comments_bloc.dart';
 import 'package:audio_books/feature/comments/bloc/comments_event.dart';
+import 'package:audio_books/feature/fetch_chapters/bloc/fetch_chapters_bloc.dart';
+import 'package:audio_books/feature/fetch_chapters/bloc/fetch_chapters_event.dart';
+import 'package:audio_books/feature/payment/bloc/payment_bloc.dart';
+import 'package:audio_books/feature/payment/bloc/payment_event.dart';
 import 'package:audio_books/models/book.dart';
 import 'package:audio_books/theme/theme.dart';
 import 'package:flutter/cupertino.dart';
@@ -32,6 +36,10 @@ class DetailsBottomPartState extends State<DetailsBottomPart>
     super.initState();
     BlocProvider.of<CommentsBloc>(context)
         .add(FetchAllComments(itemId: widget.book.id));
+    BlocProvider.of<FetchChaptersBloc>(context)
+        .add(FetchChaptersEvent(book: widget.book));
+    BlocProvider.of<PaymentBloc>(context)
+        .add(CheckSubscription(isEbook: false));
     tabController = TabController(vsync: this, length: 3);
   }
 

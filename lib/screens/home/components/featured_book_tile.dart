@@ -41,8 +41,8 @@ class FeaturedBooksTile extends StatelessWidget {
         );
       },
       child: Container(
-        height: 280,
-        width: 200,
+        height: getProportionateScreenHeight(240),
+        width: 190,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: isDarkMode ? Colors.black : Colors.white,
@@ -71,7 +71,7 @@ class FeaturedBooksTile extends StatelessWidget {
             Align(
               alignment: Alignment.topCenter,
               child: Container(
-                height: getProportionateScreenHeight(220),
+                height: getProportionateScreenHeight(200),
                 decoration: BoxDecoration(
                   color: Colors.transparent,
                   borderRadius: BorderRadius.vertical(
@@ -82,7 +82,7 @@ class FeaturedBooksTile extends StatelessWidget {
                   borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
                   child: CachedNetworkImage(
                     imageUrl: '${book.coverArt}',
-                    width: getProportionateScreenWidth(160),
+                    width: 190,
                     alignment: Alignment.center,
                     placeholder: (context, message) => Container(
                       height: 62,
@@ -103,8 +103,8 @@ class FeaturedBooksTile extends StatelessWidget {
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                width: getProportionateScreenWidth(160),
-                height: getProportionateScreenHeight(140),
+                width: 190,
+                height: getProportionateScreenHeight(130),
                 decoration: BoxDecoration(
                   color: isDarkMode ? Darktheme.containerColor : Colors.white,
                   borderRadius: BorderRadius.vertical(
@@ -131,7 +131,7 @@ class FeaturedBooksTile extends StatelessWidget {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -144,7 +144,7 @@ class FeaturedBooksTile extends StatelessWidget {
                               fontWeight: FontWeight.bold,
                             ),
                       ),
-                      SizedBox(height: getProportionateScreenHeight(4)),
+                      Spacer(),
                       Row(
                         children: [
                           Text(
@@ -166,9 +166,9 @@ class FeaturedBooksTile extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: Theme.of(context)
                                   .textTheme
-                                  .headline5!
+                                  .headline6!
                                   .copyWith(
-                                    fontSize: 14,
+                                    fontSize: 13,
                                     fontWeight: FontWeight.bold,
                                     color: isDarkMode
                                         ? Colors.white70
@@ -178,7 +178,6 @@ class FeaturedBooksTile extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: getProportionateScreenHeight(4)),
                       Row(
                         children: [
                           Text(
@@ -202,7 +201,7 @@ class FeaturedBooksTile extends StatelessWidget {
                                   .textTheme
                                   .headline5!
                                   .copyWith(
-                                    fontSize: 14,
+                                    fontSize: 13,
                                     fontWeight: FontWeight.bold,
                                     color: isDarkMode
                                         ? Colors.white70
@@ -230,7 +229,9 @@ class FeaturedBooksTile extends StatelessWidget {
                             _displayMoney(),
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
-                                      color: Colors.blueGrey[800],
+                                      color: isDarkMode
+                                          ? Colors.white70
+                                          : Colors.green[800],
                                       fontWeight: FontWeight.bold,
                                     ),
                           ),

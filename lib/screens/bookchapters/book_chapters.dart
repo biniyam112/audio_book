@@ -2,8 +2,10 @@ import 'package:audio_books/feature/fetch_downloaded_book/bloc/fetch_down_book_b
 import 'package:audio_books/feature/fetch_downloaded_book/bloc/fetch_down_book_event.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/sizeConfig.dart';
+import 'package:audio_books/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 import 'components/body.dart';
 
@@ -28,11 +30,21 @@ class _BookEpisodesState extends State<BookEpisodes> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
+    bool isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
     return Scaffold(
       appBar: AppBar(
         title: Text(
           '${widget.downloadedBook.title}',
           style: Theme.of(context).textTheme.headline4,
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: isDarkMode ? Colors.white : Colors.black,
+          ),
         ),
       ),
       body: Body(downloadedBook: widget.downloadedBook),

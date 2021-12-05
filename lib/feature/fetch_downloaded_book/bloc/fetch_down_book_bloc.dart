@@ -39,7 +39,6 @@ class FetchBookFileBloc extends Bloc<FetchBookFileEvent, FetchBookFileState> {
       final bookFile = fetchStoredBookFileRepo
           .decryptStoredPdf(fetchBookFileEvent.downloadedBook.bookFilePath!);
       fetchBookFileEvent.downloadedBook.setBookFile = bookFile;
-      print('length after decription is ${bookFile.length}');
       emitter(BookDataFetchedState(
           downloadedBook: fetchBookFileEvent.downloadedBook));
     } catch (e) {

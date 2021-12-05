@@ -8,8 +8,7 @@ bool checkSubscribtion(Subscribtion subscribtion) {
   if (userSubscribtion.length == 0) return false;
 
   final check = userSubscribtion.every((plan) => plan.id == subscribtion.id);
-  print(
-      "USR_SUBSCRIBTION_PLAN***************${userSubscribtion.length} $check");
+
   return check;
 }
 

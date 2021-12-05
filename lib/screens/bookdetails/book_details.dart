@@ -38,7 +38,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
         backgroundColor: isDarkMode ? Colors.black : Colors.white,
         leading: IconButton(
           icon: Icon(
-            CupertinoIcons.arrow_left,
+            Icons.arrow_left,
             color: isDarkMode ? Colors.white : Colors.black,
           ),
           onPressed: () {

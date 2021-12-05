@@ -19,11 +19,7 @@ class AmolePaymentDP {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-    if (response.statusCode == 200) {
-      print(response.body);
-    } else {
-      print(response.headers);
-
+    if (response.statusCode != 200) {
       throw Exception(response.reasonPhrase);
     }
   }
@@ -47,10 +43,6 @@ class AmolePaymentDP {
     if (response.statusCode == 200) {
       return jsonDecode(response.body)['msG_ErrorCode'];
     } else {
-      print(response.headers);
-      print(response.body);
-      print(response.statusCode);
-      print(response.reasonPhrase);
       throw Exception(response.reasonPhrase);
     }
   }

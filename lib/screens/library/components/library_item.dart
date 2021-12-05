@@ -223,7 +223,7 @@ class AudioBookLibraryItem extends StatelessWidget {
                       color: isDarkMode ? Colors.white60 : Colors.grey.shade600,
                     ),
                   ),
-                  verticalSpacing(10),
+                  verticalSpacing(6),
                   Center(
                     child: Container(
                       decoration: BoxDecoration(
@@ -231,9 +231,16 @@ class AudioBookLibraryItem extends StatelessWidget {
                       padding: EdgeInsets.symmetric(
                           vertical: getProportionateScreenHeight(2),
                           horizontal: getProportionateScreenWidth(5)),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Text('12 Chapters'),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.bookmark,
+                            color: Darktheme.primaryColor,
+                          ),
+                          horizontalSpacing(4),
+                          Text('${downloadedBook.category}'),
+                        ],
                       ),
                     ),
                   ),

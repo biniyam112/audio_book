@@ -1,9 +1,7 @@
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme_colors.dart';
-import 'package:audio_books/theme/theme_provider.dart';
 import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class ShowFlashWidget {
   static Widget displayFlashWidget(IconData icon, FlashController controller,

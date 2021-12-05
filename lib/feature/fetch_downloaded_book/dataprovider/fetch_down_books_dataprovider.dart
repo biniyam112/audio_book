@@ -30,7 +30,6 @@ class FetchStoredBookFileDP {
     encryptionHandler.encryptionKeyString = 'theencryptionkey';
     final file = File(filePath);
     final byteFile = file.readAsBytesSync();
-    print('reading length is ${byteFile.length}');
     return encryptionHandler.decryptData(byteFile);
   }
 }

@@ -10,7 +10,6 @@ class FetchBooksByCateDP {
 
   Future<List<Book>> fetchByCategory(
       {required String categoryId, token}) async {
-    print(categoryId);
     var response = await client.get(
       Uri.parse(
           'http://www.marakigebeya.com.et/api/BooksByCategories?categoryId=$categoryId'),

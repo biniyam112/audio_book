@@ -1,6 +1,7 @@
 import 'package:audio_books/feature/podcast/bloc/bloc.dart';
 import 'package:audio_books/feature/podcast/bloc/podcast_comment_bloc.dart';
 import 'package:audio_books/models/api_podcast_comment.dart';
+import 'package:audio_books/screens/bookdetails/components/comment_section.dart';
 import 'package:audio_books/screens/bookdetails/components/custom_tab_view_children.dart';
 import 'package:audio_books/screens/podcast_details/components/podcast_comment_field.dart';
 import 'package:audio_books/sizeConfig.dart';

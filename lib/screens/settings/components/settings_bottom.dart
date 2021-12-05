@@ -15,7 +15,6 @@ class SettingsBottom extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // print("VERSION[*][*][*][*]]*][*]*[*][*]*[*][*]${}");
     var isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,

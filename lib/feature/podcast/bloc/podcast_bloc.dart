@@ -16,10 +16,9 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
       : _podcastRepository = getIt<PodcastRepository>(),
         super(PodcastInitState()) {
     on<FetchPodcasts>(_mapFetchPodcastEventToState);
-    
+
     // on<FetchSubscribedPodcasts>(_mapFetchSubscribedPodcastsToState);
     on<FetchPodcastEpisodes>(_mapFetchPodcastEpisodesToState);
-   
   }
 
   Future<void> _mapFetchPodcastEventToState(
@@ -28,15 +27,11 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
     podcastPage = event.page;
     try {
       final apiDataResponse = await _podcastRepository.getPodcasts(event.page);
-      print(apiDataResponse);
 
       if (apiDataResponse.items == null) {
-        print('PODCAST FAILURE');
         emitter(PodcastFailure());
       } else {
-        print('PODCAST SUCCESS');
         final items = apiDataResponse.items as List;
-        print(items);
         // APIPodcast pod=APIPodcast()
         final podcasts =
             items.map((podcast) => APIPodcast.fromJson(podcast)).toList();
@@ -46,14 +41,9 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
         emitter(PodcastLoadSuccess(podcasts: podcasts));
       }
     } catch (e) {
-      print('PODCAST FAILURE $e');
       emitter(PodcastFailure());
     }
   }
-
- 
-
- 
 
   Future<void> _mapFetchPodcastEpisodesToState(
       FetchPodcastEpisodes event, Emitter<PodcastState> emitter) async {
@@ -76,9 +66,4 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
       emitter(PodcastEpisodeFetchFailure());
     }
   }
-
-  
-
-
-
 }

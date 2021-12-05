@@ -34,7 +34,6 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
         final authCredential =
             await _otpRepository.verifyCode(this.verificationId!, event.otp);
         if (authCredential.user != null) {
-          print(authCredential.user);
           emitter(OtpVerified());
         } else {
           emitter(OtpValidationError());

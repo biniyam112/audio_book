@@ -43,8 +43,7 @@ class StoreBookDP {
     DownloadedBook downloadedBook,
     Episode episode,
   ) async {
-    String fileUri =
-        Uri.http('www.marakigebeya.com.et', episode.fileUrl).toString();
+    String fileUri = episode.fileUrl;
     var response = await client.get(Uri.parse('$fileUri'));
     if (response.statusCode == 200) {
       return await storeEncryptedEpisode(response.bodyBytes,
@@ -66,7 +65,7 @@ class StoreBookDP {
         'episodes',
         '$chapterTitle',
       )).create(recursive: true);
-      final filePath = path.join(bookDirectory.path, '$chapterTitle');
+      final filePath = path.join(bookDirectory.path, '$chapterTitle.mp3');
       final file = File(filePath);
       var encryptedData = encryptionHandler.encryptData(episodeByteFile);
       await file.writeAsBytes(
@@ -106,7 +105,6 @@ class StoreBookDP {
       throw Exception('connection timed out');
     });
     if (response.statusCode == 200) {
-      print('The pdf file length is ${response.body.substring(0, 40)}');
       return await storeEncryptedPdf(
         response.bodyBytes,
         bookTitle: book.title,

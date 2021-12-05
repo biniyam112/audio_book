@@ -1,10 +1,6 @@
 import 'package:audio_books/models/models.dart';
-import 'package:equatable/equatable.dart';
 
-class CategoryState extends Equatable {
-  @override
-  List<Object?> get props => [];
-}
+class CategoryState {}
 
 class IdleState extends CategoryState {}
 

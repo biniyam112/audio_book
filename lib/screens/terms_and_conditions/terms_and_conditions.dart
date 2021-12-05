@@ -2,7 +2,6 @@ import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 import 'body.dart';
 
@@ -22,7 +21,7 @@ class TermsAndConditions extends StatelessWidget {
             Navigator.pop(context);
           },
           icon: Icon(
-            Icons.arrow_back_ios_rounded,
+            Icons.arrow_back,
             color: isDarkMode ? Colors.white : Colors.black87,
           ),
         ),

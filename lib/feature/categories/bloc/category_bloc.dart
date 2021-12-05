@@ -25,18 +25,4 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
       emitter(CategoriesFetchingFailedState(errorMessage: e.toString()));
     }
   }
-
-  // @override
-  // Stream<CategoryState> mapEventToState(CategoryEvent event) async* {
-  //   if (event is FetchCategoryEvent) {
-  //     yield CategoriesFetchingState();
-  //     try {
-  //       var user = getIt.get<User>();
-  //       var categories = await categoryRepo.fetchCategories(user.token!);
-  //       yield CategoriesFetchedState(categories: categories);
-  //     } catch (e) {
-  //       yield CategoriesFetchingFailedState(errorMessage: e.toString());
-  //     }
-  //   }
-  // }
 }

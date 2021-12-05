@@ -89,7 +89,7 @@ class _BodyState extends State<Body> {
                 child: SafeArea(
                   child: Column(
                     children: [
-                      Spacer(flex: 2),
+                      Spacer(flex: 3),
                       Padding(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
@@ -101,7 +101,7 @@ class _BodyState extends State<Body> {
                               .headline3!
                               .copyWith(
                                 fontFamily: GoogleFonts.montserrat().fontFamily,
-                                wordSpacing: 1.1,
+                                color: Colors.black.withOpacity(.8),
                               ),
                         ),
                       ),
@@ -128,6 +128,7 @@ class _BodyState extends State<Body> {
                               .copyWith(
                                 fontFamily: GoogleFonts.montserrat().fontFamily,
                                 wordSpacing: 1.1,
+                                color: Colors.black.withOpacity(.7),
                               ),
                         ),
                       ),

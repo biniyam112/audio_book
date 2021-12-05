@@ -22,7 +22,7 @@ class BookShelf extends StatelessWidget {
       return Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+            padding: EdgeInsets.symmetric(horizontal: 12),
             child: BookCategory(
               categoryName: '$categoryName',
               onPressed: onPressed,
@@ -38,6 +38,7 @@ class BookShelf extends StatelessWidget {
                     (index) {
                       return Padding(
                         padding: EdgeInsets.symmetric(
+                          vertical: getProportionateScreenHeight(6),
                           horizontal: getProportionateScreenWidth(8),
                         ),
                         child: BookTile(

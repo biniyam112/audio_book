@@ -14,7 +14,6 @@ import 'package:provider/provider.dart';
 
 import 'components/body.dart';
 
-
 class AudioPlayerScreen extends StatefulWidget {
   const AudioPlayerScreen({
     Key? key,
@@ -43,7 +42,6 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   void initState() {
     bool isFile = getIt.get<bool>(instanceName: 'isFile');
     isFile = widget.isFile;
-    print(isFile);
     getIt<PageManager>().init(
       chapters: widget.episodes,
       downloadedEpisodes: widget.downloadedEpisodes,

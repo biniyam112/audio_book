@@ -10,7 +10,6 @@ class AuthorDataProvider {
   AuthorDataProvider({required this.client});
 
   Future<Author> fetchAuthor(String authorId, token) async {
-    print('$authorId\n\n\n\n');
     var response = await client.get(
       Uri.parse('http://www.marakigebeya.com.et/api/Authors/$authorId'),
       headers: {

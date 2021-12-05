@@ -7,7 +7,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
@@ -54,10 +53,16 @@ class BookTile extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              offset: Offset(4, 4),
-              color: LightTheme.textColor.withOpacity(.1),
-              blurRadius: 10,
-              spreadRadius: 2,
+              offset: Offset(2, 2),
+              color: LightTheme.textColor.withOpacity(.08),
+              blurRadius: 4,
+              spreadRadius: 1,
+            ),
+            BoxShadow(
+              offset: Offset(-2, -2),
+              color: LightTheme.textColor.withOpacity(.08),
+              blurRadius: 1,
+              spreadRadius: 1,
             ),
           ],
         ),
@@ -114,20 +119,16 @@ class BookTile extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Spacer(),
+                    Spacer(flex: 2),
                     RichText(
                       overflow: TextOverflow.ellipsis,
                       text: TextSpan(
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 14,
-                          fontFamily: GoogleFonts.poppins().fontFamily,
-                        ),
+                        style: TextStyle(height: 1.4),
                         children: [
                           TextSpan(
                             text: 'writter  ',
                             style:
-                                Theme.of(context).textTheme.headline5!.copyWith(
+                                Theme.of(context).textTheme.headline6!.copyWith(
                                       color: isDarkMode
                                           ? Colors.white60
                                           : Colors.black45,
@@ -136,11 +137,12 @@ class BookTile extends StatelessWidget {
                           TextSpan(
                             text: '${book.author}',
                             style:
-                                Theme.of(context).textTheme.headline5!.copyWith(
-                                      fontWeight: FontWeight.bold,
+                                Theme.of(context).textTheme.headline6!.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 15,
                                       color: isDarkMode
                                           ? Colors.white70
-                                          : Colors.black.withOpacity(.6),
+                                          : Colors.black.withOpacity(.7),
                                     ),
                           ),
                         ],
@@ -149,16 +151,12 @@ class BookTile extends StatelessWidget {
                     RichText(
                       overflow: TextOverflow.ellipsis,
                       text: TextSpan(
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 14,
-                          fontFamily: GoogleFonts.poppins().fontFamily,
-                        ),
+                        style: TextStyle(height: 1.4),
                         children: [
                           TextSpan(
                             text: 'narrator  ',
                             style:
-                                Theme.of(context).textTheme.headline5!.copyWith(
+                                Theme.of(context).textTheme.headline6!.copyWith(
                                       color: isDarkMode
                                           ? Colors.white60
                                           : Colors.black45,
@@ -167,11 +165,12 @@ class BookTile extends StatelessWidget {
                           TextSpan(
                             text: '${book.narattor}',
                             style:
-                                Theme.of(context).textTheme.headline5!.copyWith(
-                                      fontWeight: FontWeight.bold,
+                                Theme.of(context).textTheme.headline6!.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 15,
                                       color: isDarkMode
                                           ? Colors.white70
-                                          : Colors.black.withOpacity(.6),
+                                          : Colors.black.withOpacity(.7),
                                     ),
                           ),
                         ],
@@ -180,16 +179,12 @@ class BookTile extends StatelessWidget {
                     RichText(
                       overflow: TextOverflow.ellipsis,
                       text: TextSpan(
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 14,
-                          fontFamily: GoogleFonts.poppins().fontFamily,
-                        ),
+                        style: TextStyle(height: 1.4),
                         children: [
                           TextSpan(
                             text: 'category  ',
                             style:
-                                Theme.of(context).textTheme.headline5!.copyWith(
+                                Theme.of(context).textTheme.headline6!.copyWith(
                                       color: isDarkMode
                                           ? Colors.white60
                                           : Colors.black45,
@@ -198,48 +193,27 @@ class BookTile extends StatelessWidget {
                           TextSpan(
                             text: '${book.category}',
                             style:
-                                Theme.of(context).textTheme.headline5!.copyWith(
-                                      fontWeight: FontWeight.bold,
+                                Theme.of(context).textTheme.headline6!.copyWith(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 15,
                                       color: isDarkMode
                                           ? Colors.white70
-                                          : Colors.black.withOpacity(.6),
-                                    ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    RichText(
-                      overflow: TextOverflow.ellipsis,
-                      text: TextSpan(
-                        style: TextStyle(
-                          color: Colors.black87,
-                          fontSize: 14,
-                          fontFamily: GoogleFonts.poppins().fontFamily,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: 'price  ',
-                            style:
-                                Theme.of(context).textTheme.headline5!.copyWith(
-                                      color: isDarkMode
-                                          ? Colors.white60
-                                          : Colors.black45,
-                                    ),
-                          ),
-                          TextSpan(
-                            text: _displayMoney(),
-                            style:
-                                Theme.of(context).textTheme.headline5!.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                      color: isDarkMode
-                                          ? Colors.white70
-                                          : Colors.black.withOpacity(.6),
+                                          : Colors.black.withOpacity(.7),
                                     ),
                           ),
                         ],
                       ),
                     ),
                     Spacer(flex: 2),
+                    Text(
+                      _displayMoney(),
+                      style: Theme.of(context).textTheme.headline5!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                            color:
+                                isDarkMode ? Colors.white70 : Colors.green[800],
+                          ),
+                    ),
                   ],
                 ),
               ),

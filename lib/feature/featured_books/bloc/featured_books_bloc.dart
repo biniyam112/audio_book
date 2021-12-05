@@ -20,7 +20,6 @@ class FeaturedBooksBloc extends Bloc<FeaturedBooksEvent, FeaturedBooksState> {
       var books = await featuredBooksRepo.fetchFeatureBooks(user.token!);
       emitter(FeaturedBooksFetched(books: books));
     } catch (e) {
-      print('the error is $e');
       emitter(FeaturedBooksFetchingFailed(errorMessage: e.toString()));
     }
   }

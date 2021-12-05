@@ -23,7 +23,7 @@ class BookCategory extends StatelessWidget {
           Text(
             categoryName,
             style: Theme.of(context).textTheme.headline4!.copyWith(
-                  fontSize: 16,
+                  fontSize: 15,
                 ),
           ),
           TextButton(
@@ -31,8 +31,8 @@ class BookCategory extends StatelessWidget {
             child: Text(
               'see all',
               style: TextStyle(
-                fontSize: 13,
-                color: isDarkMode ? Colors.white : Colors.black,
+                fontSize: 12,
+                color: isDarkMode ? Colors.white : Colors.black.withOpacity(.7),
               ),
             ),
           ),
