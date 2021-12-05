@@ -29,9 +29,7 @@ class MyAudioHandler extends BaseAudioHandler {
   Future<void> _loadEmptyPlaylist() async {
     try {
       await _player.setAudioSource(_playlist);
-    } catch (e) {
-      print("Error: $e");
-    }
+    } catch (e) {}
   }
 
   void _listenForDurationChanges() {

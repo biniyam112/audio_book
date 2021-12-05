@@ -46,6 +46,7 @@ class AudioBookLibrary extends StatelessWidget {
                   if (searchstate.searchState == SearchState.searching) {
                     return SizedBox(
                       height: SizeConfig.screenHeight! * .6,
+                      width: SizeConfig.screenWidth,
                       child: Center(
                         child: CircularProgressIndicator(
                           color: Darktheme.primaryColor,
@@ -58,25 +59,36 @@ class AudioBookLibrary extends StatelessWidget {
                     return Container(
                       height: SizeConfig.screenHeight! * .6,
                       width: SizeConfig.screenWidth,
-                      child: GridView.builder(
-                        itemCount: downloadedBooks.length,
-                        padding: EdgeInsets.symmetric(
-                          vertical: getProportionateScreenHeight(20),
-                          horizontal: getProportionateScreenWidth(30),
-                        ),
-                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 200,
-                          childAspectRatio: SizeConfig.screenWidth! /
-                              (SizeConfig.screenHeight! / 1.2),
-                          crossAxisSpacing: getProportionateScreenWidth(20),
-                          mainAxisSpacing: getProportionateScreenHeight(20),
-                        ),
-                        itemBuilder: (context, index) {
-                          return AudioBookLibraryItem(
-                            downloadedBook: downloadedBooks[index],
-                          );
-                        },
-                      ),
+                      child: downloadedBooks.isEmpty
+                          ? Center(
+                              child: Text(
+                                'No items available',
+                                style: Theme.of(context).textTheme.headline4,
+                              ),
+                            )
+                          : GridView.builder(
+                              shrinkWrap: true,
+                              itemCount: downloadedBooks.length,
+                              padding: EdgeInsets.symmetric(
+                                vertical: getProportionateScreenHeight(20),
+                                horizontal: getProportionateScreenWidth(30),
+                              ),
+                              gridDelegate:
+                                  SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent: 200,
+                                childAspectRatio: SizeConfig.screenWidth! /
+                                    (SizeConfig.screenHeight! / 1.2),
+                                crossAxisSpacing:
+                                    getProportionateScreenWidth(20),
+                                mainAxisSpacing:
+                                    getProportionateScreenHeight(20),
+                              ),
+                              itemBuilder: (context, index) {
+                                return AudioBookLibraryItem(
+                                  downloadedBook: downloadedBooks[index],
+                                );
+                              },
+                            ),
                     );
                   }
                   return SizedBox(
@@ -110,8 +122,8 @@ class AudioBookLibrary extends StatelessWidget {
             if (state is FetchingDownBooksState) {
               return Center(
                 child: SizedBox(
-                  width: 30,
-                  height: 30,
+                  width: SizeConfig.screenWidth,
+                  height: SizeConfig.screenHeight! * .6,
                   child: CircularProgressIndicator(
                     color: Darktheme.primaryColor,
                   ),
@@ -121,6 +133,7 @@ class AudioBookLibrary extends StatelessWidget {
             if (state is FetchingDownBooksFailedState) {
               return SizedBox(
                 height: SizeConfig.screenHeight! * .6,
+                width: SizeConfig.screenWidth,
                 child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -141,7 +154,10 @@ class AudioBookLibrary extends StatelessWidget {
                 ),
               );
             }
-            return Container();
+            return Container(
+              height: SizeConfig.screenHeight! * .6,
+              width: SizeConfig.screenWidth,
+            );
           },
         ),
       ),

@@ -16,13 +16,11 @@ class PodcastDataProvider {
 
       final userBox = HiveBoxes.getUserBox();
       final token = userBox.get(HiveBoxes.userKey)!.token;
-      print("USER TOKEN *******************$token");
-      print("USER ID******************${userBox.get(HiveBoxes.userKey)!.id}");
+
       final response = await _httpClient.get(podcastEndpoint, headers: {
         'Authorization': token!,
       });
 
-      // print('response body ***********${response.body}');
       if (response.statusCode == 200) {
         return APIPagedData.fromJson(jsonDecode(response.body));
       }
@@ -30,7 +28,6 @@ class PodcastDataProvider {
       return APIPagedData(
           currentPage: 0, items: null, totalItems: 0, totalPages: 0);
     } catch (e) {
-      print('PODCAST FETCH ERROR************************$e');
       return APIPagedData(
           currentPage: 0, items: null, totalItems: 0, totalPages: 0);
     }
@@ -52,10 +49,8 @@ class PodcastDataProvider {
         ),
         headers: {'Authorization': token!, 'Content-Type': 'application/json'},
       );
-      print("RESPONSE*************************${response.body}");
       return APIPodcastSubscribe.fromJson(jsonDecode(response.body));
     } catch (e) {
-      print("ERORR***************$e");
       return APIPodcastSubscribe(message: "$e");
     }
   }
@@ -93,7 +88,6 @@ class PodcastDataProvider {
       final response = await _httpClient
           .get(podcastEpisodesUrl, headers: {'Authorization': token!});
 
-      print("*************PODCAST_EPISODES_*************${response.body}");
       if (response.statusCode == 200) {
         return APIPagedData.fromJson(jsonDecode(response.body));
       }
@@ -101,7 +95,6 @@ class PodcastDataProvider {
       return APIPagedData(
           currentPage: 0, items: null, totalItems: 0, totalPages: 0);
     } catch (e) {
-      print("PODCAST_EPISODE_ERORR***************$e");
       return APIPagedData(
           currentPage: 0, items: null, totalItems: 0, totalPages: 0);
     }

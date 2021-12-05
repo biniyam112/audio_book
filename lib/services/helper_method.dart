@@ -6,7 +6,6 @@ bool checkSubscribtion(Subscribtion subscribtion) {
   final userSubscribtion = PaymentBloc.userSubscriptions;
 
   final check = userSubscribtion.every((plan) => plan.id == subscribtion.id);
-  print("USR_SUBSCRIBTION_PLAN***************${userSubscribtion.length}");
   return check;
 }
 

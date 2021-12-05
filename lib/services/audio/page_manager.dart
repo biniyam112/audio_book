@@ -36,7 +36,8 @@ class PageManager {
     if (downloadedEpisodes != null)
       await _laodDownloadedPlaylist(downloadedEpisodes);
     if (podcastEpisodes != null) await _loadPodcastPlaylist(podcastEpisodes);
-    _resetPlaylist();
+    // _resetPlaylist();
+    // _audioHandler.customAction('dispose');
     _listenToChangesInPlaylist();
     _listenToPlaybackState();
     _listenToCurrentPosition();
@@ -64,7 +65,6 @@ class PageManager {
               extras: {'url': song['url']},
             ))
         .toList();
-    print('the media item is $mediaItems');
     _audioHandler.addQueueItems(mediaItems);
   }
 
@@ -233,9 +233,7 @@ class PageManager {
     _audioHandler.customAction('dispose');
   }
 
-  void stop() {
-    _audioHandler.stop();
-  }
+  void stop() => _audioHandler.stop();
 
   void playSpeed(double d) {
     _audioHandler.setSpeed(d);

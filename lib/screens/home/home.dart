@@ -52,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen>
           leading: IconButton(
             icon: Icon(
               CupertinoIcons.text_alignleft,
-              size: 27,
+              size: 22,
               color: isDarkMode ? CupertinoColors.white : Colors.black87,
             ),
             onPressed: () {
@@ -74,6 +74,7 @@ class _HomeScreenState extends State<HomeScreen>
                   width: 10,
                 ),
                 TabBar(
+                  automaticIndicatorColorAdjustment: true,
                   physics: BouncingScrollPhysics(),
                   onTap: (index) {
                     setState(() {
@@ -90,7 +91,8 @@ class _HomeScreenState extends State<HomeScreen>
                   tabs: [
                     Text(
                       'Books',
-                      style: Theme.of(context).textTheme.headline4!.copyWith(
+                      style: Theme.of(context).textTheme.headline5!.copyWith(
+                            fontWeight: FontWeight.bold,
                             color: _activeIndex == 0
                                 ? Darktheme.primaryColor
                                 : isDarkMode
@@ -100,7 +102,8 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                     Text(
                       'Podcast',
-                      style: Theme.of(context).textTheme.headline4!.copyWith(
+                      style: Theme.of(context).textTheme.headline5!.copyWith(
+                            fontWeight: FontWeight.bold,
                             color: _activeIndex == 1
                                 ? Darktheme.primaryColor
                                 : isDarkMode
@@ -115,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         ),
         body: TabBarView(
-          physics: NeverScrollableScrollPhysics(),
+          physics: ClampingScrollPhysics(),
           children: [
             BooksBody(),
             PodcastBody(),

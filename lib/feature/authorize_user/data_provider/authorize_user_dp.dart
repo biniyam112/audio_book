@@ -9,7 +9,6 @@ class AuthorizeUserDataProvider {
 
   AuthorizeUserDataProvider({required this.client});
 
-
   Future<User> authorizeUser(User user) async {
     var response = await client.post(
       Uri.parse(
@@ -22,7 +21,6 @@ class AuthorizeUserDataProvider {
         'Content-Type': 'application/json; charset=UTF-8',
       },
     );
-    print(response.statusCode);
     if (response.statusCode == 200) {
       var userJson = jsonDecode(response.body);
       return User(

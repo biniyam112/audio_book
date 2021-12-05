@@ -278,7 +278,7 @@ class _PhoneFormState extends State<PhoneForm> {
                         ),
                 ),
               ),
-              verticalSpacing(SizeConfig.screenHeight! * .12),
+              verticalSpacing(SizeConfig.screenHeight! * .1),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

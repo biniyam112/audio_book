@@ -66,17 +66,17 @@ class DetailsTopSection extends StatelessWidget {
                   listener: (context, storingstate) {
                     if (storingstate is BookStoringState) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        buildSnackBar(context, text: 'Downloading... '),
+                        buildSnackBar(context, text: 'Downloading E-book... '),
                       );
                     }
                     if (storingstate is BookStoredState) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        buildSnackBar(context, text: 'Book added to library'),
+                        buildSnackBar(context, text: 'E-Book added to library'),
                       );
                     }
                     if (storingstate is BookStoringFailedState) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        buildSnackBar(context, text: 'Failed to fetch item'),
+                        buildSnackBar(context, text: 'Failed to store E-Book'),
                       );
                     }
                   },
@@ -107,6 +107,22 @@ class DetailsTopSection extends StatelessWidget {
                                   if (book.priceEtb == 0) {
                                     DetailsBottomPartState.tabController
                                         .animateTo(1);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        backgroundColor: isDarkMode
+                                            ? Darktheme.backgroundColor
+                                            : Colors.white,
+                                        content: Text(
+                                          'Tap download on episode to add to library',
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .headline5!
+                                              .copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                        ),
+                                      ),
+                                    );
                                   } else {
                                     BlocProvider.of<PaymentBloc>(context)
                                         .add(CheckSubscription(isEbook: false));
@@ -143,6 +159,20 @@ class DetailsTopSection extends StatelessWidget {
                   if (checksubstate.subscribtions.isNotEmpty &&
                       !checksubstate.isEbook) {
                     DetailsBottomPartState.tabController.animateTo(1);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        backgroundColor: isDarkMode
+                            ? Darktheme.backgroundColor
+                            : Colors.white,
+                        content: Text(
+                          'Tap download on episode to add to library',
+                          style:
+                              Theme.of(context).textTheme.headline5!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        ),
+                      ),
+                    );
                   }
                 }
               },

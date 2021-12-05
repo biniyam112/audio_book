@@ -12,9 +12,7 @@ class SetThemeDataBloc extends Bloc<SetThemeDataEvent, ThemeMode> {
       SetThemeDataEvent setThemeDataEvent, Emitter<ThemeMode> emitter) async {
     try {
       await setThemeData(context: setThemeDataEvent.context);
-    } catch (e) {
-      print('error while settng theme');
-    }
+    } catch (e) {}
   }
 }
 

@@ -38,7 +38,6 @@ class EncryptionHandler {
       ),
       iv: iv,
     );
-    print('decrypted length is ${decrypted.length}');
 
     return Uint8List.sublistView(
         Uint8List.fromList(decrypted), 0, decrypted.length);

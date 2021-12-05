@@ -27,15 +27,11 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
     podcastPage = event.page;
     try {
       final apiDataResponse = await _podcastRepository.getPodcasts(event.page);
-      print(apiDataResponse);
 
       if (apiDataResponse.items == null) {
-        print('PODCAST FAILURE');
         emitter(PodcastFailure());
       } else {
-        print('PODCAST SUCCESS');
         final items = apiDataResponse.items as List;
-        print(items);
         // APIPodcast pod=APIPodcast()
         final podcasts =
             items.map((podcast) => APIPodcast.fromJson(podcast)).toList();
@@ -45,7 +41,6 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
         emitter(PodcastLoadSuccess(podcasts: podcasts));
       }
     } catch (e) {
-      print('PODCAST FAILURE $e');
       emitter(PodcastFailure());
     }
   }
@@ -75,14 +70,11 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
     try {
       final apiDataResponse =
           await _podcastRepository.getMySubscription(event.page);
-      print(apiDataResponse);
 
       if (apiDataResponse.items == null) {
         emitter(PodcastSubscribeFailure());
       } else {
-        // print('PODCAST SUCCESS');
         final items = apiDataResponse.items as List;
-        print(items);
         // APIPodcast pod=APIPodcast()
         final podcasts =
             items.map((podcast) => APIPodcast.fromJson(podcast)).toList();
@@ -91,7 +83,6 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
         emitter(PodcastLoadSuccess(podcasts: podcasts));
       }
     } catch (e) {
-      print('PODCAST FAILURE $e');
       emitter(PodcastFailure());
     }
   }
@@ -113,7 +104,6 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
         emitter(PodcastEpisodeLoadSuccess(podcastEpisodes: apiPodcastEpisodes));
       }
     } catch (e) {
-      print('PODCAST FAILURE $e');
       emitter(PodcastFailure());
     }
   }

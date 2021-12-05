@@ -20,7 +20,11 @@ class CreatePlayList extends PlaylistRepository {
   List<Map<String, String>> fetchInitialPlaylist(List<Episode> chapters,
       {int length = 1}) {
     return List.generate(
-        chapters.length, (index) => _nextSong(chapters[index]));
+      chapters.length,
+      (index) => _nextSong(
+        chapters[index],
+      ),
+    );
   }
 
 // ?fetch a single song

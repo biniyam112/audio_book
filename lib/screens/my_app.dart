@@ -193,7 +193,6 @@ class _MyAppState extends State<MyApp> {
                     ),
                 ),
                 BlocProvider(
-                  lazy: false,
                   create: (context) => FetchBooksByCategoryBloc(
                     fetchBooksByCateRepo: widget.fetchBooksByCateRepo,
                   ),

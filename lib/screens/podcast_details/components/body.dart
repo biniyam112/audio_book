@@ -199,7 +199,6 @@ class PodcastListCard extends StatelessWidget {
     Random random = Random();
     return GestureDetector(
       onTap: () {
-        print(PodcastBloc.podcastEpisodes[0].toJson());
         pushNewScreen(
           context,
           withNavBar: false,

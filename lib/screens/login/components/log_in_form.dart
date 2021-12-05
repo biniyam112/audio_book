@@ -97,7 +97,6 @@ class _LoginFormState extends State<LoginForm> {
       listener: (context, authstate) {
         if (authstate is UserAuthorizationFailedState) {
           setState(() {
-            print(authstate.errorMessage);
             if (authstate.errorMessage.contains(kPhoneNotRegisteredError)) {
               if (!errors.contains(kPhoneNotRegisteredError)) {
                 errors.add(kPhoneNotRegisteredError);

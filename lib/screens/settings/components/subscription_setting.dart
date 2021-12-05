@@ -26,12 +26,8 @@ class _SubscriptionSettingState extends State<SubscriptionSetting> {
 
   @override
   Widget build(BuildContext context) {
-    print(
-        "SUBSCRIPTION_SETTING CONTENT*************************${PaymentBloc.subscriptionPlans}");
-
     return BlocConsumer<PaymentBloc, PaymentState>(
       listener: (context, state) {
-        print("SUBSCRIPTION_PLAN STATE*********************$state");
         if (state is PlansFetchingFailed) {
           BlocProvider.of<PaymentBloc>(context).add(FetchPlans());
         }

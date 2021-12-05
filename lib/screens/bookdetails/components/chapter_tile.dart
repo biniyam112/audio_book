@@ -1,5 +1,6 @@
 import 'package:audio_books/feature/store_book/bloc/store_book_bloc.dart';
 import 'package:audio_books/feature/store_book/bloc/store_book_event.dart';
+import 'package:audio_books/feature/store_book/bloc/store_book_state.dart';
 import 'package:audio_books/models/episode.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/audioplayer/audio_player.dart';
@@ -54,7 +55,15 @@ class EpisodeTile extends StatelessWidget {
                       ),
                     );
                   }
-                : () {},
+                : () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Pay for this book or have subscription plan first',
+                        ),
+                      ),
+                    );
+                  },
             child: Container(
               width: double.infinity,
               padding: EdgeInsets.all(12),
@@ -127,27 +136,67 @@ class EpisodeTile extends StatelessWidget {
               ),
             ),
           ),
-          TextButton(
-            onPressed: isPaidFor
-                ? () {
-                    BlocProvider.of<StoreBookBloc>(context).add(
-                      StoreAudioBookEvent(book: book, episode: episode),
-                    );
-                  }
-                : null,
-            child: Row(
-              children: [
-                Icon(Icons.download),
-                horizontalSpacing(8),
-                Text(
-                  'Download',
-                  style: Theme.of(context).textTheme.headline5!.copyWith(),
-                ),
-              ],
+          BlocListener<StoreBookBloc, StoreBookState>(
+            listener: (context, storingstate) {
+              if (storingstate is StoringEpisode) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  buildSnackBar(context, text: 'Downloading AudioBook... '),
+                );
+              }
+              if (storingstate is EpisodeStored) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  buildSnackBar(context, text: 'Audio-Book added to library'),
+                );
+              }
+              if (storingstate is StoringEpisodeFailed) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  buildSnackBar(context, text: 'Failed to store audio-book'),
+                );
+              }
+            },
+            child: TextButton(
+              onPressed: isPaidFor
+                  ? () {
+                      BlocProvider.of<StoreBookBloc>(context).add(
+                        StoreAudioBookEvent(book: book, episode: episode),
+                      );
+                    }
+                  : null,
+              child: Row(
+                children: [
+                  Icon(Icons.download),
+                  horizontalSpacing(8),
+                  Text(
+                    'Download',
+                    style: Theme.of(context).textTheme.headline5!.copyWith(),
+                  ),
+                ],
+              ),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  SnackBar buildSnackBar(
+    BuildContext context, {
+    required String text,
+  }) {
+    bool isDarkMode =
+        Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
+
+    return SnackBar(
+      elevation: 6,
+      backgroundColor: isDarkMode ? Darktheme.backgroundColor : Colors.white,
+      content: Container(
+        width: SizeConfig.screenWidth,
+        child: Text(
+          '$text',
+          style: Theme.of(context).textTheme.headline5,
+        ),
+      ),
+      duration: Duration(seconds: 2),
     );
   }
 }
