@@ -18,6 +18,7 @@ class AudioBookLibrary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RefreshIndicator(
+      color: Darktheme.primaryColor,
       onRefresh: () async {
         var fetchBloc = BlocProvider.of<FetchDownAudioBooksBloc>(context);
         fetchBloc.add(FetchDownAudioBooksEvent());
@@ -56,40 +57,39 @@ class AudioBookLibrary extends StatelessWidget {
                   }
                   if (searchstate.searchState == SearchState.done ||
                       searchstate.searchState == SearchState.initial) {
-                    return Container(
-                      height: SizeConfig.screenHeight! * .6,
-                      width: SizeConfig.screenWidth,
-                      child: downloadedBooks.isEmpty
-                          ? Center(
+                    return downloadedBooks.isEmpty
+                        ? SizedBox(
+                            height: SizeConfig.screenHeight! * .6,
+                            width: SizeConfig.screenWidth,
+                            child: Center(
                               child: Text(
                                 'No items available',
                                 style: Theme.of(context).textTheme.headline4,
                               ),
-                            )
-                          : GridView.builder(
-                              shrinkWrap: true,
-                              itemCount: downloadedBooks.length,
-                              padding: EdgeInsets.symmetric(
-                                vertical: getProportionateScreenHeight(20),
-                                horizontal: getProportionateScreenWidth(30),
-                              ),
-                              gridDelegate:
-                                  SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 200,
-                                childAspectRatio: SizeConfig.screenWidth! /
-                                    (SizeConfig.screenHeight! / 1.2),
-                                crossAxisSpacing:
-                                    getProportionateScreenWidth(20),
-                                mainAxisSpacing:
-                                    getProportionateScreenHeight(20),
-                              ),
-                              itemBuilder: (context, index) {
-                                return AudioBookLibraryItem(
-                                  downloadedBook: downloadedBooks[index],
-                                );
-                              },
                             ),
-                    );
+                          )
+                        : GridView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: downloadedBooks.length,
+                            padding: EdgeInsets.symmetric(
+                              vertical: getProportionateScreenHeight(20),
+                              horizontal: getProportionateScreenWidth(30),
+                            ),
+                            gridDelegate:
+                                SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 200,
+                              childAspectRatio: SizeConfig.screenWidth! /
+                                  (SizeConfig.screenHeight! / 1.2),
+                              crossAxisSpacing: getProportionateScreenWidth(20),
+                              mainAxisSpacing: getProportionateScreenHeight(20),
+                            ),
+                            itemBuilder: (context, index) {
+                              return AudioBookLibraryItem(
+                                downloadedBook: downloadedBooks[index],
+                              );
+                            },
+                          );
                   }
                   return SizedBox(
                     height: SizeConfig.screenHeight! * .6,

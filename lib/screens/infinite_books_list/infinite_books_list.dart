@@ -33,7 +33,7 @@ class InfiniteBooksList extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
           icon: Icon(
-            CupertinoIcons.arrow_left,
+            Icons.arrow_left,
             color: isDarkMode ? Colors.white : Colors.black,
           ),
           onPressed: () {

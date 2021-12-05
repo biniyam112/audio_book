@@ -92,6 +92,7 @@ class MyAudioHandler extends BaseAudioHandler {
 
   AudioSource _createAudioSource(MediaItem mediaItem) {
     bool isFile = getIt.get<bool>(instanceName: 'isFile');
+    print(isFile);
     return !isFile
         ? AudioSource.uri(
             Uri.parse(mediaItem.extras!['url']),

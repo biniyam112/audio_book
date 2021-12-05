@@ -69,7 +69,7 @@ class CustomDrawer extends StatelessWidget {
                 ),
                 DrawerTile(
                   title: 'Log out',
-                  icon: CupertinoIcons.square_arrow_left,
+                  icon: Icons.arrow_back,
                   onPress: () async {
                     var userBox = HiveBoxes.getUserBox();
                     HiveBoxes.deleteUser();

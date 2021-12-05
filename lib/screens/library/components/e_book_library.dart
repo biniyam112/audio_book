@@ -56,27 +56,39 @@ class EBookLibrary extends StatelessWidget {
                   }
                   if (searchstate.searchState == SearchState.done ||
                       searchstate.searchState == SearchState.initial) {
-                    return GridView.builder(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: downloadedBooks.length,
-                      padding: EdgeInsets.symmetric(
-                        vertical: getProportionateScreenHeight(20),
-                        horizontal: getProportionateScreenWidth(30),
-                      ),
-                      gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 200,
-                        childAspectRatio: SizeConfig.screenWidth! /
-                            (SizeConfig.screenHeight! / 1.2),
-                        crossAxisSpacing: getProportionateScreenWidth(20),
-                        mainAxisSpacing: getProportionateScreenHeight(20),
-                      ),
-                      itemBuilder: (context, index) {
-                        return EBookLibraryItem(
-                          downloadedBook: downloadedBooks[index],
-                        );
-                      },
-                    );
+                    return downloadedBooks.isEmpty
+                        ? SizedBox(
+                            height: SizeConfig.screenHeight! * .6,
+                            width: SizeConfig.screenWidth,
+                            child: Center(
+                              child: Text(
+                                'No items available',
+                                style: Theme.of(context).textTheme.headline4,
+                              ),
+                            ),
+                          )
+                        : GridView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: downloadedBooks.length,
+                            padding: EdgeInsets.symmetric(
+                              vertical: getProportionateScreenHeight(20),
+                              horizontal: getProportionateScreenWidth(30),
+                            ),
+                            gridDelegate:
+                                SliverGridDelegateWithMaxCrossAxisExtent(
+                              maxCrossAxisExtent: 200,
+                              childAspectRatio: SizeConfig.screenWidth! /
+                                  (SizeConfig.screenHeight! / 1.2),
+                              crossAxisSpacing: getProportionateScreenWidth(20),
+                              mainAxisSpacing: getProportionateScreenHeight(20),
+                            ),
+                            itemBuilder: (context, index) {
+                              return EBookLibraryItem(
+                                downloadedBook: downloadedBooks[index],
+                              );
+                            },
+                          );
                   }
                   return SizedBox(
                     height: SizeConfig.screenHeight! * .6,

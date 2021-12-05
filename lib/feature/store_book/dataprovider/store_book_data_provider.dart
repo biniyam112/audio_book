@@ -65,7 +65,7 @@ class StoreBookDP {
         'episodes',
         '$chapterTitle',
       )).create(recursive: true);
-      final filePath = path.join(bookDirectory.path, '$chapterTitle');
+      final filePath = path.join(bookDirectory.path, '$chapterTitle.mp3');
       final file = File(filePath);
       var encryptedData = encryptionHandler.encryptData(episodeByteFile);
       await file.writeAsBytes(

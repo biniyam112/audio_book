@@ -21,7 +21,7 @@ class TermsAndConditions extends StatelessWidget {
             Navigator.pop(context);
           },
           icon: Icon(
-            Icons.arrow_back_ios_rounded,
+            Icons.arrow_back,
             color: isDarkMode ? Colors.white : Colors.black87,
           ),
         ),
