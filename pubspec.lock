@@ -14,11 +14,7 @@ packages:
       name: analyzer
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "1.7.1"
-=======
     version: "2.7.0"
->>>>>>> c6c347589f4b3cfc7de52744e0b33bd455db65ff
   animated_theme_switcher:
     dependency: "direct main"
     description:
@@ -53,7 +49,7 @@ packages:
       name: async
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.6.1"
+    version: "2.8.2"
   audio_service:
     dependency: "direct main"
     description:
@@ -193,14 +189,14 @@ packages:
       name: characters
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.1.0"
+    version: "1.2.0"
   charcode:
     dependency: transitive
     description:
       name: charcode
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.2.0"
+    version: "1.3.1"
   checked_yaml:
     dependency: transitive
     description:
@@ -593,11 +589,7 @@ packages:
       name: json_annotation
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "4.0.1"
-=======
     version: "4.3.0"
->>>>>>> c6c347589f4b3cfc7de52744e0b33bd455db65ff
   json_serializable:
     dependency: "direct dev"
     description:
@@ -639,14 +631,14 @@ packages:
       name: matcher
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.10"
+    version: "0.12.11"
   meta:
     dependency: transitive
     description:
       name: meta
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.3.0"
+    version: "1.7.0"
   mime:
     dependency: transitive
     description:
@@ -765,9 +757,6 @@ packages:
       name: path_provider
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "2.0.4"
-=======
     version: "2.0.7"
   path_provider_android:
     dependency: transitive
@@ -783,7 +772,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.7"
->>>>>>> c6c347589f4b3cfc7de52744e0b33bd455db65ff
   path_provider_linux:
     dependency: transitive
     description:
@@ -819,23 +807,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.11.1"
-<<<<<<< HEAD
-  permission_handler:
-    dependency: "direct main"
-    description:
-      name: permission_handler
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "8.1.6"
-  permission_handler_platform_interface:
-    dependency: transitive
-    description:
-      name: permission_handler_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.6.1"
-=======
->>>>>>> c6c347589f4b3cfc7de52744e0b33bd455db65ff
   persistent_bottom_nav_bar:
     dependency: "direct main"
     description:
@@ -919,16 +890,6 @@ packages:
       name: pubspec_parse
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "1.0.0"
-  rect_getter:
-    dependency: transitive
-    description:
-      name: rect_getter
-      url: "https://pub.dartlang.org"
-    source: hosted
-=======
->>>>>>> c6c347589f4b3cfc7de52744e0b33bd455db65ff
     version: "1.1.0"
   rxdart:
     dependency: transitive
@@ -943,9 +904,6 @@ packages:
       name: shared_preferences
       url: "https://pub.dartlang.org"
     source: hosted
-<<<<<<< HEAD
-    version: "2.0.7"
-=======
     version: "2.0.9"
   shared_preferences_android:
     dependency: transitive
@@ -961,7 +919,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.8"
->>>>>>> c6c347589f4b3cfc7de52744e0b33bd455db65ff
   shared_preferences_linux:
     dependency: transitive
     description:
@@ -1141,7 +1098,7 @@ packages:
       name: test_api
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.0"
+    version: "0.4.3"
   timing:
     dependency: transitive
     description:
@@ -1183,7 +1140,7 @@ packages:
       name: vector_math
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.0"
+    version: "2.1.1"
   watcher:
     dependency: transitive
     description:
@@ -1255,5 +1212,5 @@ packages:
     source: hosted
     version: "3.1.0"
 sdks:
-  dart: ">=2.13.0 <3.0.0"
-  flutter: ">2.0.0"
+  dart: ">=2.14.0 <3.0.0"
+  flutter: ">=2.5.0"

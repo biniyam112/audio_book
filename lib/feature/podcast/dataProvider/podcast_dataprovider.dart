@@ -111,8 +111,8 @@ class PodcastDataProvider {
     try {
       final user = HiveBoxes.getUserBox().get(HiveBoxes.userKey);
       final token = user!.token;
-      final unsubscribePodcastUrl =
-          Uri.parse("$unsubscribePodcastEndpoint?subscriptionId=$subscriptionId");
+      final unsubscribePodcastUrl = Uri.parse(
+          "$unsubscribePodcastEndpoint?subscriptionId=$subscriptionId");
 
       final response = await _httpClient
           .post(unsubscribePodcastUrl, headers: {'Authorization': token!});
@@ -129,6 +129,56 @@ class PodcastDataProvider {
           currentPage: 0, items: null, totalItems: 0, totalPages: 0);
     } catch (e) {
       print("PODCAST_UNSUBSCRIBE_ERROR***************$e");
+      return APIPagedData(
+          currentPage: 0, items: null, totalItems: 0, totalPages: 0);
+    }
+  }
+
+  Future<APIPagedData> postPodcastComment(
+      String podcastId, String content) async {
+    try {
+      final user = HiveBoxes.getUserBox().get(HiveBoxes.userKey);
+      final token = user!.token;
+      final subscriberId = user.id;
+
+      final podcastCommentPostUrl = Uri.parse(
+          '$podcastCommentEndpoint?podcastID=$podcastId&subscriberID=$subscriberId&content=$content');
+      final response = await _httpClient
+          .post(podcastCommentPostUrl, headers: {'Authorization': token!});
+
+      if (response.statusCode == 200) {
+        return APIPagedData(
+            currentPage: 0,
+            items: [response.body],
+            totalItems: 0,
+            totalPages: 0);
+      }
+      return APIPagedData(
+          currentPage: 0, items: null, totalItems: 0, totalPages: 0);
+    } catch (e) {
+      print("PODCAST_COMMENT_POST_ERROR***************$e");
+      return APIPagedData(
+          currentPage: 0, items: null, totalItems: 0, totalPages: 0);
+    }
+  }
+
+  Future<APIPagedData> getPodcastComments(String podcastId, int page) async {
+    try {
+      final user = HiveBoxes.getUserBox().get(HiveBoxes.userKey);
+      final token = user!.token;
+      final podcastCommetnUrl = Uri.parse(
+          '$podcastCommentGetEndpoint&page=$page&podcastId=$podcastId');
+
+      final response = await _httpClient
+          .get(podcastCommetnUrl, headers: {'Authorization': token!});
+      if (response.statusCode == 200) {
+        return APIPagedData.fromJson(jsonDecode(response.body));
+      }
+
+      return APIPagedData(
+          currentPage: 0, items: null, totalItems: 0, totalPages: 0);
+    } catch (e) {
+      print("PODCAST_COMMENT_ERROR***************$e");
       return APIPagedData(
           currentPage: 0, items: null, totalItems: 0, totalPages: 0);
     }

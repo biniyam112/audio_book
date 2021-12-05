@@ -53,7 +53,7 @@ dependencies:
   syncfusion_flutter_pdfviewer: ^19.2.51-beta
   hive: ^2.0.4
   hive_flutter: ^1.1.0
-  json_annotation: ^4.0.1
+  json_annotation: ^4.3.0
   carousel_slider: ^4.0.0
   uuid: ^3.0.5
   palette_generator: ^0.3.2

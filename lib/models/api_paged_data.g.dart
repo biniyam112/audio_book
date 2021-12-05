@@ -6,14 +6,12 @@ part of 'api_paged_data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-APIPagedData _$APIPagedDataFromJson(Map<String, dynamic> json) {
-  return APIPagedData(
-    currentPage: json['currentPage'] as int,
-    totalItems: json['totalItems'] as int,
-    totalPages: json['totalPages'] as int,
-    items: json['items'] as List<dynamic>?,
-  );
-}
+APIPagedData _$APIPagedDataFromJson(Map<String, dynamic> json) => APIPagedData(
+      currentPage: json['currentPage'] as int,
+      totalItems: json['totalItems'] as int,
+      totalPages: json['totalPages'] as int,
+      items: json['items'] as List<dynamic>?,
+    );
 
 Map<String, dynamic> _$APIPagedDataToJson(APIPagedData instance) =>
     <String, dynamic>{

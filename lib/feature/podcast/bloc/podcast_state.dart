@@ -9,15 +9,15 @@ abstract class PodcastState extends Equatable {
 
 class PodcastInitState extends PodcastState {}
 
-class PodcastSubscribeProgress extends PodcastState {}
+// class PodcastSubscribeProgress extends PodcastState {}
 
-class PodcastSubscribeFailure extends PodcastState {}
+// class PodcastSubscribeFailure extends PodcastState {}
 
-class PodcastUnsubscirbeInProgress extends PodcastState {}
+// class PodcastUnsubscirbeInProgress extends PodcastState {}
 
-class PodcastUnsubscirbeFailure extends PodcastState {}
+// class PodcastUnsubscirbeFailure extends PodcastState {}
 
-class PodcastUnsubscribedSuccess extends PodcastState {}
+// class PodcastUnsubscribedSuccess extends PodcastState {}
 
 class PodcastInProgress extends PodcastState {}
 

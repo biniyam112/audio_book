@@ -7,6 +7,7 @@ import 'package:audio_books/theme/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class PodcastCard extends StatelessWidget {
@@ -15,36 +16,20 @@ class PodcastCard extends StatelessWidget {
   final APIPodcast podcast;
   final bool isSubscribed;
 
-//   @override
-//   _PodcastCardState createState() => _PodcastCardState();
-// }
-
-// class _PodcastCardState extends State<PodcastCard> {
-//   late bool isSubscribed;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     isSubscribed = widget.isSubscribed;
-//   }
-
   @override
   Widget build(BuildContext context) {
     var isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
     return GestureDetector(
       onTap: () {
-        Navigator.push(
+        BlocProvider.of<PodcastBloc>(context)
+            .add(FetchPodcastEpisodes(podcastId: podcast.id));
+        pushNewScreen(
           context,
-          MaterialPageRoute(
-            builder: (context) {
-              BlocProvider.of<PodcastBloc>(context)
-                  .add(FetchPodcastEpisodes(podcastId: podcast.id));
-              return PodcastDetails(
-                podcast: podcast,
-                isSubscribed: isSubscribed,
-              );
-            },
+          screen: PodcastDetails(
+            podcast: podcast,
+            isSubscribed: isSubscribed,
           ),
+          withNavBar: false,
         );
       },
       child: Neumorphic(
@@ -99,7 +84,6 @@ class PodcastCard extends StatelessWidget {
                         style: Theme.of(context).textTheme.headline4,
                       ),
                       Spacer(),
-                      
                       Opacity(
                         opacity: .9,
                         child: Text(

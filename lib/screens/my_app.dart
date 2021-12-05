@@ -32,6 +32,8 @@ import 'package:audio_books/feature/payment/repository/amole_payment_repository.
 import 'package:audio_books/feature/podcast/bloc/bloc.dart';
 import 'package:audio_books/feature/podcast/bloc/podcast_bloc.dart';
 import 'package:audio_books/feature/ping_site/bloc/ping_site_bloc.dart';
+import 'package:audio_books/feature/podcast/bloc/subscribed_podcast_bloc.dart';
+import 'package:audio_books/feature/podcast/bloc/subscribed_podcast_event.dart';
 import 'package:audio_books/feature/register_user/bloc/register_user_bloc.dart';
 import 'package:audio_books/feature/register_user/repository/register_user_repository.dart';
 import 'package:audio_books/feature/request_hard_copy/bloc/request_hard_copy_bloc.dart';
@@ -45,6 +47,7 @@ import 'package:audio_books/models/user.dart';
 import 'package:audio_books/route.dart';
 import 'package:audio_books/screens/components/tab_view.dart';
 import 'package:audio_books/screens/phone_registration/phone_registration.dart';
+import 'package:audio_books/screens/podcast_details/components/podcast_comment_field.dart';
 import 'package:audio_books/services/audio/service_locator.dart';
 import 'package:audio_books/services/dataBase/database_handler.dart';
 import 'package:audio_books/services/hiveConfig/hive_config.dart';
@@ -275,6 +278,10 @@ class _MyAppState extends State<MyApp> {
                   create: (context) =>
                       SearchDownloadedBookBloc(widget.searchDownBooksRepo),
                 ),
+                BlocProvider(
+                    create: (context) => SubscribedPodcastBloc()
+                      ..add(LoadSubscribedPodcasts(page: 1))),
+                BlocProvider(create: (context) => PodcastCommentBloc())
               ],
               child: MaterialApp(
                 title: 'Maraki',

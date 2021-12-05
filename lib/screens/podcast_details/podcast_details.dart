@@ -6,7 +6,7 @@ import 'components/body.dart';
 
 class PodcastDetails extends StatelessWidget {
   const PodcastDetails(
-      {Key? key, required this.podcast,required this.isSubscribed })
+      {Key? key, required this.podcast,required this.isSubscribed } )
       : super(key: key);
   final APIPodcast podcast;
   final bool isSubscribed;

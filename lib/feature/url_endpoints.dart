@@ -5,3 +5,5 @@ const subscribeForPodcastUrl = "$baseUrl/api/SubscribeForPodcast";
 const mySubscriptions = "$baseUrl/api/MySubscriptions";
 const podcastEpisodes = "$baseUrl/api/Episodes";
 const  unsubscribePodcastEndpoint="$baseUrl/api/SubscribeForPodcast/Unsubscribe";
+const podcastCommentEndpoint='$baseUrl/api/Comments';
+const podcastCommentGetEndpoint ='$podcastCommentEndpoint/GetAllComments?Limit=10';

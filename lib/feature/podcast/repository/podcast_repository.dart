@@ -38,4 +38,19 @@ class PodcastRepository {
         await _podcastDataProvider.unsubscribePodcast(subscriptionId);
     return apiReponse;
   }
+
+  Future<APIPagedData> getPodcastComments(String podcastId, int page) async {
+    final apiResponse =
+        await _podcastDataProvider.getPodcastComments(podcastId, page);
+
+    return apiResponse;
+  }
+
+  Future<APIPagedData> postPodcastComment(
+      String podcastId, String content) async {
+    final apiResponse =
+        await _podcastDataProvider.postPodcastComment(podcastId, content);
+
+    return apiResponse;
+  }
 }

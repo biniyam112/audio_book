@@ -16,7 +16,7 @@ class ConnectionErrorIndicator extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       padding: EdgeInsets.only(
-        top: SizeConfig.screenHeight! * .26,
+        top: SizeConfig.screenHeight! * .1  ,
       ),
       children: [
         Column(
@@ -38,7 +38,7 @@ class ConnectionErrorIndicator extends StatelessWidget {
             ),
           ],
         ),
-        SizedBox(height: SizeConfig.screenHeight! * .32),
+        SizedBox(height: getProportionateScreenHeight(40)),
         SizedBox(
           height: getProportionateScreenHeight(50),
           child: Padding(

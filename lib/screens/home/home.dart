@@ -4,6 +4,8 @@ import 'package:audio_books/feature/featured_books/bloc/featured_books_bloc.dart
 import 'package:audio_books/feature/featured_books/bloc/featured_books_event.dart';
 import 'package:audio_books/feature/ping_site/bloc/ping_site_bloc.dart';
 import 'package:audio_books/feature/podcast/bloc/bloc.dart';
+import 'package:audio_books/feature/podcast/bloc/subscribed_podcast_bloc.dart';
+import 'package:audio_books/feature/podcast/bloc/subscribed_podcast_event.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme_colors.dart';
 import 'package:audio_books/theme/theme_provider.dart';
@@ -79,8 +81,9 @@ class _HomeScreenState extends State<HomeScreen>
                     setState(() {
                       _activeIndex = index;
                       if (index == 1)
-                        BlocProvider.of<PodcastBloc>(context)
-                            .add(FetchSubscribedPodcasts(page: 1));
+                        BlocProvider.of<SubscribedPodcastBloc>(context).add(
+                            LoadSubscribedPodcasts(
+                                page: SubscribedPodcastBloc.podcastPage));
                     });
                   },
                   isScrollable: true,
