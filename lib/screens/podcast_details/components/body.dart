@@ -5,10 +5,12 @@ import 'package:audio_books/feature/url_endpoints.dart';
 import 'package:audio_books/models/api_podcast_episode.dart';
 import 'package:audio_books/models/models.dart';
 import 'package:audio_books/screens/audioplayer/audio_player.dart';
-import 'package:audio_books/screens/components/no_connection_widget.dart';
+import 'package:audio_books/screens/components/connection_error_indicator.dart';
+import 'package:audio_books/screens/podcast_details/components/flash_widget.dart';
 import 'package:audio_books/sizeConfig.dart';
 import 'package:audio_books/theme/theme.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -18,10 +20,14 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 // import 'dart:math' as math;
 
 class Body extends StatelessWidget {
-  const Body({Key? key, required this.podcast}) : super(key: key);
+  const Body({Key? key, required this.podcast, required this.isSubscribed})
+      : super(key: key);
   final APIPodcast podcast;
+  final bool isSubscribed;
   @override
   Widget build(BuildContext context) {
+    final podcastState = BlocProvider.of<PodcastBloc>(context).state;
+    var isDarkMode = Provider.of<ThemeProvider>(context).isDarkMode;
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,82 +106,136 @@ class Body extends StatelessWidget {
               ],
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${podcast.title}'.toUpperCase(),
-                        style: Theme.of(context).textTheme.headline2,
-                      ),
-                      Text(
-                        '${podcast.creator}',
-                        style: Theme.of(context).textTheme.headline4,
-                      ),
-                    ],
-                  ),
+          Padding(
+            padding: EdgeInsets.symmetric(
+                horizontal: getProportionateScreenWidth(10)),
+            child: Column(
+              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '${podcast.title}'.toUpperCase(),
+                  style: Theme.of(context).textTheme.headline3,
                 ),
-              ),
-              BlocBuilder<PodcastBloc, PodcastState>(
-                builder: (context, state) {
-                  return state is PodcastSuccess
-                      ? Center(
-                          child: Icon(Icons.done),
-                        )
-                      : state is PodcastInProgress
-                          ? Center(
-                              child: CircularProgressIndicator(
-                                color: Colors.orange,
-                              ),
-                            )
-                          : Padding(
-                              padding: EdgeInsets.only(
-                                  right: getProportionateScreenWidth(15),
-                                  top: getProportionateScreenHeight(25)),
-                              child: ElevatedButton(
-                                onPressed: () {
+                Text(podcast.description),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    RichText(
+                        text: TextSpan(children: [
+                      TextSpan(
+                          text: "By : ",
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline4!
+                              .copyWith(color: Colors.black)),
+                      TextSpan(
+                          text: podcast.creator,
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline4!
+                              .copyWith(color: Colors.orange))
+                    ])),
+                    BlocConsumer<PodcastBloc, PodcastState>(
+                      listener: (context, state) {
+                        if (state is PodcastSuccess ||
+                            state is PodcastUnsubscribedSuccess) {
+                          showFlash(
+                              context: context,
+                              builder: (context, controller) {
+                                return ShowFlashWidget.displayFlashWidget(
+                                    Icons.done,
+                                    controller,
+                                    FlashPosition.top,
+                                    isSubscribed
+                                        ? "Podcast UnSubscribed "
+                                        : "Podcast Subscribed",
+                                    "Task completed Successfully",
+                                    isDarkMode);
+                              });
+                          BlocProvider.of<PodcastBloc>(context)
+                              .add(FetchSubscribedPodcasts(page: 1));
+                        }
+                      },
+                      builder: (context, state) {
+                        if (state is PodcastInProgress ||
+                            state is PodcastUnsubscirbeInProgress)
+                          return Padding(
+                            padding: EdgeInsets.only(
+                                right: getProportionateScreenWidth(20)),
+                            child: CircularProgressIndicator(
+                              color: Colors.orange,
+                            ),
+                          );
+                        else
+                          return ElevatedButton(
+                              onPressed: () {
+                                if (!isSubscribed) {
                                   BlocProvider.of<PodcastBloc>(context).add(
                                       SubscribePodcast(podcastId: podcast.id));
-                                  BlocProvider.of<PodcastBloc>(context)
-                                      .add(FetchSubscribedPodcasts(page: 1));
-                                },
-                                child: Text('Subscirbe'),
-                              ),
-                            );
-                },
-              )
-            ],
+                                } else {
+                                  BlocProvider.of<PodcastBloc>(context).add(
+                                      UnsubscribePodcast(
+                                          subscriptionId:
+                                              podcast.subscriptionId!));
+                                }
+                              },
+                              child: isSubscribed
+                                  ? Text('Unsubscirbe')
+                                  : Text('Subscirbe'));
+                      },
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
           verticalSpacing(40),
           BlocBuilder<PodcastBloc, PodcastState>(
             builder: (context, state) {
-              return state is PodcastEpisodeLoadSuccess
-                  ? Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: getProportionateScreenWidth(14)),
-                      child: Column(
-                        children: [
-                          ...List.generate(
-                            PodcastBloc.podcastEpisodes.length,
-                            (index) => PodcastListCard(
-                                podcast: podcast,
-                                podcastEpisode:
-                                    PodcastBloc.podcastEpisodes[index]),
-                          ),
-                        ],
-                      ),
-                    )
-                  : state is PodcastInProgress || state is PodcastInitState
+              return state is PodcastEpisodeFetchFailure
+                  ? Center(
+                      child: ConnectionErrorIndicator(
+                      title: "Could not fetch podcast Episodes",
+                      message: " please Try again",
+                      onTryAgain: () {
+                        BlocProvider.of<PodcastBloc>(context)
+                            .add(FetchPodcastEpisodes(podcastId: podcast.id));
+                      },
+                    ))
+                  : state is PodcastEpisodeFetchInProgress
                       ? Center(
                           child: CircularProgressIndicator(
                           color: Colors.orange,
                         ))
-                      : Center(child: NoConnectionWidget());
+                      : Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: getProportionateScreenWidth(14)),
+                          child: PodcastBloc.podcastEpisodes.length == 0
+                              ? Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal:
+                                          getProportionateScreenWidth(20),
+                                      vertical:
+                                          getProportionateScreenHeight(60)),
+                                  child: Text(
+                                    "There is No Podcast Episodes added yet!",
+                                    style:
+                                        Theme.of(context).textTheme.headline5,
+                                  ),
+                                )
+                              : Column(
+                                  children: [
+                                    ...List.generate(
+                                      PodcastBloc.podcastEpisodes.length,
+                                      (index) => PodcastListCard(
+                                          podcast: podcast,
+                                          podcastEpisode: PodcastBloc
+                                              .podcastEpisodes[index]),
+                                    ),
+                                  ],
+                                ),
+                        );
             },
           ),
         ],

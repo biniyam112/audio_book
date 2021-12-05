@@ -14,7 +14,7 @@ class APIPodcastSubscribe {
       {this.subscriberId,
       this.id,
       this.createdAt,
-      this.status,
+      this.status,  
       this.message,
       });
 

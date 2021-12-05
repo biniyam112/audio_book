@@ -12,6 +12,7 @@ class APIPodcast {
   final String creator;
   final String createdAt;
   final String? imagePath;
+  final String? subscriptionId;
 
   APIPodcast({
     required this.id,
@@ -21,6 +22,7 @@ class APIPodcast {
     required this.status,
     required this.creator,
     this.imagePath,
+    this.subscriptionId,
     required this.createdAt,
   });
 

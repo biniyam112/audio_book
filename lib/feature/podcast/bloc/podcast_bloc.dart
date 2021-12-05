@@ -19,6 +19,7 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
     on<SubscribePodcast>(_mapSubscribeForPodcast);
     on<FetchSubscribedPodcasts>(_mapFetchSubscribedPodcastsToState);
     on<FetchPodcastEpisodes>(_mapFetchPodcastEpisodesToState);
+    on<UnsubscribePodcast>(_mapUnsubscribeEventToState);
   }
 
   Future<void> _mapFetchPodcastEventToState(
@@ -78,6 +79,7 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
         // APIPodcast pod=APIPodcast()
         final podcasts =
             items.map((podcast) => APIPodcast.fromJson(podcast)).toList();
+        subscribedPodcasats = [];
         subscribedPodcasats.addAll(podcasts.where((podcast) =>
             subscribedPodcasats.every((pdcst) => pdcst.id != podcast.id)));
         emitter(PodcastLoadSuccess(podcasts: podcasts));
@@ -104,6 +106,25 @@ class PodcastBloc extends Bloc<PodcastEvent, PodcastState> {
         emitter(PodcastEpisodeLoadSuccess(podcastEpisodes: apiPodcastEpisodes));
       }
     } catch (e) {
+      emitter(PodcastEpisodeFetchFailure());
+    }
+  }
+
+  Stream<PodcastState> _mapUnsubscribeEventToState(
+      UnsubscribePodcast event, Emitter<PodcastState> emitter) async* {
+    yield PodcastUnsubscirbeInProgress();
+    try {
+      final apiDataResponse =
+          await _podcastRepository.unsubscribePodcast(event.subscriptionId);
+
+      if (apiDataResponse.items == null) {
+        yield PodcastUnsubscirbeFailure();
+      } else {
+        yield PodcastUnsubscribedSuccess();
+      }
+    } catch (e) {
+      yield PodcastUnsubscirbeFailure();
+
       emitter(PodcastFailure());
     }
   }
